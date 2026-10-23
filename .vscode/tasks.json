@@ -1,0 +1,47 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "environment: check",
+      "type": "shell",
+      "command": "${workspaceFolder}/scripts/check-env.sh",
+      "problemMatcher": []
+    },
+    {
+      "label": "backend: test",
+      "type": "shell",
+      "command": "mvn",
+      "args": ["test"],
+      "group": "test",
+      "problemMatcher": ["$javac"]
+    },
+    {
+      "label": "backend: build",
+      "type": "shell",
+      "command": "${workspaceFolder}/scripts/build-backend.sh",
+      "group": "build",
+      "problemMatcher": ["$javac"]
+    },
+    {
+      "label": "backend: run",
+      "type": "shell",
+      "command": "${workspaceFolder}/scripts/start-backend.sh",
+      "group": "build",
+      "problemMatcher": []
+    },
+    {
+      "label": "frontend: install",
+      "type": "shell",
+      "command": "npm install",
+      "options": { "cwd": "${workspaceFolder}/frontend" },
+      "problemMatcher": []
+    },
+    {
+      "label": "frontend: dev",
+      "type": "shell",
+      "command": "${workspaceFolder}/scripts/start-frontend.sh",
+      "isBackground": true,
+      "problemMatcher": []
+    }
+  ]
+}

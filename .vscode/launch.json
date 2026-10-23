@@ -1,0 +1,27 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "java",
+      "name": "Backend: RuoYiApplication",
+      "request": "launch",
+      "mainClass": "com.ruoyi.RuoYiApplication",
+      "projectName": "ruoyi-admin",
+      "cwd": "${workspaceFolder}",
+      "env": {
+        "DB_PASSWORD": "${env:DB_PASSWORD}",
+        "TOKEN_SECRET": "${env:TOKEN_SECRET}",
+        "VALKEY_PASSWORD": "${env:VALKEY_PASSWORD}",
+        "LOG_PATH": "${workspaceFolder}/logs",
+        "RUOYI_PROFILE": "${workspaceFolder}/data/uploadPath"
+      }
+    },
+    {
+      "type": "pwa-chrome",
+      "name": "Frontend: Chrome",
+      "request": "launch",
+      "url": "http://localhost",
+      "webRoot": "${workspaceFolder}/frontend/src"
+    }
+  ]
+}

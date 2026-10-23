@@ -1,0 +1,14 @@
+{
+  "java.configuration.updateBuildConfiguration": "automatic",
+  "java.compile.nullAnalysis.mode": "automatic",
+  "maven.terminal.useJavaHome": true,
+  "files.exclude": {
+    "**/.m2": true,
+    "**/target": true,
+    "frontend/node_modules": true,
+    "frontend/dist": true
+  },
+  "[vue]": {
+    "editor.defaultFormatter": "Vue.volar"
+  }
+}

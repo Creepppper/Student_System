@@ -1,0 +1,126 @@
+######################################################################
+# Build Tools
+
+.gradle
+/build/
+!gradle/wrapper/gradle-wrapper.jar
+
+target/
+!.mvn/wrapper/maven-wrapper.jar
+.m2/
+
+######################################################################
+# IDE
+
+### STS ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+
+### IntelliJ IDEA ###
+.idea
+*.iws
+*.iml
+*.ipr
+
+### JRebel ###
+rebel.xml
+
+### NetBeans ###
+nbproject/private/
+build/*
+nbbuild/
+dist/
+nbdist/
+.nb-gradle/
+
+######################################################################
+# Others
+*.log
+*.xml.versionsBackup
+*.swp
+*.swo
+*.tmp
+*.temp
+*.bak
+*.orig
+*~
+hs_err_pid*
+replay_pid*
+*.hprof
+.DS_Store
+Thumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+.Trash-*/
+
+!*/build/*.java
+!*/build/*.html
+!*/build/*.xml
+
+######################################################################
+# Shared VS Code files; everything else remains local
+
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+
+######################################################################
+# Local secrets, runtime data, and frontend outputs
+
+/.env*
+!/.env.example
+.env.local
+.env.*.local
+.secrets/
+secrets/
+*.pem
+*.key
+*.p12
+*.jks
+*.keystore
+data/
+logs/
+*.pid
+frontend/node_modules/
+frontend/dist/
+frontend/.vite/
+frontend/coverage/
+frontend/npm-debug.log*
+
+######################################################################
+# Local package-manager state (lock files remain tracked)
+
+.npm/
+.pnpm-store/
+.yarn/cache/
+.yarn/install-state.gz
+
+######################################################################
+# Local database exports and machine-specific tool state
+
+database/local/
+database/*.local.sql
+database/*.dump
+database/*.bak.sql
+.agents/
+.codex/
+.aws/
+
+######################################################################
+# Original course handouts are kept locally; extracted requirements stay in docs
+
+docs/reference/materials/
+
+# Upstream legacy manual contains obsolete machine-specific paths; README replaces it
+doc/若依环境使用手册.docx
+
+######################################################################
+# Keep reproducible dependency locks
+
+!frontend/package-lock.json

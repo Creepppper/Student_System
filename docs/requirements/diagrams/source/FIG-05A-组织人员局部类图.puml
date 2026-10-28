@@ -1,0 +1,82 @@
+@startuml
+skinparam defaultFontName "Noto Sans CJK SC"
+skinparam dpi 180
+skinparam shadowing false
+skinparam classAttributeIconSize 0
+skinparam classFontSize 6
+skinparam classHeaderFontSize 8
+skinparam classAttributeFontSize 8
+skinparam class {
+  BackgroundColor #F5F7FA
+  BorderColor #546E7A
+}
+title FIG-05A 组织、人员、任职与账号局部类图\n与 FIG-09A/ENT-01～08/17 一致；账号-档案关联≠学生档案本身
+
+class "学年" as Year {
+  yearCode
+  isCurrent
+  startDate
+  endDate
+}
+class "学期" as Term {
+  termCode
+  termName
+  startDate
+  endDate
+}
+class "年级" as Grade {
+  gradeCode
+  gradeName
+  studyYears
+}
+class "班级" as Class {
+  classCode
+  className
+  status
+}
+class "学生" as Student {
+  studentNo
+  name
+  status
+}
+class "学生班级归属" as SClass {
+  startDate
+  endDate
+  changeReason
+  isActive
+}
+class "班主任" as Head {
+  teacherNo
+  name
+  status
+}
+class "班主任任职" as Assignment {
+  startDate
+  endDate
+  changeReason
+  isActive
+}
+class "账号档案关联" as AccountProfile {
+  userId
+  profileType
+  profileId
+  status
+}
+
+Year "1" -- "0..*" Term : 学年学期
+Year "1" -- "0..*" Class : 学年班级
+Grade "1" -- "0..*" Class : 年级班级
+Year "1" -- "0..*" SClass : 学年归属
+Class "1" -- "0..*" SClass : 班级归属
+Student "1" -- "0..*" SClass : 学生归属
+Head "1" -- "0..*" Assignment : 任职
+Class "1" -- "0..*" Assignment : 班主任
+Student "0..1" -- "1" AccountProfile : 学生档案账号
+Head "0..1" -- "1" AccountProfile : 班主任账号
+
+legend bottom
+  每班同一时刻最多 1 条有效任职；1 名班主任可负责多个班；历史任职保留，不覆盖。
+  同一学年最多 1 条有效学生归属；转班保留历史，不覆盖。
+  系统账号由若依账号承载；账号档案关联≠学生档案本身，不声明物理外键。
+endlegend
+@enduml

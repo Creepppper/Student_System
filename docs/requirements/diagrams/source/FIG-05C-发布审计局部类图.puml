@@ -1,0 +1,44 @@
+@startuml
+skinparam defaultFontName "Noto Sans CJK SC"
+skinparam dpi 180
+skinparam shadowing false
+skinparam classAttributeIconSize 0
+skinparam classFontSize 8
+skinparam classAttributeFontSize 8
+skinparam class {
+  BackgroundColor #F5F7FA
+  BorderColor #546E7A
+}
+title FIG-05C 发布与审计局部类图\n发布唯一(考试,班级)；版本/撤回/更正；审计多态引用
+
+class "考试" as Exam {
+  examName
+  status
+}
+class "班级" as Class {
+  classCode
+  className
+}
+class "班级发布" as Publication {
+  pubStatus
+  version
+  publishedAt
+  withdrawnReason
+}
+class "业务变更记录" as Audit {
+  eventType
+  entityType
+  entityId
+  beforeValue
+  afterValue
+  reason
+}
+
+Exam "1" -- "0..*" Publication : 考试发布
+Class "1" -- "0..*" Publication : 班级发布
+Publication "0..*" .. "0..*" Audit : 多态审计
+legend bottom
+  发布唯一 (考试,班级)，有版本；撤回/更正/重发版本递增；
+  不允许对 PUB_PUBLISHED 直接覆盖；所有动作写审计。
+endlegend
+@enduml

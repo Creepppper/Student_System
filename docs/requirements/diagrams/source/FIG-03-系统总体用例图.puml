@@ -1,0 +1,57 @@
+@startuml
+left to right direction
+skinparam defaultFontName "Noto Sans CJK SC"
+skinparam dpi 200
+skinparam shadowing false
+skinparam usecase {
+  BackgroundColor #FFF8E7
+  BorderColor #B8860B
+  FontSize 9
+}
+skinparam actor {
+  BackgroundColor #E3F0FB
+  BorderColor #2F5D8A
+  FontSize 10
+}
+skinparam usecase<<P1>> {
+  BackgroundColor #F3E5F5
+  BorderColor #6A1B9A
+  FontColor #4A148C
+}
+title FIG-03 系统总体用例图（业务目标级）\n四类角色；P1 紫色 <<P1>>；详细用例见 FIG-03A～03D
+
+actor "系统管理员" as SA
+actor "教务管理员" as AC
+actor "班主任" as HT
+actor "学生" as ST
+
+rectangle "高中学生信息与成绩管理系统" {
+  usecase "系统管理与审计\nUC-AUTH-001/UC-AUDIT-001" as U_ADMIN
+  usecase "基础资料与考试配置\nUC-ORG/STU/TCH/EXAM-001" as U_BASE
+  usecase "成绩录入与提交\nUC-SCORE-001/002" as U_RECORD
+  usecase "成绩审核与发布\nUC-PUB-001/002/003" as U_PUB
+  usecase "成绩查询与统计\nUC-QUERY-001/UC-STAT-001" as U_QUERY
+  usecase "P1 成绩复核\nUC-REVIEW-001" as U_REVIEW <<P1>>
+  usecase "P1 导入/趋势/对比\nUC-IMPORT/TREND/COMPARE" as U_EXT <<P1>>
+}
+
+SA --> U_ADMIN
+AC --> U_BASE
+HT --> U_RECORD
+AC --> U_PUB
+ST --> U_QUERY
+HT --> U_QUERY
+AC --> U_QUERY
+ST --> U_REVIEW
+HT --> U_REVIEW
+AC --> U_REVIEW
+HT --> U_EXT
+AC --> U_EXT
+ST --> U_EXT
+
+legend bottom
+  业务目标级总览：登录、账号/权限、维护学生/班主任/科目、考试配置等
+  在 FIG-03A～03D 中按角色展开；P1 不进入 P0 退出条件。
+  不设任课教师核查；不把数据库/技术组件画成业务 Actor。
+endlegend
+@enduml

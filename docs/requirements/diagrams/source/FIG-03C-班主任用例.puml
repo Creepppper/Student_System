@@ -1,0 +1,41 @@
+@startuml
+left to right direction
+skinparam defaultFontName "Noto Sans CJK SC"
+skinparam dpi 200
+skinparam shadowing false
+skinparam usecase {
+  BackgroundColor #FFF8E7
+  BorderColor #B8860B
+  FontSize 9
+}
+skinparam actor {
+  BackgroundColor #E8F5E9
+  BorderColor #2E7D32
+  FontSize 10
+}
+skinparam usecase<<P1>> {
+  BackgroundColor #F3E5F5
+  BorderColor #6A1B9A
+  FontColor #4A148C
+}
+title FIG-03C 班主任用例（P0 + P1）
+actor "班主任" as HT
+rectangle "高中学生信息与成绩管理系统" {
+  usecase "登录与权限校验\nUC-AUTH-001" as U_LOGIN
+  usecase "录入/暂存本班全科成绩\nUC-SCORE-001 / FR-SCORE-001～003/005" as U_SCORE
+  usecase "提交成绩任务\nUC-SCORE-002 / FR-SCORE-004" as U_SUBMIT
+  usecase "本班统计与审计\nUC-STAT-001/UC-AUDIT-001\nFR-STAT-001/002、FR-AUDIT-001/002" as U_STAT
+  usecase "P1 复核受理与核查\nUC-REVIEW-001\nFR-REVIEW-002" as U_REVIEW <<P1>>
+  usecase "P1 导入\nUC-IMPORT-001\nFR-IMPORT-001～004" as U_IMPORT <<P1>>
+}
+HT --> U_LOGIN
+HT --> U_SCORE
+HT --> U_SUBMIT
+HT --> U_STAT
+HT --> U_REVIEW
+HT --> U_IMPORT
+legend bottom
+  说明：本图只展开该角色的业务用例；P1 扩展不进入 P0 退出条件。
+  不设任课教师核查；数据库/技术组件不是业务 Actor。
+endlegend
+@enduml

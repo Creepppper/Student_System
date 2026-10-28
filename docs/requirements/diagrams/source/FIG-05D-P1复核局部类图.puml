@@ -1,0 +1,66 @@
+@startuml
+skinparam defaultFontName "Noto Sans CJK SC"
+skinparam dpi 180
+skinparam shadowing false
+skinparam classAttributeIconSize 0
+skinparam classFontSize 8
+skinparam classAttributeFontSize 8
+skinparam class {
+  BackgroundColor #F5F7FA
+  BorderColor #546E7A
+}
+skinparam class<<P1>> {
+  BackgroundColor #F3E5F5
+  BorderColor #6A1B9A
+  FontColor #4A148C
+}
+title FIG-05D P1 复核局部类图\n学生申请→班主任受理/核查→教务确认/更正；不进入 P0；不设任课教师
+
+class "学生" as Student {
+  studentNo
+  name
+}
+class "考试" as Exam {
+  examName
+  status
+}
+class "科目" as Subject {
+  subjectCode
+  name
+}
+class "班主任" as Head {
+  teacherNo
+  name
+}
+class "成绩记录" as Score {
+  scoreStatus
+  scoreValue
+  version
+}
+class "复核申请" as Review <<P1>> {
+  reviewStatus
+  applyReason
+  verificationOpinion
+  decisionReason
+  deadlineAt
+  version
+}
+class "业务变更记录" as Audit {
+  eventType
+  entityType
+  entityId
+  reason
+}
+
+Student "1" -- "0..*" Review : 申请
+Exam "1" -- "0..*" Review : 复核考试
+Subject "1" -- "0..*" Review : 复核科目
+Head "0..1" -- "0..*" Review : 受理/核查
+Score "0..1" -- "0..*" Review : 基于成绩版本
+Review "0..*" .. "0..*" Audit : 多态审计
+legend bottom
+  同一学生+考试+科目最多 1 个活跃申请；
+  班主任只受理/核查本班；教务最终确认/更正；
+  更正需原因/前后值/版本+1/审计。
+endlegend
+@enduml

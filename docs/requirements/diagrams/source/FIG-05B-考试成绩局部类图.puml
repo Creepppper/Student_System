@@ -1,0 +1,69 @@
+@startuml
+skinparam defaultFontName "Noto Sans CJK SC"
+skinparam dpi 180
+skinparam shadowing false
+skinparam classAttributeIconSize 0
+skinparam classFontSize 8
+skinparam classAttributeFontSize 8
+skinparam class {
+  BackgroundColor #F5F7FA
+  BorderColor #546E7A
+}
+title FIG-05B 考试、考试科目、任务与成绩局部类图\n与 FIG-09B1/09B2 一致；任务唯一考试×班级×科目，成绩唯一任务×学生
+
+class "科目" as Subject {
+  subjectCode
+  name
+  status
+}
+class "考试" as Exam {
+  examName
+  examType
+  status
+  startTime
+  endTime
+}
+class "考试班级范围" as ExamClass {
+  examId
+  classId
+}
+class "考试科目" as ExamSubject {
+  fullScore
+  passLine
+  excellentLine
+}
+class "成绩任务" as Task {
+  taskStatus
+  primaryTeacherId
+  rosterVersion
+  submittedAt
+}
+class "成绩记录" as Score {
+  scoreStatus
+  scoreValue
+  version
+}
+class "学生" as Student {
+  studentNo
+  name
+}
+
+class "班级" as Class {
+  classCode
+  className
+}
+Subject "1" -- "0..*" ExamSubject : 被考科目
+Exam "1" -- "0..*" ExamSubject : 设置科目
+Exam "1" -- "0..*" ExamClass : 范围
+Class "1" -- "0..*" ExamClass : 参加班级
+ExamClass "1" -- "0..*" Task : 生成任务
+ExamSubject "1" -- "0..*" Task : 任务科目
+Task "1" -- "0..*" Score : 任务成绩
+Student "1" -- "0..*" Score : 学生成绩
+
+Class "1" -- "0..*" Task : 任务班级
+legend bottom
+  任务唯一 (考试,班级,科目)；primaryTeacherId 是生成时第一责任人快照，换班主任不覆盖历史。
+  成绩唯一 (任务,学生)；scoreStatus 区分缺考/未录入/零分；0.5 分步长。
+endlegend
+@enduml

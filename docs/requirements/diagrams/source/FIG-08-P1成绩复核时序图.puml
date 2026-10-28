@@ -1,0 +1,48 @@
+@startuml
+scale 0.9
+skinparam defaultFontName "Noto Sans CJK SC"
+skinparam dpi 200
+skinparam shadowing false
+skinparam sequenceMessageAlign center
+skinparam sequence {
+  ArrowColor #2F5D8A
+  LifeLineBorderColor #546E7A
+  ParticipantBorderColor #546E7A
+  ParticipantBackgroundColor #F5F7FA
+  FontSize 8.5
+}
+title FIG-08 P1 成绩复核时序图\n学生→业务系统→班主任受理/核查→教务最终确认/更正；P1 不进入 P0 退出条件
+
+actor "学生" as S
+participant "业务系统" as SYS
+actor "班主任" as H
+actor "教务管理员" as A
+
+S -> SYS : 提交复核申请\n(考试/科目/理由/联系方式)
+SYS -> SYS : 校验申请资格、时限、重复申请\n锁定本人已发布成绩
+alt 资格/时限不符
+  SYS --> S : 拒绝申请并说明原因
+else 资格通过
+  SYS -> H : 生成本班待受理任务
+  H -> SYS : 受理并提交核查意见
+  alt 班主任核查后建议驳回
+    SYS -> A : 转教务最终确认
+    A -> SYS : 确认驳回并填写理由
+    SYS -> S : 驳回结论（可查看理由）
+  else 核查通过/需更正
+    SYS -> A : 转教务最终确认
+    opt 需要更正
+      A -> SYS : 执行受控更正\n(原因/前后值/版本+1)
+      SYS -> SYS : 重算总分/排名；写业务审计
+    end
+    A -> SYS : 确认结论
+    SYS -> S : 复核结论/更正后成绩
+  end
+  S -> SYS : 查看结论与更正结果
+end
+note over SYS
+  P1 复核独立于 P0 主链路；
+  班主任只受理/核查本班，不最终确认；
+  不设任课教师核查；所有结论/更正写审计。
+end note
+@enduml

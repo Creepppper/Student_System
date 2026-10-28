@@ -1,0 +1,30 @@
+@startuml
+left to right direction
+skinparam defaultFontName "Noto Sans CJK SC"
+skinparam dpi 200
+skinparam shadowing false
+skinparam usecase {
+  BackgroundColor #FFF8E7
+  BorderColor #B8860B
+  FontSize 9
+}
+skinparam actor {
+  BackgroundColor #E3F0FB
+  BorderColor #2F5D8A
+  FontSize 10
+}
+title FIG-03A 系统管理员用例（P0）
+actor "系统管理员" as SA
+rectangle "高中学生信息与成绩管理系统" {
+  usecase "登录与权限校验\nUC-AUTH-001 / FR-AUTH-001/004" as U_LOGIN
+  usecase "账号/角色/权限管理\nUC-AUTH-001 / FR-AUTH-002/003/005" as U_ACCOUNT
+  usecase "业务审计查询\nUC-AUDIT-001 / FR-AUDIT-001/002" as U_AUDIT
+}
+SA --> U_LOGIN
+SA --> U_ACCOUNT
+SA --> U_AUDIT
+legend bottom
+  说明：本图只展开该角色的业务用例；P1 扩展不进入 P0 退出条件。
+  不设任课教师核查；数据库/技术组件不是业务 Actor。
+endlegend
+@enduml

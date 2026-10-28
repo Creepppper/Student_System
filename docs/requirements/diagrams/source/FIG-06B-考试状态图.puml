@@ -1,0 +1,28 @@
+@startuml
+skinparam defaultFontName "Noto Sans CJK SC"
+skinparam dpi 200
+skinparam shadowing false
+skinparam stateFontSize 10
+skinparam state {
+  BackgroundColor #FFF8E7
+  BorderColor #B8860B
+}
+title FIG-06B 考试状态图（EXAM_*）\n开放/结束/重开/归档；结束不等于发布
+
+state "EXAM_DRAFT\n草稿" as D
+state "EXAM_OPEN\n已开放" as O
+state "EXAM_CLOSED\n已结束" as C
+state "EXAM_ARCHIVED\n已归档" as A
+
+[*] --> D
+D --> O : 教务 / 开放考试\n[至少1班、至少1科、满分>0]
+O --> C : 教务 / 结束录入\n[不要求全部提交]
+C --> O : 教务 / 重开录入\n[必须填原因]
+C --> A : 教务 / 归档\n[无 DRAFT/SUBMITTED/RETURNED]
+A --> [*]
+legend bottom
+  EXAM_CLOSED 只表示录入窗口关闭，不等于成绩已发布；
+  EXAM_ARCHIVED 为终态，已发布成绩仍可查；
+  状态转换只由教务执行。
+endlegend
+@enduml

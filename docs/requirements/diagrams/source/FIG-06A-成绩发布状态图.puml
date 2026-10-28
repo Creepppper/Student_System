@@ -1,0 +1,25 @@
+@startuml
+skinparam defaultFontName "Noto Sans CJK SC"
+skinparam dpi 200
+skinparam shadowing false
+skinparam stateFontSize 10
+skinparam state {
+  BackgroundColor #FFF8E7
+  BorderColor #B8860B
+}
+title FIG-06A 班级发布状态图（PUB_*）\n发布/撤回/重发/受控更正；撤回后学生不可见，数据保留
+
+state "PUB_UNPUBLISHED\n未发布" as U
+state "PUB_PUBLISHED\n已发布" as P
+state "PUB_WITHDRAWN\n已撤回" as W
+
+[*] --> U
+U --> P : 教务 / 发布\n[所有适用任务 TASK_APPROVED；\n无未录入；至少1科]
+P --> W : 教务 / 撤回\n[原因必填]
+W --> P : 教务 / 重新发布\n[所有任务仍 APPROVED；版本+1]
+P --> P : 教务 / 受控更正\n[原因；前后值；版本+1；\n重算总分/排名]
+legend bottom
+  发布唯一 (考试,班级)，有版本；撤回/更正/重发版本递增；
+  不允许对 PUB_PUBLISHED 直接覆盖；所有动作写审计。
+endlegend
+@enduml

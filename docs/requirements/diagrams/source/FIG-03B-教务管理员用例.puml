@@ -1,0 +1,43 @@
+@startuml
+left to right direction
+skinparam defaultFontName "Noto Sans CJK SC"
+skinparam dpi 200
+skinparam shadowing false
+skinparam usecase {
+  BackgroundColor #FFF8E7
+  BorderColor #B8860B
+  FontSize 9
+}
+skinparam actor {
+  BackgroundColor #E3F0FB
+  BorderColor #2F5D8A
+  FontSize 10
+}
+skinparam usecase<<P1>> {
+  BackgroundColor #F3E5F5
+  BorderColor #6A1B9A
+  FontColor #4A148C
+}
+title FIG-03B 教务管理员用例（P0 + P1）
+actor "教务管理员" as AC
+rectangle "高中学生信息与成绩管理系统" {
+  usecase "登录与权限校验\nUC-AUTH-001" as U_LOGIN
+  usecase "维护基础资料\nUC-ORG/STU/TCH-001\nFR-ORG/STU/TCH" as U_BASE
+  usecase "配置考试与适用科目\nUC-EXAM-001 / FR-EXAM-001～004" as U_EXAM
+  usecase "审核/发布/撤回/更正\nUC-PUB-001/002/003" as U_PUB
+  usecase "统计与业务审计\nUC-STAT-001/UC-AUDIT-001\nFR-STAT-001/002、FR-AUDIT-001/002" as U_STAT
+  usecase "P1 复核最终确认/更正\nUC-REVIEW-001\nFR-REVIEW-001/002/004/005" as U_REVIEW <<P1>>
+  usecase "P1 导入/趋势/对比\nUC-IMPORT/TREND/COMPARE\nFR-IMPORT/TREND/COMPARE" as U_EXT <<P1>>
+}
+AC --> U_LOGIN
+AC --> U_BASE
+AC --> U_EXAM
+AC --> U_PUB
+AC --> U_STAT
+AC --> U_REVIEW
+AC --> U_EXT
+legend bottom
+  说明：本图只展开该角色的业务用例；P1 扩展不进入 P0 退出条件。
+  不设任课教师核查；数据库/技术组件不是业务 Actor。
+endlegend
+@enduml

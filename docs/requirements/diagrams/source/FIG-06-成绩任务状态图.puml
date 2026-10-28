@@ -1,0 +1,28 @@
+@startuml
+skinparam defaultFontName "Noto Sans CJK SC"
+skinparam dpi 200
+skinparam shadowing false
+skinparam stateFontSize 10
+skinparam state {
+  BackgroundColor #FFF8E7
+  BorderColor #B8860B
+}
+title FIG-06 成绩任务状态图（TASK_*）\n提交/审核/退回/重提；TASK_APPROVED 不等于 PUB_PUBLISHED
+
+state "TASK_DRAFT\n草稿" as D
+state "TASK_SUBMITTED\n已提交" as S
+state "TASK_APPROVED\n已通过" as A
+state "TASK_RETURNED\n已退回" as R
+
+[*] --> D : 系统 / 生成任务\n[考试×班级×科目]
+D --> S : 班主任 / 提交\n[无未录入；数值合法；版本匹配；EXAM_OPEN]
+S --> A : 教务 / 审核通过\n[审核人≠提交人；成绩合法]
+S --> R : 教务 / 退回\n[原因必填]
+A --> R : 教务 / 退回\n[原因；班级未发布]
+R --> S : 班主任 / 重新提交\n[无未录入；数值合法]
+legend bottom
+  TASK_SUBMITTED 时班主任不能自行撤回，须教务退回；
+  TASK_APPROVED 只表示任务可参与发布，不等于 PUB_PUBLISHED；
+  每次提交/审核/退回写审计。
+endlegend
+@enduml

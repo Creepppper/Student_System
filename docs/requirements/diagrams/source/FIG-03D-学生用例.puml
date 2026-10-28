@@ -1,0 +1,37 @@
+@startuml
+left to right direction
+skinparam defaultFontName "Noto Sans CJK SC"
+skinparam dpi 200
+skinparam shadowing false
+skinparam usecase {
+  BackgroundColor #FFF8E7
+  BorderColor #B8860B
+  FontSize 9
+}
+skinparam actor {
+  BackgroundColor #F3E5F5
+  BorderColor #6A1B9A
+  FontSize 10
+}
+skinparam usecase<<P1>> {
+  BackgroundColor #F3E5F5
+  BorderColor #6A1B9A
+  FontColor #4A148C
+}
+title FIG-03D 学生用例（P0 + P1）
+actor "学生" as ST
+rectangle "高中学生信息与成绩管理系统" {
+  usecase "登录与权限校验\nUC-AUTH-001" as U_LOGIN
+  usecase "查询本人已发布成绩\nUC-QUERY-001 / FR-QUERY-001/002" as U_QUERY
+  usecase "P1 提交/查看复核\nUC-REVIEW-001\nFR-REVIEW-001/005" as U_REVIEW <<P1>>
+  usecase "P1 趋势/对比查看\nUC-TREND/COMPARE\nFR-TREND/COMPARE" as U_EXT <<P1>>
+}
+ST --> U_LOGIN
+ST --> U_QUERY
+ST --> U_REVIEW
+ST --> U_EXT
+legend bottom
+  说明：本图只展开该角色的业务用例；P1 扩展不进入 P0 退出条件。
+  不设任课教师核查；数据库/技术组件不是业务 Actor。
+endlegend
+@enduml

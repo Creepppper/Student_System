@@ -1,0 +1,80 @@
+@startuml
+left to right direction
+skinparam defaultFontName "Noto Sans CJK SC"
+skinparam dpi 180
+skinparam shadowing false
+skinparam classAttributeIconSize 0
+skinparam classFontSize 10
+skinparam classAttributeFontSize 8
+skinparam class {
+  BackgroundColor #F5F7FA
+  BorderColor #546E7A
+  FontSize 9
+}
+skinparam class<<P1>> {
+  BackgroundColor #F3E5F5
+  BorderColor #6A1B9A
+  FontColor #4A148C
+}
+title FIG-05 领域概念类图总览\n核心概念与关键多重性；历史任职/归属、账号、科目/审计见 FIG-05A～05C；P1 单独标记
+
+class "学年" as Year {
+  yearCode
+  isCurrent
+}
+class "班级" as Class {
+  classCode
+  className
+  status
+}
+class "学生" as Student {
+  studentNo
+  name
+  status
+}
+class "班主任" as Head {
+  teacherNo
+  name
+}
+class "考试" as Exam {
+  examName
+  status
+}
+class "成绩任务" as Task {
+  taskStatus
+  primaryTeacherId
+  rosterVersion
+}
+class "成绩记录" as Score {
+  scoreStatus
+  scoreValue
+  version
+}
+class "班级发布" as Publication {
+  pubStatus
+  version
+}
+class "复核申请" as Review <<P1>> {
+  reviewStatus
+  deadlineAt
+  decisionReason
+}
+
+Year "1" -- "0..*" Class : 学年班级
+Class "1" -- "0..*" Student : 当前归属
+Head "1" -- "0..*" Class : 当前任职
+Exam "1" -- "0..*" Task : 生成任务
+Class "1" -- "0..*" Task : 任务班级
+Task "1" -- "0..*" Score : 任务成绩
+Student "1" -- "0..*" Score : 学生成绩
+Exam "1" -- "0..*" Publication : 考试发布
+Class "1" -- "0..*" Publication : 班级发布
+Student "1" -- "0..*" Review : 申请
+Task "0..1" -- "0..*" Review : 关联任务
+
+legend bottom
+  本图是核心概念总览；当前归属/当前任职为简化关联，
+  历史化的学生班级归属、班主任任职、账号档案关联见 FIG-05A；
+  科目/考试科目见 05B；发布/审计见 05C；P1 细节见 05D。
+endlegend
+@enduml

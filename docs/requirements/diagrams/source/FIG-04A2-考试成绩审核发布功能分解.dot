@@ -1,0 +1,32 @@
+digraph FIG04A2 {
+  graph [rankdir=LR, bgcolor="white", pad="0.25", nodesep="0.10", ranksep="0.55",
+         fontname="Noto Sans CJK SC", fontsize=11, labelloc=t,
+         label="FIG-04A2 P0 功能分解（考试、成绩录入、审核与发布；13 项）\n功能树只表示层级；P4/P5 的 DFD 细节见 FIG-02B1/02B2", dpi=220];
+  node [fontname="Noto Sans CJK SC", fontsize=8.5, shape=box, style="rounded,filled", fillcolor="#FFF8E7", color="#B8860B", margin="0.05,0.03", height=0.25];
+  edge [color="#8A6D3B", arrowsize=0.4, arrowhead=none];
+
+  ROOT [label="P0 功能\n第 2 组", shape=box, style="rounded,filled", fillcolor="#FFF3CD", color="#B8860B", fontsize=10, width=1.2];
+  M_EXAM [label="MOD-EXAM\n考试管理", fillcolor="#FFF3CD", fontsize=9];
+  M_SCORE [label="MOD-SCORE\n成绩录入与提交", fillcolor="#FFF3CD", fontsize=9];
+  M_PUB [label="MOD-PUB\n审核与发布", fillcolor="#FFF3CD", fontsize=9];
+  ROOT -> M_EXAM; ROOT -> M_SCORE; ROOT -> M_PUB;
+
+  E1 [label="FR-EXAM-001 考试创建与编辑"];
+  E2 [label="FR-EXAM-002 考试范围配置"];
+  E3 [label="FR-EXAM-003 考试科目与分值配置"];
+  E4 [label="FR-EXAM-004 考试状态管理"];
+  M_EXAM -> E1; M_EXAM -> E2; M_EXAM -> E3; M_EXAM -> E4;
+
+  C1 [label="FR-SCORE-001 成绩录入任务生成"];
+  C2 [label="FR-SCORE-002 成绩录入与暂存"];
+  C3 [label="FR-SCORE-003 成绩校验"];
+  C4 [label="FR-SCORE-004 成绩提交与退回后重提"];
+  C5 [label="FR-SCORE-005 缺考/未录入状态维护"];
+  M_SCORE -> C1; M_SCORE -> C2; M_SCORE -> C3; M_SCORE -> C4; M_SCORE -> C5;
+
+  P1 [label="FR-PUB-001 教务审核"];
+  P2 [label="FR-PUB-002 班级成绩发布"];
+  P3 [label="FR-PUB-003 撤回发布"];
+  P4 [label="FR-PUB-004 发布后更正与版本"];
+  M_PUB -> P1; M_PUB -> P2; M_PUB -> P3; M_PUB -> P4;
+}

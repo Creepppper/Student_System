@@ -1,0 +1,22 @@
+digraph FIG09 {
+  graph [rankdir=TB, bgcolor="white", pad="0.4", nodesep="0.5", ranksep="0.7",
+         fontname="Noto Sans CJK SC", fontsize=11, labelloc=t,
+         label="FIG-09 业务实体分区索引（非完整 ER）\n17 个 DR + ENT-08 班主任任职关联实体；完整基数见 FIG-09A/09B1/09B2/09C", dpi=220];
+  node [fontname="Noto Sans CJK SC", fontsize=9, shape=box, style="rounded,filled", fillcolor="#F5F7FA", color="#546E7A", margin="0.12,0.08"];
+  edge [fontname="Noto Sans CJK SC", fontsize=8, color="#546E7A", arrowsize=0.55];
+
+  ORG [label="A 组织、学生与归属\nENT-01 学年（DR-ORG-001）\nENT-02 学期（DR-ORG-002）\nENT-03 年级（DR-ORG-003）\nENT-04 班级（DR-ORG-004）\nENT-05 学生（DR-STU-001）\nENT-06 学生班级归属（DR-STU-002）", fillcolor="#E3F2FD", color="#2F5D8A"];
+  HEAD [label="B 班主任与账号\nENT-07 班主任（DR-TCH-001）\nENT-08 班主任任职（无独立 DR）\nENT-17 账号-档案关联（DR-AUTH-001）", fillcolor="#E8F5E9", color="#2E7D32"];
+  EXAM [label="C 考试与科目\nENT-09 科目（DR-TCH-002）\nENT-10 考试（DR-EXAM-001）\nENT-11 考试班级范围（DR-EXAM-002）\nENT-12 考试科目（DR-EXAM-003）", fillcolor="#FFF8E1", color="#B8860B"];
+  SCORE [label="D 成绩与发布\nENT-13 成绩任务（DR-SCORE-001）\nENT-14 成绩记录（DR-SCORE-002）\nENT-15 班级发布（DR-PUB-001）", fillcolor="#E8F5E9", color="#2E7D32"];
+  EXT [label="E 审计与 P1 复核\nENT-16 业务变更记录（DR-AUDIT-001）\nENT-18 复核申请（DR-REVIEW-001，P1）", fillcolor="#F3E5F5", color="#6A1B9A"];
+
+  ORG -> HEAD [label="班级—任职"];
+  ORG -> EXAM [label="学年/班级/学生"];
+  HEAD -> SCORE [label="班主任—任务"];
+  EXAM -> SCORE [label="考试/科目—任务"];
+  SCORE -> EXT [label="成绩/发布—审计"];
+  HEAD -> EXT [label="复核受理（P1）", style=dashed, color="#6A1B9A"];
+  ORG -> EXT [label="学生申请（P1）", style=dashed, color="#6A1B9A"];
+  EXAM -> EXT [label="考试/科目（P1）", style=dashed, color="#6A1B9A"];
+}

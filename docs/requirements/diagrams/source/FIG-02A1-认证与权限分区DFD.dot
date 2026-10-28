@@ -1,0 +1,38 @@
+digraph FIG02A1 {
+  graph [rankdir=TB, bgcolor="white", pad="0.4", nodesep="0.4", ranksep="0.9",
+         fontname="Noto Sans CJK SC", fontsize=11, labelloc=t,
+         label="FIG-02A1 1 层 DFD 分区视图：账号认证与权限\n同一层 DFD 的局部展示，不是 P1 的下级加工分解；四类角色均经 P1 认证", dpi=220];
+  node [fontname="Noto Sans CJK SC", fontsize=9.5];
+  edge [fontname="Noto Sans CJK SC", fontsize=8, color="#4A6572", arrowsize=0.55];
+
+  EO1 [label="EO-01 系统管理员", shape=box, style="rounded,filled", fillcolor="#E3F0FB", color="#2F5D8A", width=1.75];
+  EO2 [label="EO-02 教务管理员", shape=box, style="rounded,filled", fillcolor="#E3F0FB", color="#2F5D8A", width=1.75];
+  EO3 [label="EO-03 班主任", shape=box, style="rounded,filled", fillcolor="#E8F5E9", color="#2E7D32", width=1.75];
+  EO4 [label="EO-04 学生", shape=box, style="rounded,filled", fillcolor="#F3E5F5", color="#6A1B9A", width=1.75];
+
+  P1 [label="P1 身份认证与权限管理", shape=box, style="rounded,filled", fillcolor="#FFF3CD", color="#B8860B", width=2.0];
+  D1 [label="D1 账号与权限", shape=box3d, style="filled", fillcolor="#ECEFF1", color="#607D8B"];
+  D2 [label="D2 组织与人员", shape=box3d, style="filled", fillcolor="#ECEFF1", color="#607D8B"];
+  D8 [label="D8 业务审计", shape=box3d, style="filled", fillcolor="#ECEFF1", color="#607D8B"];
+
+  EO1 -> P1 [label="DF-001 登录"];
+  EO1 -> P1 [label="DF-002 账号/权限配置"];
+  P1 -> EO1 [label="DF-003 认证/权限"];
+  P1 -> EO1 [label="DF-004 配置结果"];
+  EO2 -> P1 [label="DF-007 登录"];
+  EO2 -> P1 [label="DF-008 账号绑定"];
+  P1 -> EO2 [label="DF-009 认证/权限"];
+  P1 -> EO2 [label="DF-010 绑定结果"];
+  EO3 -> P1 [label="DF-021 登录"];
+  P1 -> EO3 [label="DF-022 认证/权限"];
+  EO4 -> P1 [label="DF-029 登录"];
+  P1 -> EO4 [label="DF-030 认证/权限"];
+
+  P1 -> D1 [dir=both, label="DF-101/102\n账号/权限"];
+  D2 -> P1 [label="DF-103 档案状态"];
+  P1 -> D8 [label="DF-129 登录审计"];
+
+  NOTE [shape=note, style=filled, fillcolor="#FAFAFA", color="#999999", fontsize=8,
+        label="说明：本图为 1 层 DFD 的 P1 分区视图；P1 仍是完整 1 层的独立加工。\l四类角色只经 P1 获得令牌/权限；数据范围见 PS-01/PS-13。\lP1 的上下级分解未在本图展开；若展开应另编号 P1.1/P1.2。\l"];
+  D8 -> NOTE [style=dotted, arrowhead=none, color="#999999"];
+}

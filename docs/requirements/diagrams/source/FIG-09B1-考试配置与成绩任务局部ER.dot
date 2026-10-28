@@ -1,0 +1,27 @@
+digraph FIG09B1 {
+  graph [rankdir=TB, bgcolor="white", pad="0.4", nodesep="0.45", ranksep="0.8",
+         fontname="Noto Sans CJK SC", fontsize=11, labelloc=t,
+         label="FIG-09B1 考试配置、范围、科目与成绩任务局部 ER\n任务唯一考试×班级×科目；班主任为第一责任人快照；基数以本图为准", dpi=220];
+  node [fontname="Noto Sans CJK SC", fontsize=9, shape=box, style="rounded,filled", fillcolor="#F5F7FA", color="#546E7A", width=2.1];
+  edge [fontname="Noto Sans CJK SC", fontsize=8, color="#2E7D32", arrowsize=0.55];
+
+  SUBJ [label="ENT-09 科目\nDR-TCH-002\nPK 科目ID"];
+  EXAM [label="ENT-10 考试\nDR-EXAM-001\nPK 考试ID"];
+  CLASS [label="ENT-04 班级\nDR-ORG-004\nPK 班级ID"];
+  ECLASS [label="ENT-11 考试班级范围\nDR-EXAM-002（关联实体）\n考试+班级唯一"];
+  ESUBJ [label="ENT-12 考试科目\nDR-EXAM-003（关联实体）\n考试+科目唯一"];
+  HEAD [label="ENT-07 班主任\nDR-TCH-001\n第一责任人快照"];
+  TASK [label="ENT-13 成绩任务\nDR-SCORE-001\n考试+班级+科目唯一"];
+
+  SUBJ -> ESUBJ [label="1:N 被考"];
+  EXAM -> ESUBJ [label="1:N 设置"];
+  EXAM -> ECLASS [label="1:N 范围"];
+  CLASS -> ECLASS [label="1:N 参加"];
+  ECLASS -> TASK [label="1:N 生成"];
+  ESUBJ -> TASK [label="1:N 生成"];
+  HEAD -> TASK [label="1:N 第一责任人"];
+
+  NOTE [shape=note, style=filled, fillcolor="#FAFAFA", color="#2E7D32", fontsize=8.2,
+        label="约束：\l• 任务唯一 (考试,班级,科目)；一任务对应一组成绩记录。\l• 考试班级范围与考试科目共同限定任务可生成性。\l• 第一责任人为班主任，任务生成时快照；换班主任不改历史快照。\l"];
+  TASK -> NOTE [style=dotted, arrowhead=none, color="#2E7D32"];
+}

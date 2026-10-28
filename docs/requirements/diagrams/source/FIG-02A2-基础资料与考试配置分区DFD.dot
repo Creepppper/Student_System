@@ -1,0 +1,25 @@
+digraph FIG02A2 {
+  graph [rankdir=LR, bgcolor="white", pad="0.4", nodesep="0.35", ranksep="0.8",
+         fontname="Noto Sans CJK SC", fontsize=11, labelloc=t,
+         label="FIG-02A2 1 层 DFD 分区视图：基础资料与考试配置\nP2、P3 保持独立加工；P2/P3 合并只出现在 FIG-02 总览，不在本图", dpi=220];
+  node [fontname="Noto Sans CJK SC", fontsize=9.5];
+  edge [fontname="Noto Sans CJK SC", fontsize=7.8, color="#4A6572", arrowsize=0.55];
+
+  EO2 [label="EO-02 教务管理员", shape=box, style="rounded,filled", fillcolor="#E3F0FB", color="#2F5D8A", width=1.8];
+  P2 [label="P2 基础资料管理", shape=box, style="rounded,filled", fillcolor="#FFF3CD", color="#B8860B", width=1.9];
+  P3 [label="P3 考试配置管理", shape=box, style="rounded,filled", fillcolor="#FFF3CD", color="#B8860B", width=1.9];
+  D2 [label="D2 组织与人员", shape=box3d, style="filled", fillcolor="#ECEFF1", color="#607D8B"];
+  D3 [label="D3 班主任任职", shape=box3d, style="filled", fillcolor="#ECEFF1", color="#607D8B"];
+  D4 [label="D4 考试配置", shape=box3d, style="filled", fillcolor="#ECEFF1", color="#607D8B"];
+  D8 [label="D8 业务审计", shape=box3d, style="filled", fillcolor="#ECEFF1", color="#607D8B"];
+
+  EO2 -> P2 [label="DF-011 基础资料"];
+  P2 -> EO2 [label="DF-012 资料结果"];
+  EO2 -> P3 [label="DF-013 考试配置"];
+  P3 -> EO2 [label="DF-014 配置结果"];
+  P2 -> D2 [dir=both, label="DF-104/105\n组织/人员/科目"];
+  P2 -> D3 [dir=both, label="DF-108/109\n任职/历史"];
+  P3 -> D4 [dir=both, label="DF-112/113\n考试配置"];
+  P2 -> D8 [label="DF-130 资料审计"];
+  P3 -> D8 [label="DF-131 考试审计"];
+}

@@ -1,0 +1,25 @@
+digraph FIG02A3 {
+  graph [rankdir=LR, bgcolor="white", pad="0.4", nodesep="0.4", ranksep="0.9",
+         fontname="Noto Sans CJK SC", fontsize=11, labelloc=t,
+         label="FIG-02A3 1 层 DFD 分区视图：业务审计查询\n本图只展示 P7 查询；P1～P5 的审计写入见 A1/A2/B1/B2 与 DF-129～133，不在此重复", dpi=220];
+  node [fontname="Noto Sans CJK SC", fontsize=9.5];
+  edge [fontname="Noto Sans CJK SC", fontsize=8, color="#4A6572", arrowsize=0.55];
+
+  EO1 [label="EO-01 系统管理员", shape=box, style="rounded,filled", fillcolor="#E3F0FB", color="#2F5D8A", width=1.8];
+  EO2 [label="EO-02 教务管理员", shape=box, style="rounded,filled", fillcolor="#E3F0FB", color="#2F5D8A", width=1.8];
+  EO3 [label="EO-03 班主任", shape=box, style="rounded,filled", fillcolor="#E8F5E9", color="#2E7D32", width=1.8];
+  P7 [label="P7 业务审计与记录查询", shape=box, style="rounded,filled", fillcolor="#FFF3CD", color="#B8860B", width=2.2];
+  D8 [label="D8 业务审计记录", shape=box3d, style="filled", fillcolor="#ECEFF1", color="#607D8B"];
+
+  EO1 -> P7 [label="DF-005 系统审计查询"];
+  P7 -> EO1 [label="DF-006 脱敏审计结果"];
+  EO2 -> P7 [label="DF-019 业务审计查询"];
+  P7 -> EO2 [label="DF-020 业务审计结果"];
+  EO3 -> P7 [label="DF-027 本班审计查询"];
+  P7 -> EO3 [label="DF-028 本班审计结果"];
+  D8 -> P7 [label="DF-135 审计记录"];
+
+  NOTE [shape=note, style=filled, fillcolor="#FAFAFA", color="#999999", fontsize=8,
+        label="说明：审计写入在 P1～P5 的业务分区中完成（DF-129～133）；\l本图只表示查询读取，避免把多个不同加工压成一个“审计总线”。\l系统管理员结果脱敏；班主任只读本班相关。\l"];
+  P7 -> NOTE [style=dotted, arrowhead=none, color="#999999"];
+}

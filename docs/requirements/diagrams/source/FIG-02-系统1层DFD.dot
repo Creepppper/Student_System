@@ -1,66 +1,38 @@
 digraph FIG02 {
-  graph [rankdir=TB, bgcolor="white", pad="0.35", nodesep="0.3", ranksep="0.55",
+  graph [rankdir=LR, bgcolor="white", pad="0.4", nodesep="0.35", ranksep="1.0",
          fontname="Noto Sans CJK SC", fontsize=11, labelloc=t,
-         label="FIG-02 系统 1 层 DFD（P0）\n按主题分组：P2/P3 合并显示，P4/P5/P6/P7 保留编号；局部展开见 FIG-02A/02B；P1 复核见 FIG-02C", dpi=220];
+         label="FIG-02 系统 1 层 DFD 内部流总览（P0；P1～P7 独立）\n外部实体/交互见 FIG-01 与同层分区 02A1～A3、02B1～B3；本图不重复外部箭头，避免回环", dpi=220];
   node [fontname="Noto Sans CJK SC", fontsize=9];
-  edge [fontname="Noto Sans CJK SC", fontsize=7.0, color="#546E7A", arrowsize=0.55];
+  edge [fontname="Noto Sans CJK SC", fontsize=7.2, color="#546E7A", arrowsize=0.5];
 
-  EO1 [label="EO-01 系统管理员", shape=box, style="rounded,filled", fillcolor="#E3F0FB", color="#2F5D8A", width=1.6];
-  EO2 [label="EO-02 教务管理员", shape=box, style="rounded,filled", fillcolor="#E3F0FB", color="#2F5D8A", width=1.6];
-  EO3 [label="EO-03 班主任", shape=box, style="rounded,filled", fillcolor="#E8F5E9", color="#2E7D32", width=1.6];
-  EO4 [label="EO-04 学生", shape=box, style="rounded,filled", fillcolor="#F3E5F5", color="#6A1B9A", width=1.6];
+  P1 [label="P1 认证与权限", shape=box, style="rounded,filled", fillcolor="#FFF3CD", color="#B8860B", width=2.0];
+  P2 [label="P2 基础资料", shape=box, style="rounded,filled", fillcolor="#FFF3CD", color="#B8860B", width=2.0];
+  P3 [label="P3 考试配置", shape=box, style="rounded,filled", fillcolor="#FFF3CD", color="#B8860B", width=2.0];
+  P4 [label="P4 成绩录入/提交", shape=box, style="rounded,filled", fillcolor="#FFF3CD", color="#B8860B", width=2.0];
+  P5 [label="P5 审核/发布", shape=box, style="rounded,filled", fillcolor="#FFF3CD", color="#B8860B", width=2.0];
+  P6 [label="P6 查询/统计", shape=box, style="rounded,filled", fillcolor="#FFF3CD", color="#B8860B", width=2.0];
+  P7 [label="P7 业务审计", shape=box, style="rounded,filled", fillcolor="#FFF3CD", color="#B8860B", width=2.0];
 
-  P1 [label="P1 身份认证与权限", shape=box, style="rounded,filled", fillcolor="#FFF3CD", color="#B8860B"];
-  P23 [label="P2/P3 基础资料与考试配置\n（合并显示）", shape=box, style="rounded,filled", fillcolor="#FFF3CD", color="#B8860B"];
-  P4 [label="P4 成绩录入与提交", shape=box, style="rounded,filled", fillcolor="#FFF3CD", color="#B8860B"];
-  P5 [label="P5 成绩审核与发布", shape=box, style="rounded,filled", fillcolor="#FFF3CD", color="#B8860B"];
-  P6 [label="P6 成绩查询与统计", shape=box, style="rounded,filled", fillcolor="#FFF3CD", color="#B8860B"];
-  P7 [label="P7 业务审计与记录查询", shape=box, style="rounded,filled", fillcolor="#FFF3CD", color="#B8860B"];
+  DS1 [label="DS-1 账号与权限", shape=box3d, style="filled", fillcolor="#ECEFF1", color="#607D8B"];
+  DS2 [label="DS-2 教务基础数据\n（D2+D3+D4）", shape=box3d, style="filled", fillcolor="#ECEFF1", color="#607D8B"];
+  DS3 [label="DS-3 成绩与发布\n（D5+D6+D7）", shape=box3d, style="filled", fillcolor="#ECEFF1", color="#607D8B"];
+  DS4 [label="DS-4 业务审计\n（D8）", shape=box3d, style="filled", fillcolor="#ECEFF1", color="#607D8B"];
 
-  D1 [label="DS-1 账号与权限", shape=box3d, style="filled", fillcolor="#ECEFF1", color="#607D8B"];
-  D2 [label="DS-2 教务基础数据\n（组织/人员/考试）", shape=box3d, style="filled", fillcolor="#ECEFF1", color="#607D8B"];
-  D3 [label="DS-3 成绩与发布\n（任务/成绩/发布）", shape=box3d, style="filled", fillcolor="#ECEFF1", color="#607D8B"];
-  D4 [label="DS-4 业务审计", shape=box3d, style="filled", fillcolor="#ECEFF1", color="#607D8B"];
+  P1 -> DS1 [dir=both, label="DF-101/102 账号/权限"];
+  P2 -> DS2 [dir=both, label="DF-104/105 资料"];
+  P3 -> DS2 [dir=both, label="DF-112/113 考试"];
+  P4 -> DS3 [dir=both, label="DF-116/121 任务/成绩"];
+  P5 -> DS3 [dir=both, label="DF-118/126 审核/发布"];
+  DS2 -> P6 [label="DF-107/120 范围/任务"];
+  DS3 -> P6 [label="DF-125/128 成绩/发布"];
+  P1 -> DS4 [label="DF-129 登录审计", color="#90A4AE"];
+  P2 -> DS4 [label="DF-130 资料审计", color="#90A4AE"];
+  P3 -> DS4 [label="DF-131 考试审计", color="#90A4AE"];
+  P4 -> DS4 [label="DF-132 成绩审计", color="#90A4AE"];
+  P5 -> DS4 [label="DF-133 发布审计", color="#90A4AE"];
+  DS4 -> P7 [label="DF-135 审计记录", color="#90A4AE"];
 
-  EO1 -> P1 [dir=both, label="登录凭据/认证与配置结果"];
-  EO2 -> P1 [dir=both, label="登录/账号绑定/结果"];
-  EO3 -> P1 [dir=both, label="登录凭据/认证结果"];
-  EO4 -> P1 [dir=both, label="登录凭据/认证结果"];
-
-  EO1 -> P7 [label="系统审计查询"];
-  P7 -> EO1 [label="脱敏审计结果"];
-  EO2 -> P7 [label="业务审计查询"];
-  P7 -> EO2 [label="审计结果"];
-  EO3 -> P7 [label="本班审计查询"];
-  P7 -> EO3 [label="本班审计结果"];
-
-  EO2 -> P23 [label="基础资料/考试配置"];
-  P23 -> EO2 [label="配置结果"];
-  EO2 -> P5 [label="审核/发布/撤回/更正"];
-  P5 -> EO2 [label="审核/发布结果"];
-  EO2 -> P6 [label="全校统计查询"];
-  P6 -> EO2 [label="统计结果"];
-
-  EO3 -> P4 [label="本班全科成绩/提交"];
-  P4 -> EO3 [label="任务状态/退回原因"];
-  EO3 -> P6 [label="本班统计查询"];
-  P6 -> EO3 [label="本班成绩/统计结果"];
-  EO4 -> P6 [label="本人成绩查询"];
-  P6 -> EO4 [label="本人已发布成绩"];
-
-  P1 -> D1 [dir=both, label="账号/角色/权限"];
-  D1 -> P23 [label="账号/档案状态"];
-  P23 -> D2 [dir=both, label="基础资料/考试配置"];
-  D2 -> P4 [label="任职/学生/科目"];
-  P4 -> D3 [dir=both, label="任务/成绩"];
-  P5 -> D3 [dir=both, label="审核/发布/版本"];
-  D2 -> P5 [label="范围/条件"];
-  D2 -> P6 [label="学生/班级"];
-  D3 -> P6 [label="任务/成绩/发布"];
-
-  P1 -> D4 [label="登录审计"];
-  P23 -> D4 [label="资料/考试审计"];
-  P4 -> D4 [label="成绩审计"];
-  P5 -> D4 [label="发布审计"];
-  D4 -> P7 [label="审计记录"];
+  NOTE [shape=note, style=filled, fillcolor="#FAFAFA", color="#999999", fontsize=8,
+        label="说明：本图是 1 层 DFD 的**内部流总览**，不是完整的上下文图；\l四类外部实体和全部外部流见 FIG-01 与 02A1～A3/02B1～B3，避免在同一张图重复画 30 余条长回环。\lP1～P7 是独立加工；DS-1= D1，DS-2=D2+D3+D4，DS-3=D5+D6+D7，DS-4=D8。\lP1 复核是 02C（P8 的下级分解）。\l"];
+  DS4 -> NOTE [style=dotted, arrowhead=none, color="#999999"];
 }

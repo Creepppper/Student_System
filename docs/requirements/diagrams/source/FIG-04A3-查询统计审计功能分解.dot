@@ -1,0 +1,25 @@
+digraph FIG04A3 {
+  graph [rankdir=LR, bgcolor="white", pad="0.25", nodesep="0.10", ranksep="0.55",
+         fontname="Noto Sans CJK SC", fontsize=11, labelloc=t,
+         label="FIG-04A3 P0 功能分解（本人查询、统计与业务审计；6 项）\n功能树只表示层级；统计/查询细节见 FIG-02B3", dpi=220];
+  node [fontname="Noto Sans CJK SC", fontsize=8.5, shape=box, style="rounded,filled", fillcolor="#FFF8E7", color="#B8860B", margin="0.05,0.03", height=0.25];
+  edge [color="#8A6D3B", arrowsize=0.4, arrowhead=none];
+
+  ROOT [label="P0 功能\n第 3 组", shape=box, style="rounded,filled", fillcolor="#FFF3CD", color="#B8860B", fontsize=10, width=1.2];
+  M_QUERY [label="MOD-QUERY\n本人成绩查询", fillcolor="#FFF3CD", fontsize=9];
+  M_STAT [label="MOD-STAT\n基础统计", fillcolor="#FFF3CD", fontsize=9];
+  M_AUDIT [label="MOD-AUDIT\n业务审计", fillcolor="#FFF3CD", fontsize=9];
+  ROOT -> M_QUERY; ROOT -> M_STAT; ROOT -> M_AUDIT;
+
+  Q1 [label="FR-QUERY-001 学生查询本人已发布成绩"];
+  Q2 [label="FR-QUERY-002 成绩明细/总分/班级排名"];
+  M_QUERY -> Q1; M_QUERY -> Q2;
+
+  X1 [label="FR-STAT-001 单场考试班级学科统计"];
+  X2 [label="FR-STAT-002 班级学生总分与排名汇总"];
+  M_STAT -> X1; M_STAT -> X2;
+
+  U1 [label="FR-AUDIT-001 成绩业务变更记录"];
+  U2 [label="FR-AUDIT-002 发布与撤回记录"];
+  M_AUDIT -> U1; M_AUDIT -> U2;
+}

@@ -1,7 +1,7 @@
 digraph FIG02C {
   graph [rankdir=TB, bgcolor="white", pad="0.4", nodesep="0.45", ranksep="0.8",
          fontname="Noto Sans CJK SC", fontsize=11, labelloc=t,
-         label="FIG-02C P1 成绩复核扩展 DFD（独立于 P0 主链路）\n学生→班主任受理并核查→教务确认/更正→学生查看；不出现任课教师", dpi=220];
+         label="FIG-02C P8 成绩复核的下级加工分解（P8.1～P8.3）\nP8 是 1 层的 P1 扩展加工；本图是正式下级分解，不是同层分区视图", dpi=220];
   node [fontname="Noto Sans CJK SC", fontsize=9.5];
   edge [fontname="Noto Sans CJK SC", fontsize=7.8, color="#6A4C93", arrowsize=0.65];
 

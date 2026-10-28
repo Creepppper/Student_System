@@ -1,0 +1,38 @@
+digraph FIG04A1 {
+  graph [rankdir=LR, bgcolor="white", pad="0.25", nodesep="0.10", ranksep="0.55",
+         fontname="Noto Sans CJK SC", fontsize=11, labelloc=t,
+         label="FIG-04A1 P0 功能分解（认证、组织、学生、班主任与科目；16 项）\n功能树只表示层级，不需要方向箭头；FR 编号为现行有效需求", dpi=220];
+  node [fontname="Noto Sans CJK SC", fontsize=8.5, shape=box, style="rounded,filled", fillcolor="#FFF8E7", color="#B8860B", margin="0.05,0.03", height=0.25];
+  edge [color="#8A6D3B", arrowsize=0.4, arrowhead=none];
+
+  ROOT [label="P0 功能\n第 1 组", shape=box, style="rounded,filled", fillcolor="#FFF3CD", color="#B8860B", fontsize=10, width=1.2];
+  M_AUTH [label="MOD-AUTH\n认证与权限", fillcolor="#FFF3CD", fontsize=9];
+  M_ORG  [label="MOD-ORG\n组织与学年", fillcolor="#FFF3CD", fontsize=9];
+  M_STU  [label="MOD-STU\n学生档案", fillcolor="#FFF3CD", fontsize=9];
+  M_TCH  [label="MOD-TCH\n班主任与科目", fillcolor="#FFF3CD", fontsize=9];
+  ROOT -> M_AUTH; ROOT -> M_ORG; ROOT -> M_STU; ROOT -> M_TCH;
+
+  A1 [label="FR-AUTH-001 登录/登出/验证码"];
+  A2 [label="FR-AUTH-002 用户/角色/菜单/按钮权限"];
+  A3 [label="FR-AUTH-003 业务角色分配与账号绑定"];
+  A4 [label="FR-AUTH-004 业务数据范围过滤"];
+  A5 [label="FR-AUTH-005 账号启停与密码重置"];
+  M_AUTH -> A1; M_AUTH -> A2; M_AUTH -> A3; M_AUTH -> A4; M_AUTH -> A5;
+
+  O1 [label="FR-ORG-001 学年管理"];
+  O2 [label="FR-ORG-002 学期管理"];
+  O3 [label="FR-ORG-003 年级管理"];
+  O4 [label="FR-ORG-004 班级管理"];
+  O5 [label="FR-ORG-005 班主任指派与变更"];
+  M_ORG -> O1; M_ORG -> O2; M_ORG -> O3; M_ORG -> O4; M_ORG -> O5;
+
+  S1 [label="FR-STU-001 学生档案维护"];
+  S2 [label="FR-STU-002 学生班级归属与变更"];
+  S3 [label="FR-STU-003 学生账号开通与关联"];
+  S4 [label="FR-STU-004 学生状态管理"];
+  M_STU -> S1; M_STU -> S2; M_STU -> S3; M_STU -> S4;
+
+  T1 [label="FR-TCH-001 班主任档案维护"];
+  T2 [label="FR-TCH-002 科目维护"];
+  M_TCH -> T1; M_TCH -> T2;
+}

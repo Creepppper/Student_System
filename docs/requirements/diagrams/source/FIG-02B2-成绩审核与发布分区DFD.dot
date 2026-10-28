@@ -1,0 +1,26 @@
+digraph FIG02B2 {
+  graph [rankdir=LR, bgcolor="white", pad="0.4", nodesep="0.35", ranksep="0.85",
+         fontname="Noto Sans CJK SC", fontsize=11, labelloc=t,
+         label="FIG-02B2 1 层 DFD 分区视图：成绩审核与发布\nP5 独立加工；审核/退回/发布/撤回/更正均只归教务", dpi=220];
+  node [fontname="Noto Sans CJK SC", fontsize=9.5];
+  edge [fontname="Noto Sans CJK SC", fontsize=7.8, color="#7A4B00", arrowsize=0.55];
+
+  EO2 [label="EO-02 教务管理员", shape=box, style="rounded,filled", fillcolor="#E3F0FB", color="#2F5D8A", width=1.8];
+  P5 [label="P5 成绩审核与发布", shape=box, style="rounded,filled", fillcolor="#FFF3CD", color="#B8860B", width=2.1];
+  D4 [label="D4 考试配置", shape=box3d, style="filled", fillcolor="#ECEFF1", color="#607D8B"];
+  D5 [label="D5 成绩任务", shape=box3d, style="filled", fillcolor="#ECEFF1", color="#607D8B"];
+  D6 [label="D6 成绩记录", shape=box3d, style="filled", fillcolor="#ECEFF1", color="#607D8B"];
+  D7 [label="D7 成绩发布", shape=box3d, style="filled", fillcolor="#ECEFF1", color="#607D8B"];
+  D8 [label="D8 业务审计", shape=box3d, style="filled", fillcolor="#ECEFF1", color="#607D8B"];
+
+  EO2 -> P5 [label="DF-015 审核/发布/撤回/更正"];
+  P5 -> EO2 [label="DF-016 审核/发布结果"];
+  D4 -> P5 [label="DF-115 考试范围/发布条件"];
+  D5 -> P5 [label="DF-118 待审核任务"];
+  P5 -> D5 [label="DF-119 审核状态"];
+  D6 -> P5 [label="DF-124 成绩记录"];
+  P5 -> D6 [label="DF-123 更正/状态"];
+  P5 -> D7 [label="DF-126 发布/撤回/版本"];
+  D7 -> P5 [label="DF-127 发布版本"];
+  P5 -> D8 [label="DF-133 审核/发布/更正审计"];
+}

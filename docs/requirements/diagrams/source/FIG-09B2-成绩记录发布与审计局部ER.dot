@@ -1,0 +1,27 @@
+digraph FIG09B2 {
+  graph [rankdir=TB, bgcolor="white", pad="0.4", nodesep="0.42", ranksep="0.8",
+         fontname="Noto Sans CJK SC", fontsize=11, labelloc=t,
+         label="FIG-09B2 成绩记录、发布版本与业务审计局部 ER\n成绩唯一任务×学生；发布唯一考试×班级并版本化；审计多态引用", dpi=220];
+  node [fontname="Noto Sans CJK SC", fontsize=9, shape=box, style="rounded,filled", fillcolor="#F5F7FA", color="#546E7A", width=2.1];
+  edge [fontname="Noto Sans CJK SC", fontsize=8, color="#2E7D32", arrowsize=0.55];
+
+  TASK [label="ENT-13 成绩任务\nDR-SCORE-001\n来自 FIG-09B1"];
+  STUD [label="ENT-05 学生\nDR-STU-001\nPK 学生ID"];
+  SCORE [label="ENT-14 成绩记录\nDR-SCORE-002\n任务+学生唯一"];
+  EXAM [label="ENT-10 考试\nDR-EXAM-001\nPK 考试ID"];
+  CLASS [label="ENT-04 班级\nDR-ORG-004\nPK 班级ID"];
+  PUB [label="ENT-15 班级发布\nDR-PUB-001\n考试+班级唯一；版本"];
+  AUDIT [label="ENT-16 业务变更记录\nDR-AUDIT-001\n事件日志，多态引用"];
+
+  TASK -> SCORE [label="1:N 含"];
+  STUD -> SCORE [label="1:N 取得"];
+  EXAM -> PUB [label="1:N 发布"];
+  CLASS -> PUB [label="1:N 发布"];
+  TASK -> AUDIT [label="记录（多态）", style=dotted, color="#90A4AE"];
+  SCORE -> AUDIT [label="记录（多态）", style=dotted, color="#90A4AE"];
+  PUB -> AUDIT [label="记录（多态）", style=dotted, color="#90A4AE"];
+
+  NOTE [shape=note, style=filled, fillcolor="#FAFAFA", color="#2E7D32", fontsize=8.2,
+        label="约束：\l• 成绩记录唯一 (任务,学生)；缺考/未录入/零分三态。\l• 发布唯一 (考试,班级)，版本随撤回/更正/重发递增。\l• 审核通过 task 不等于发布；发布是班级级动作。\l• 审计按对象类型/ID 多态记录，不声明物理外键。\l"];
+  AUDIT -> NOTE [style=dotted, arrowhead=none, color="#2E7D32"];
+}

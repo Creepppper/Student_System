@@ -1,0 +1,29 @@
+digraph FIG02B3 {
+  graph [rankdir=LR, bgcolor="white", pad="0.4", nodesep="0.35", ranksep="0.85",
+         fontname="Noto Sans CJK SC", fontsize=11, labelloc=t,
+         label="FIG-02B3 1 层 DFD 分区视图：成绩查询与统计\nP6 独立加工；学生仅本人已发布，班主任仅本班，教务可全校", dpi=220];
+  node [fontname="Noto Sans CJK SC", fontsize=9.5];
+  edge [fontname="Noto Sans CJK SC", fontsize=7.8, color="#2F5D8A", arrowsize=0.55];
+
+  EO2 [label="EO-02 教务管理员", shape=box, style="rounded,filled", fillcolor="#E3F0FB", color="#2F5D8A", width=1.75];
+  EO3 [label="EO-03 班主任", shape=box, style="rounded,filled", fillcolor="#E8F5E9", color="#2E7D32", width=1.75];
+  EO4 [label="EO-04 学生", shape=box, style="rounded,filled", fillcolor="#F3E5F5", color="#6A1B9A", width=1.75];
+  P6 [label="P6 成绩查询与统计", shape=box, style="rounded,filled", fillcolor="#FFF3CD", color="#B8860B", width=2.1];
+  D2 [label="D2 组织与人员", shape=box3d, style="filled", fillcolor="#ECEFF1", color="#607D8B"];
+  D3 [label="D3 班主任任职", shape=box3d, style="filled", fillcolor="#ECEFF1", color="#607D8B"];
+  D5 [label="D5 成绩任务", shape=box3d, style="filled", fillcolor="#ECEFF1", color="#607D8B"];
+  D6 [label="D6 成绩记录", shape=box3d, style="filled", fillcolor="#ECEFF1", color="#607D8B"];
+  D7 [label="D7 成绩发布", shape=box3d, style="filled", fillcolor="#ECEFF1", color="#607D8B"];
+
+  EO2 -> P6 [label="DF-017 全校统计查询"];
+  P6 -> EO2 [label="DF-018 全校统计结果"];
+  EO3 -> P6 [label="DF-025 本班统计查询"];
+  P6 -> EO3 [label="DF-026 本班成绩/统计结果"];
+  EO4 -> P6 [label="DF-031 本人成绩查询"];
+  P6 -> EO4 [label="DF-032 本人已发布成绩"];
+  D2 -> P6 [label="DF-107 班级/学生基础"];
+  D3 -> P6 [label="DF-111 任职班级"];
+  D5 -> P6 [label="DF-120 任务状态/范围"];
+  D6 -> P6 [label="DF-125 成绩记录"];
+  D7 -> P6 [label="DF-128 已发布成绩"];
+}

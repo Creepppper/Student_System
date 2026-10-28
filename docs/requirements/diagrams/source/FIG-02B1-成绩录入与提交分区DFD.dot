@@ -1,0 +1,25 @@
+digraph FIG02B1 {
+  graph [rankdir=LR, bgcolor="white", pad="0.4", nodesep="0.35", ranksep="0.85",
+         fontname="Noto Sans CJK SC", fontsize=11, labelloc=t,
+         label="FIG-02B1 1 层 DFD 分区视图：成绩录入与提交\nP4 仍是一个独立加工；本图不展开 P4.1/P4.2 等下级步骤", dpi=220];
+  node [fontname="Noto Sans CJK SC", fontsize=9.5];
+  edge [fontname="Noto Sans CJK SC", fontsize=7.8, color="#2E7D32", arrowsize=0.55];
+
+  EO3 [label="EO-03 班主任", shape=box, style="rounded,filled", fillcolor="#E8F5E9", color="#2E7D32", width=1.8];
+  P4 [label="P4 成绩录入与提交", shape=box, style="rounded,filled", fillcolor="#FFF3CD", color="#B8860B", width=2.1];
+  D3 [label="D3 班主任任职", shape=box3d, style="filled", fillcolor="#ECEFF1", color="#607D8B"];
+  D4 [label="D4 考试配置", shape=box3d, style="filled", fillcolor="#ECEFF1", color="#607D8B"];
+  D5 [label="D5 成绩任务", shape=box3d, style="filled", fillcolor="#ECEFF1", color="#607D8B"];
+  D6 [label="D6 成绩记录", shape=box3d, style="filled", fillcolor="#ECEFF1", color="#607D8B"];
+  D8 [label="D8 业务审计", shape=box3d, style="filled", fillcolor="#ECEFF1", color="#607D8B"];
+
+  EO3 -> P4 [label="DF-023 本班全科成绩/提交"];
+  P4 -> EO3 [label="DF-024 任务状态/退回"];
+  D3 -> P4 [label="DF-110 当前任职班级"];
+  D4 -> P4 [label="DF-114 适用科目/满分/线"];
+  P4 -> D5 [label="DF-116 任务/花名册/状态"];
+  D5 -> P4 [label="DF-117 任务/花名册/状态"];
+  P4 -> D6 [label="DF-121 成绩草稿/提交"];
+  D6 -> P4 [label="DF-122 成绩记录"];
+  P4 -> D8 [label="DF-132 成绩/提交审计"];
+}

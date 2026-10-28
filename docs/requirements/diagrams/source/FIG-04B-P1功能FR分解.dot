@@ -4,7 +4,7 @@ digraph FIG04B {
          label="FIG-04B P1 功能模块—FR 分解（11 项）\nP1 不进入 P0 退出条件；不得用 P1 替代 P0 交付", dpi=200];
   node [fontname="Noto Sans CJK SC", fontsize=9, shape=box, style="rounded,dashed,filled",
         fillcolor="#F7F0FF", color="#7B4FA0", margin="0.06,0.04", height=0.28];
-  edge [fontname="Noto Sans CJK SC", fontsize=7.5, color="#7B4FA0", arrowsize=0.5];
+  edge [fontname="Noto Sans CJK SC", fontsize=7.5, color="#7B4FA0", arrowsize=0.4, arrowhead=none];
 
   ROOT [label="P1\n11 项", shape=box, style="rounded,dashed,filled", fillcolor="#E9D8FD", color="#7B4FA0", fontsize=11, width=1.2];
 

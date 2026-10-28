@@ -1,0 +1,37 @@
+@startuml
+skinparam defaultFontName "Noto Sans CJK SC"
+skinparam dpi 180
+skinparam shadowing false
+skinparam activityFontSize 8
+skinparam activityDiamondFontSize 8
+skinparam swimlaneTitleFontSize 10
+skinparam activity {
+  BackgroundColor #FFF8E7
+  BorderColor #B8860B
+}
+skinparam swimlane {
+  BorderColor #546E7A
+}
+title FIG-07C 撤回发布与重新发布活动图（P0 异常）\n撤回后学生不可见；数据保留；重发要求全部任务仍 APPROVED，版本+1
+
+|教务管理员|
+start
+:选择 PUB_PUBLISHED 班级发布;
+:填写撤回原因;
+|系统|
+:PUB_WITHDRAWN；数据保留;
+|学生|
+:成绩不可见;
+|教务管理员|
+if (重新发布？) then (是)
+  :确认所有适用任务 TASK_APPROVED;
+  |系统|
+  :发布版本 +1；PUB_PUBLISHED;
+  |学生|
+  :重新可见;
+else (否)
+  |学生|
+  :保持不可见;
+endif
+stop
+@enduml

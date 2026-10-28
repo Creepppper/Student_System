@@ -61,7 +61,7 @@ ExamSubject "1" -- "0..*" Task : 任务科目
 Task "1" -- "0..*" Score : 任务成绩
 Student "1" -- "0..*" Score : 学生成绩
 
-Class "1" -- "0..*" Task : 任务班级
+Class "1" -- "0..*" Task : 班级 1:N 任务
 legend bottom
   任务唯一 (考试,班级,科目)；primaryTeacherId 是生成时第一责任人快照，换班主任不覆盖历史。
   成绩唯一 (任务,学生)；scoreStatus 区分缺考/未录入/零分；0.5 分步长。

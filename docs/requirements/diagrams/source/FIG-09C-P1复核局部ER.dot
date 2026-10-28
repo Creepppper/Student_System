@@ -15,7 +15,7 @@ digraph FIG09C {
   STUD -> REVIEW [label="1:N 申请"];
   EXAM -> REVIEW [label="1:N 涉及"];
   SUBJ -> REVIEW [label="1:N 涉及"];
-  SCORE -> REVIEW [label="0..1:N 基于成绩版本"];
+  SCORE -> REVIEW [label="1:N 基于成绩版本"];
   HEAD -> REVIEW [label="1:N 受理/核查"];
 
   N1 [shape=note, style=filled, fillcolor="#FAFAFA", color="#6A1B9A", fontsize=8.4,

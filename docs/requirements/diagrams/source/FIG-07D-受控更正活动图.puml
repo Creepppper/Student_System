@@ -1,0 +1,29 @@
+@startuml
+skinparam defaultFontName "Noto Sans CJK SC"
+skinparam dpi 180
+skinparam shadowing false
+skinparam activityFontSize 8
+skinparam activityDiamondFontSize 8
+skinparam swimlaneTitleFontSize 10
+skinparam activity {
+  BackgroundColor #FFF8E7
+  BorderColor #B8860B
+}
+skinparam swimlane {
+  BorderColor #546E7A
+}
+title FIG-07D 发布后受控更正活动图（P0 异常）\n保持 PUB_PUBLISHED；生成新的不可变版本；保留原值/新值/原因/操作人/时间
+
+|教务管理员|
+start
+:选择 PUB_PUBLISHED 成绩记录;
+:填写更正原因、修改值、前后值;
+|系统|
+:校验数值/版本/权限;
+:生成新的不可变版本，保留旧版本;
+:更新成绩并重算总分/排名;
+:写业务审计;
+|学生|
+:显示更正后成绩（PUB_PUBLISHED）;
+stop
+@enduml

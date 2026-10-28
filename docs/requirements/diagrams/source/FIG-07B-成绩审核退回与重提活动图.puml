@@ -1,0 +1,38 @@
+@startuml
+skinparam defaultFontName "Noto Sans CJK SC"
+skinparam dpi 180
+skinparam shadowing false
+skinparam activityFontSize 8
+skinparam activityDiamondFontSize 8
+skinparam swimlaneTitleFontSize 10
+skinparam activity {
+  BackgroundColor #FFF8E7
+  BorderColor #B8860B
+}
+skinparam swimlane {
+  BorderColor #546E7A
+}
+title FIG-07B 审核退回、修改与重提（P0 异常）\n入口：TASK_SUBMITTED 且审核不通过；通过则直接回 07 发布；再次退回重复本图
+
+|教务管理员|
+start
+:打开 TASK_SUBMITTED 任务;
+:判定审核不通过（退回）;
+:填写退回原因;
+|系统|
+:TASK_RETURNED;
+|班主任|
+:修改成绩;
+|系统|
+:校验提交条件（完整/合法/版本）;
+|班主任|
+:重新提交;
+|系统|
+:TASK_SUBMITTED;
+|教务管理员|
+:重新审核;
+|系统|
+:TASK_APPROVED;
+:返回正常主流程（发布）;
+stop
+@enduml

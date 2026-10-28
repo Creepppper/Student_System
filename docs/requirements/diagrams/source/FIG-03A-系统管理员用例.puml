@@ -18,13 +18,14 @@ actor "系统管理员" as SA
 rectangle "高中学生信息与成绩管理系统" {
   usecase "登录与权限校验\nUC-AUTH-001 / FR-AUTH-001/004" as U_LOGIN
   usecase "账号/角色/权限管理\nUC-AUTH-001 / FR-AUTH-002/003/005" as U_ACCOUNT
-  usecase "业务审计查询\nUC-AUDIT-001 / FR-AUDIT-001/002" as U_AUDIT
+  usecase "审计查询（系统管理员脱敏视图）\nUC-AUDIT-001（受限视图）\nFR-AUDIT-001/002" as U_AUDIT
 }
-SA --> U_LOGIN
-SA --> U_ACCOUNT
-SA --> U_AUDIT
+SA -- U_LOGIN
+SA -- U_ACCOUNT
+SA -- U_AUDIT
 legend bottom
-  说明：本图只展开该角色的业务用例；P1 扩展不进入 P0 退出条件。
-  不设任课教师核查；数据库/技术组件不是业务 Actor。
+  系统管理员只查看系统/安全审计元数据；成绩前后值脱敏，不能展开/导出成绩明细。
+  系统管理权限不等于教务审批权；P1 不进入 P0 退出条件。
+  数据库/技术组件不是业务 Actor。
 endlegend
 @enduml

@@ -77,7 +77,7 @@
 <title>SCORE&#45;&gt;REVIEW</title>
 <path fill="none" stroke="#6a1b9a" d="M579.67,-240.92C550.96,-222.98 511.4,-198.25 481.29,-179.43"/>
 <polygon fill="#6a1b9a" stroke="#6a1b9a" points="482.36,-177.83 476.68,-176.55 480.32,-181.1 482.36,-177.83"/>
-<text xml:space="preserve" text-anchor="middle" x="566.92" y="-206.84" font-family="Noto Sans CJK SC" font-size="7.80">0..1:N 基于成绩版本</text>
+<text xml:space="preserve" text-anchor="middle" x="562.42" y="-206.84" font-family="Noto Sans CJK SC" font-size="7.80">1:N 基于成绩版本</text>
 </g>
 <!-- HEAD -->
 <g id="node5" class="node">
@@ -90,9 +90,9 @@
 <!-- HEAD&#45;&gt;REVIEW -->
 <g id="edge5" class="edge">
 <title>HEAD&#45;&gt;REVIEW</title>
-<path fill="none" stroke="#6a1b9a" d="M726.73,-240.8C691.03,-228.97 647,-214.59 607.4,-202.25 579.52,-193.56 548.95,-184.41 521.51,-176.33"/>
-<polygon fill="#6a1b9a" stroke="#6a1b9a" points="522.25,-174.55 516.43,-174.84 521.17,-178.24 522.25,-174.55"/>
-<text xml:space="preserve" text-anchor="middle" x="667.51" y="-206.84" font-family="Noto Sans CJK SC" font-size="7.80">1:N 受理/核查</text>
+<path fill="none" stroke="#6a1b9a" d="M721.81,-240.84C684.64,-229.21 639.17,-214.99 598.4,-202.25 572.87,-194.27 545.07,-185.59 519.86,-177.72"/>
+<polygon fill="#6a1b9a" stroke="#6a1b9a" points="520.43,-175.89 514.61,-176.09 519.28,-179.56 520.43,-175.89"/>
+<text xml:space="preserve" text-anchor="middle" x="660.11" y="-206.84" font-family="Noto Sans CJK SC" font-size="7.80">1:N 受理/核查</text>
 </g>
 <!-- N1 -->
 <g id="node7" class="node">

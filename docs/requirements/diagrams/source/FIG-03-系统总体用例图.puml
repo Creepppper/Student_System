@@ -32,26 +32,22 @@ rectangle "高中学生信息与成绩管理系统" {
   usecase "成绩审核与发布\nUC-PUB-001/002/003" as U_PUB
   usecase "成绩查询与统计\nUC-QUERY-001/UC-STAT-001" as U_QUERY
   usecase "P1 成绩复核\nUC-REVIEW-001" as U_REVIEW <<P1>>
-  usecase "P1 导入/趋势/对比\nUC-IMPORT/TREND/COMPARE" as U_EXT <<P1>>
 }
 
-SA --> U_ADMIN
-AC --> U_BASE
-HT --> U_RECORD
-AC --> U_PUB
-ST --> U_QUERY
-HT --> U_QUERY
-AC --> U_QUERY
-ST --> U_REVIEW
-HT --> U_REVIEW
-AC --> U_REVIEW
-HT --> U_EXT
-AC --> U_EXT
-ST --> U_EXT
+SA -- U_ADMIN
+AC -- U_BASE
+HT -- U_RECORD
+AC -- U_PUB
+ST -- U_QUERY
+HT -- U_QUERY
+AC -- U_QUERY
+ST -- U_REVIEW
+HT -- U_REVIEW
+AC -- U_REVIEW
 
 legend bottom
   业务目标级总览：登录、账号/权限、维护学生/班主任/科目、考试配置等
-  在 FIG-03A～03D 中按角色展开；P1 不进入 P0 退出条件。
+  在 FIG-03A～03D 中按角色展开；P1 分析/导入只在角色子图出现，避免合并授权。
   不设任课教师核查；不把数据库/技术组件画成业务 Actor。
 endlegend
 @enduml

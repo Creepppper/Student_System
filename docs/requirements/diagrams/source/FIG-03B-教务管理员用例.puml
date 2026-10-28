@@ -1,4 +1,5 @@
 @startuml
+scale 0.85
 left to right direction
 skinparam defaultFontName "Noto Sans CJK SC"
 skinparam dpi 200
@@ -27,15 +28,19 @@ rectangle "高中学生信息与成绩管理系统" {
   usecase "审核/发布/撤回/更正\nUC-PUB-001/002/003" as U_PUB
   usecase "统计与业务审计\nUC-STAT-001/UC-AUDIT-001\nFR-STAT-001/002、FR-AUDIT-001/002" as U_STAT
   usecase "P1 复核最终确认/更正\nUC-REVIEW-001\nFR-REVIEW-001/002/004/005" as U_REVIEW <<P1>>
-  usecase "P1 导入/趋势/对比\nUC-IMPORT/TREND/COMPARE\nFR-IMPORT/TREND/COMPARE" as U_EXT <<P1>>
+  usecase "P1 导入导出\nUC-IMPORT-001\nFR-IMPORT-001～004" as U_IMPORT <<P1>>
+  usecase "P1 全校成绩趋势\nUC-TREND-002\nFR-TREND-002" as U_TREND <<P1>>
+  usecase "P1 多班级对比\nUC-COMPARE-001\nFR-COMPARE-001" as U_COMPARE <<P1>>
 }
-AC --> U_LOGIN
-AC --> U_BASE
-AC --> U_EXAM
-AC --> U_PUB
-AC --> U_STAT
-AC --> U_REVIEW
-AC --> U_EXT
+AC -- U_LOGIN
+AC -- U_BASE
+AC -- U_EXAM
+AC -- U_PUB
+AC -- U_STAT
+AC -- U_REVIEW
+AC -- U_IMPORT
+AC -- U_TREND
+AC -- U_COMPARE
 legend bottom
   说明：本图只展开该角色的业务用例；P1 扩展不进入 P0 退出条件。
   不设任课教师核查；数据库/技术组件不是业务 Actor。

@@ -1,0 +1,40 @@
+@startuml
+skinparam defaultFontName "Noto Sans CJK SC"
+skinparam dpi 180
+skinparam shadowing false
+skinparam activityFontSize 8
+skinparam activityDiamondFontSize 8
+skinparam swimlaneTitleFontSize 10
+skinparam activity {
+  BackgroundColor #FFF8E7
+  BorderColor #B8860B
+}
+skinparam swimlane {
+  BorderColor #546E7A
+}
+title FIG-07A 成绩录入校验失败与补录（P0 异常）\n系统校验；班主任修正/补录；循环直到合法且无未录入
+
+|班主任|
+start
+:进入本班成绩录入;
+repeat
+  |系统|
+  :校验字段类型、0.5步长、数值范围;
+  :检查是否存在 SCORE_NOT_ENTERED;
+  if (存在非法值？) then (有)
+    |班主任|
+    :修正非法字段;
+  else (无)
+    if (存在未录入？) then (有)
+      |班主任|
+      :补录缺失学生成绩;
+    else (无)
+      |系统|
+      :校验通过（TASK_DRAFT 可提交）;
+    endif
+  endif
+repeat while (仍有非法/未录入？) is (是)
+|班主任|
+:保留 TASK_DRAFT;
+stop
+@enduml

@@ -29,6 +29,7 @@ class "业务变更记录" as Audit {
   eventType
   entityType
   entityId
+  entityVersion
   beforeValue
   afterValue
   reason
@@ -36,7 +37,7 @@ class "业务变更记录" as Audit {
 
 Exam "1" -- "0..*" Publication : 考试发布
 Class "1" -- "0..*" Publication : 班级发布
-Publication "0..*" .. "0..*" Audit : 多态审计
+Publication "0..1" -- "0..*" Audit : 发布审计（版本/原因）
 legend bottom
   发布唯一 (考试,班级)，有版本；撤回/更正/重发版本递增；
   不允许对 PUB_PUBLISHED 直接覆盖；所有动作写审计。

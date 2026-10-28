@@ -62,9 +62,9 @@ class "复核申请" as Review <<P1>> {
 
 Year "1" -- "0..*" Class : 学年班级
 Class "1" -- "0..*" Student : 当前归属
-Head "1" -- "0..*" Class : 当前任职
+Head "0..1" -- "0..*" Class : 当前任职（历史见05A）
 Exam "1" -- "0..*" Task : 生成任务
-Class "1" -- "0..*" Task : 任务班级
+Class "1" -- "0..*" Task : 班级 1:N 任务
 Task "1" -- "0..*" Score : 任务成绩
 Student "1" -- "0..*" Score : 学生成绩
 Exam "1" -- "0..*" Publication : 考试发布

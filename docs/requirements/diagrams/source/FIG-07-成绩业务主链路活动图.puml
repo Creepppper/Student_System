@@ -1,5 +1,4 @@
 @startuml
-scale 0.85
 skinparam defaultFontName "Noto Sans CJK SC"
 skinparam dpi 180
 skinparam shadowing false
@@ -13,58 +12,46 @@ skinparam activity {
 skinparam swimlane {
   BorderColor #546E7A
 }
-title FIG-07 成绩业务主链路活动图（P0）\n主流程与关键分支；异常细节/重提/撤回见 FIG-07A
+title FIG-07 成绩管理正常主流程（P0）\n前置：考试已配置；正常路径要求数据合法、无未录入；异常分别转 07A/07B/07C
 
 |教务管理员|
 start
-:创建考试;
-:配置班级范围、科目、满分/线;
+:创建考试、配置范围/科目/满分线;
 :开放考试;
 |系统|
 :按考试×班级×科目生成任务;
+:创建待录入任务;
 |班主任|
 :录入/暂存本班全科成绩;
-if (数据合法？) then (否)
+|系统|
+:校验字段、步长、完整性;
+if (校验通过？) then (通过)
   |班主任|
-  :提示字段/步长错误并修正;
-  :重试录入（见 FIG-07A）;
-  stop
-else (是)
-  if (存在未录入？) then (是)
-    |班主任|
-    :阻止提交并列出学生;
-    :补充录入（见 FIG-07A）;
-    stop
-  else (否)
-    |班主任|
-    :提交成绩任务;
-    |教务管理员|
-    :逐任务审核;
-    if (审核通过？) then (否)
-      |教务管理员|
-      :退回并填写原因;
-      |班主任|
-      :修改后重新提交;
-      |教务管理员|
-      :重新审核;
-    else (是)
-      |教务管理员|
-      :确认任务通过;
-    endif
+  :提交成绩任务;
+  |系统|
+  :TASK_SUBMITTED;
+  :通知教务审核;
+  |教务管理员|
+  :逐任务审核;
+  if (审核通过？) then (通过)
+    |系统|
+    :TASK_APPROVED;
     |教务管理员|
     :按考试×班级发布;
+    |系统|
+    :PUB_PUBLISHED（版本1）;
+    :数据权限检查;
     |学生|
     :查询本人已发布成绩;
-    if (教务撤回？) then (是)
-      |教务管理员|
-      :撤回并填写原因;
-      |学生|
-      :成绩不可见（数据保留）;
-    else (否)
-      |学生|
-      :保持可见;
-    endif
+  else (退回)
+    |系统|
+    :调用「07B 审核退回/重提」;
+    detach
   endif
+else (校验不通过)
+  |系统|
+  :调用「07A 校验与补录」;
+  detach
 endif
 stop
 @enduml

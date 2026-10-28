@@ -1,0 +1,54 @@
+digraph FIG02A {
+  graph [rankdir=TB, bgcolor="white", pad="0.35", nodesep="0.28", ranksep="0.65",
+         fontname="Noto Sans CJK SC", fontsize=11, labelloc=t,
+         label="FIG-02A 1 层 DFD 局部 A：认证、基础资料、考试配置与业务审计\nP0 主链路；外部实体为系统管理员、教务管理员；本图不包含任课教师", dpi=220];
+  node [fontname="Noto Sans CJK SC", fontsize=9];
+  edge [fontname="Noto Sans CJK SC", fontsize=7.2, color="#546E7A", arrowsize=0.6];
+
+  EO1 [label="EO-01\n系统管理员", shape=box, style="rounded,filled", fillcolor="#E3F0FB", color="#2F5D8A", width=1.6];
+  EO2 [label="EO-02\n教务管理员", shape=box, style="rounded,filled", fillcolor="#E3F0FB", color="#2F5D8A", width=1.6];
+
+  P1 [label="P1 身份认证与权限管理", shape=box, style="rounded,filled", fillcolor="#FFF3CD", color="#B8860B"];
+  P2 [label="P2 基础资料管理", shape=box, style="rounded,filled", fillcolor="#FFF3CD", color="#B8860B"];
+  P3 [label="P3 考试配置管理", shape=box, style="rounded,filled", fillcolor="#FFF3CD", color="#B8860B"];
+  P7 [label="P7 业务审计与记录查询", shape=box, style="rounded,filled", fillcolor="#FFF3CD", color="#B8860B"];
+
+  D1 [label="D1 账号与权限信息", shape=box3d, style="filled", fillcolor="#ECEFF1", color="#607D8B"];
+  D2 [label="D2 组织与人员信息", shape=box3d, style="filled", fillcolor="#ECEFF1", color="#607D8B"];
+  D3 [label="D3 班主任任职记录", shape=box3d, style="filled", fillcolor="#ECEFF1", color="#607D8B"];
+  D4 [label="D4 考试配置数据", shape=box3d, style="filled", fillcolor="#ECEFF1", color="#607D8B"];
+  D8 [label="D8 业务审计记录", shape=box3d, style="filled", fillcolor="#ECEFF1", color="#607D8B"];
+
+  EO1 -> P1 [label="DF-001 登录"];
+  EO1 -> P1 [label="DF-002 账号/权限配置"];
+  P1 -> EO1 [label="DF-003 认证/权限"];
+  P1 -> EO1 [label="DF-004 配置/状态"];
+  EO1 -> P7 [label="DF-005 系统审计查询条件"];
+  P7 -> EO1 [label="DF-006 脱敏审计结果"];
+
+  EO2 -> P1 [label="DF-007 登录凭据"];
+  EO2 -> P1 [label="DF-008 业务账号/档案绑定"];
+  P1 -> EO2 [label="DF-009 认证/权限"];
+  P1 -> EO2 [label="DF-010 绑定"];
+  EO2 -> P2 [label="DF-011 基础资料"];
+  P2 -> EO2 [label="DF-012 基础资料维护结果"];
+  EO2 -> P3 [label="DF-013 考试配置"];
+  P3 -> EO2 [label="DF-014 考试配置结果/状态"];
+  EO2 -> P7 [label="DF-019 业务审计查询条件"];
+  P7 -> EO2 [label="DF-020 业务审计结果"];
+
+  D1 -> P1 [label="DF-101 账号/权限"];
+  P1 -> D1 [label="DF-102 权限配置"];
+  D2 -> P1 [label="DF-103 学生/班主任档案状态"];
+  P2 -> D2 [label="DF-104 组织/人员/科目记录"];
+  D2 -> P2 [label="DF-105 组织/人员/科目数据"];
+  P2 -> D3 [label="DF-108 班主任任职记录"];
+  D3 -> P2 [label="DF-109 任职历史"];
+  P3 -> D4 [label="DF-112 考试配置记录"];
+  D4 -> P3 [label="DF-113 考试配置"];
+
+  P1 -> D8 [label="DF-129 登录审计", color="#90A4AE"];
+  P2 -> D8 [label="DF-130 资料变更审计", color="#90A4AE"];
+  P3 -> D8 [label="DF-131 考试配置审计", color="#90A4AE"];
+  D8 -> P7 [label="DF-135 审计记录", color="#90A4AE"];
+}

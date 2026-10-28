@@ -1,0 +1,30 @@
+digraph FIG09A {
+  graph [rankdir=TB, bgcolor="white", pad="0.4", nodesep="0.35", ranksep="0.7",
+         fontname="Noto Sans CJK SC", fontsize=11, labelloc=t,
+         label="FIG-09A 组织、班主任任职与学生归属局部 ER\n重点：每班最多 1 名有效班主任；1 名班主任可负责多班；历史任职与历史归属保留", dpi=220];
+  node [fontname="Noto Sans CJK SC", fontsize=9, shape=box, style="rounded,filled", fillcolor="#F5F7FA", color="#546E7A", width=2.1];
+  edge [fontname="Noto Sans CJK SC", fontsize=7.8, color="#2F5D8A", arrowsize=0.55];
+
+  YEAR [label="ENT-01 学年\nDR-ORG-001\nPK 学年编码"];
+  TERM [label="ENT-02 学期\nDR-ORG-002\nPK 学期ID"];
+  GRADE [label="ENT-03 年级\nDR-ORG-003\nPK 年级ID"];
+  CLASS [label="ENT-04 班级\nDR-ORG-004\nPK 班级ID"];
+  STUD [label="ENT-05 学生\nDR-STU-001\nPK 学生ID"];
+  SCLASS [label="ENT-06 学生班级归属\nDR-STU-002（关联实体）\n学年+学生唯一有效"];
+  HEAD [label="ENT-07 班主任\nDR-TCH-001\nPK 班主任ID"];
+  ASSIGN [label="ENT-08 班主任任职\n（历史化关联实体）\n班级+班主任+起止", style="rounded,filled,dashed"];
+
+  YEAR -> TERM [label="1:N 含"];
+  YEAR -> CLASS [label="1:N 开办"];
+  GRADE -> CLASS [label="1:N 属于"];
+  YEAR -> SCLASS [label="1:N 学年归属"];
+  CLASS -> SCLASS [label="1:N 当前/历史班级"];
+  STUD -> SCLASS [label="1:N 归属历史"];
+  HEAD -> ASSIGN [label="1:N 任职历史"];
+  CLASS -> ASSIGN [label="1:N 班主任历史"];
+  ASSIGN -> CLASS [label="0..1 有效", style=dashed, color="#2F5D8A"];
+
+  N1 [shape=note, style=filled, fillcolor="#FAFAFA", color="#2F5D8A", fontsize=8.2,
+      label="约束：\l• 每班同一时刻最多 1 条有效任职（结束日期为空或覆盖当前日期）。\l• 1 名班主任可有多条任职记录，覆盖多个班级。\l• 学生班级归属按学年保留；转班结束旧记录，不覆盖历史。\l• 班主任更换不改变历史成绩任务的第一责任人快照。\l"];
+  ASSIGN -> N1 [style=dotted, arrowhead=none, color="#2F5D8A"];
+}

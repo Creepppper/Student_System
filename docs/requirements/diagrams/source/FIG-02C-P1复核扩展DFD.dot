@@ -1,0 +1,36 @@
+digraph FIG02C {
+  graph [rankdir=TB, bgcolor="white", pad="0.4", nodesep="0.45", ranksep="0.8",
+         fontname="Noto Sans CJK SC", fontsize=11, labelloc=t,
+         label="FIG-02C P1 成绩复核扩展 DFD（独立于 P0 主链路）\n学生→班主任受理并核查→教务确认/更正→学生查看；不出现任课教师", dpi=220];
+  node [fontname="Noto Sans CJK SC", fontsize=9.5];
+  edge [fontname="Noto Sans CJK SC", fontsize=7.8, color="#6A4C93", arrowsize=0.65];
+
+  STU [label="EO-04\n学生", shape=box, style="rounded,filled", fillcolor="#F3E5F5", color="#6A1B9A", width=1.6];
+  HEAD [label="EO-03\n班主任", shape=box, style="rounded,filled", fillcolor="#E8F5E9", color="#2E7D32", width=1.6];
+  ACAD [label="EO-02\n教务管理员", shape=box, style="rounded,filled", fillcolor="#E3F0FB", color="#2F5D8A", width=1.6];
+
+  P81 [label="P8.1 复核申请与时限校验", shape=box, style="rounded,dashed,filled", fillcolor="#F3E8FF", color="#7B4FA0"];
+  P82 [label="P8.2 班主任受理与核查", shape=box, style="rounded,dashed,filled", fillcolor="#F3E8FF", color="#7B4FA0"];
+  P83 [label="P8.3 教务确认/更正", shape=box, style="rounded,dashed,filled", fillcolor="#F3E8FF", color="#7B4FA0"];
+
+  D9 [label="D9 复核申请（P1）", shape=box3d, style="filled", fillcolor="#F3E5F5", color="#6A1B9A"];
+  D6 [label="D6 成绩记录", shape=box3d, style="filled", fillcolor="#ECEFF1", color="#607D8B"];
+  D8 [label="D8 业务审计记录", shape=box3d, style="filled", fillcolor="#ECEFF1", color="#607D8B"];
+
+  STU -> P81 [label="DF-201 复核申请（考试+科目+理由）"];
+  P81 -> STU [label="DF-202 受理编号/当前状态"];
+  P81 -> D9 [label="DF-203 复核申请记录（REV_PENDING）"];
+  D9 -> P82 [label="DF-204 本班待受理申请"];
+  HEAD -> P82 [label="DF-205 受理/驳回/核查意见"];
+  P82 -> D9 [label="DF-206 受理/核查状态（REV_PROCESSING）"];
+  D9 -> P83 [label="DF-207 待确认复核"];
+  ACAD -> P83 [label="DF-208 确认/更正/驳回决定"];
+  P83 -> D9 [label="DF-209 复核结论"];
+  P83 -> D6 [label="DF-210 受控更正（复用 FR-PUB-004）"];
+  P83 -> D8 [label="DF-211 复核/更正审计"];
+  P83 -> STU [label="DF-212 复核结果/更正后成绩"];
+
+  NOTE [shape=note, style=filled, fillcolor="#FAFAFA", color="#7B4FA0", fontsize=8.5,
+        label="P1 边界：复核不改变 P0 状态机；\l班主任只提交核查意见，不能直接改分；\l教务最终确认/更正，学生只看本人结果。\l"];
+  P83 -> NOTE [style=dotted, arrowhead=none, color="#7B4FA0"];
+}

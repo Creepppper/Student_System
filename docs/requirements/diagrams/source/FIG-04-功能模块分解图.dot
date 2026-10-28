@@ -1,0 +1,51 @@
+digraph FIG04 {
+  graph [size="13,10", rankdir=LR, bgcolor="white", pad="0.35", nodesep="0.35", ranksep="0.85",
+         fontname="Noto Sans CJK SC", fontsize=12, labelloc=t,
+         label="FIG-04 系统功能模块分解图（P0 35 项 / P1 11 项）\n基线 BL-REQ-001 v1.2-provisional；四类角色；不包含任课教师", dpi=200];
+  node [fontname="Noto Sans CJK SC", fontsize=10];
+  edge [fontname="Noto Sans CJK SC", fontsize=9, color="#5B6B7A", arrowsize=0.7];
+
+  SYS [label="高中学生信息与成绩管理系统\n（P0 主链路 + P1 扩展）", shape=box, style="rounded,filled",
+       fillcolor="#DCE9F7", color="#2F5D8A", penwidth=1.6, fontsize=14, width=3.2];
+
+  P0 [label="P0 必须交付\n35 项功能", shape=box, style="rounded,filled",
+      fillcolor="#FFF3CD", color="#B8860B", penwidth=1.4, fontsize=12, width=2.0];
+  P1 [label="P1 扩展需求\n11 项功能", shape=box, style="rounded,dashed,filled",
+      fillcolor="#F3E8FF", color="#7B4FA0", penwidth=1.4, fontsize=12, width=2.0];
+
+  SYS -> P0 [label="必须完成"];
+  SYS -> P1 [label="P0 稳定后增强", style=dashed];
+
+  subgraph cluster_p0 {
+    label="P0 功能模块（全部为未实现的目标能力；若依仅提供基础能力）";
+    fontsize=11; fontcolor="#7A4B00"; style="rounded,dashed"; color="#D6B656";
+    M_AUTH [label="MOD-AUTH\n认证与权限\nFR-AUTH-001～005", shape=box, style="rounded,filled", fillcolor="#FFF8E7"];
+    M_ORG  [label="MOD-ORG\n学年/学期/年级/班级\nFR-ORG-001～005", shape=box, style="rounded,filled", fillcolor="#FFF8E7"];
+    M_STU  [label="MOD-STU\n学生档案\nFR-STU-001～004", shape=box, style="rounded,filled", fillcolor="#FFF8E7"];
+    M_TCH  [label="MOD-TCH\n班主任与科目\nFR-TCH-001～002", shape=box, style="rounded,filled", fillcolor="#FFF8E7"];
+    M_EXAM [label="MOD-EXAM\n考试管理\nFR-EXAM-001～004", shape=box, style="rounded,filled", fillcolor="#FFF8E7"];
+    M_SCORE[label="MOD-SCORE\n成绩录入与提交\nFR-SCORE-001～005", shape=box, style="rounded,filled", fillcolor="#FFF8E7"];
+    M_PUB  [label="MOD-PUB\n成绩审核与发布\nFR-PUB-001～004", shape=box, style="rounded,filled", fillcolor="#FFF8E7"];
+    M_QUERY[label="MOD-QUERY\n本人成绩查询\nFR-QUERY-001～002", shape=box, style="rounded,filled", fillcolor="#FFF8E7"];
+    M_STAT [label="MOD-STAT\n基础成绩统计\nFR-STAT-001～002", shape=box, style="rounded,filled", fillcolor="#FFF8E7"];
+    M_AUDIT[label="MOD-AUDIT\n业务审计\nFR-AUDIT-001～002", shape=box, style="rounded,filled", fillcolor="#FFF8E7"];
+  }
+
+  subgraph cluster_p1 {
+    label="P1 扩展（不进入 P0 退出条件）";
+    fontsize=11; fontcolor="#5B2C87"; style="rounded,dashed"; color="#B39DDB";
+    M_REVIEW [label="MOD-REVIEW\n成绩复核\nFR-REVIEW-001/002/004/005", shape=box, style="rounded,dashed,filled", fillcolor="#F7F0FF"];
+    M_IMPORT [label="MOD-IMPORT\nExcel 导入导出\nFR-IMPORT-001～004", shape=box, style="rounded,dashed,filled", fillcolor="#F7F0FF"];
+    M_TREND  [label="MOD-TREND\n成绩趋势\nFR-TREND-001～002", shape=box, style="rounded,dashed,filled", fillcolor="#F7F0FF"];
+    M_COMPARE[label="MOD-COMPARE\n班级对比\nFR-COMPARE-001", shape=box, style="rounded,dashed,filled", fillcolor="#F7F0FF"];
+  }
+
+  P0 -> M_AUTH; P0 -> M_ORG; P0 -> M_STU; P0 -> M_TCH; P0 -> M_EXAM;
+  P0 -> M_SCORE; P0 -> M_PUB; P0 -> M_QUERY; P0 -> M_STAT; P0 -> M_AUDIT;
+  P1 -> M_REVIEW [style=dashed]; P1 -> M_IMPORT [style=dashed];
+  P1 -> M_TREND [style=dashed]; P1 -> M_COMPARE [style=dashed];
+
+  note [shape=note, style=filled, fillcolor="#F7F7F7", fontsize=9,
+        label="说明：图中 FR 编号以 02-功能需求规格 v0.2-draft 为准；\lP0 35 项、P1 11 项；不出现任课教师。\l详细 FR 清单见 FIG-04A/04B 与追踪矩阵。\l"];
+  M_AUDIT -> note [style=dotted, arrowhead=none];
+}

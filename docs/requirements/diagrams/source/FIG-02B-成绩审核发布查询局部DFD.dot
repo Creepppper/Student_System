@@ -1,0 +1,60 @@
+digraph FIG02B {
+  graph [rankdir=TB, bgcolor="white", pad="0.35", nodesep="0.26", ranksep="0.65",
+         fontname="Noto Sans CJK SC", fontsize=11, labelloc=t,
+         label="FIG-02B 1 层 DFD 局部 B：成绩录入、审核发布与查询统计\nP0 主链路；班主任只处理本班全科；审核/发布/更正只归教务", dpi=220];
+  node [fontname="Noto Sans CJK SC", fontsize=9];
+  edge [fontname="Noto Sans CJK SC", fontsize=7.0, color="#546E7A", arrowsize=0.6];
+
+  EO2 [label="EO-02\n教务管理员", shape=box, style="rounded,filled", fillcolor="#E3F0FB", color="#2F5D8A", width=1.55];
+  EO3 [label="EO-03\n班主任", shape=box, style="rounded,filled", fillcolor="#E8F5E9", color="#2E7D32", width=1.55];
+  EO4 [label="EO-04\n学生", shape=box, style="rounded,filled", fillcolor="#F3E5F5", color="#6A1B9A", width=1.55];
+
+  P4 [label="P4 成绩录入与提交", shape=box, style="rounded,filled", fillcolor="#FFF3CD", color="#B8860B"];
+  P5 [label="P5 成绩审核与发布", shape=box, style="rounded,filled", fillcolor="#FFF3CD", color="#B8860B"];
+  P6 [label="P6 成绩查询与统计", shape=box, style="rounded,filled", fillcolor="#FFF3CD", color="#B8860B"];
+
+  D2 [label="D2 组织与人员信息", shape=box3d, style="filled", fillcolor="#ECEFF1", color="#607D8B"];
+  D3 [label="D3 班主任任职记录", shape=box3d, style="filled", fillcolor="#ECEFF1", color="#607D8B"];
+  D4 [label="D4 考试配置数据", shape=box3d, style="filled", fillcolor="#ECEFF1", color="#607D8B"];
+  D5 [label="D5 成绩任务数据", shape=box3d, style="filled", fillcolor="#ECEFF1", color="#607D8B"];
+  D6 [label="D6 成绩记录", shape=box3d, style="filled", fillcolor="#ECEFF1", color="#607D8B"];
+  D7 [label="D7 成绩发布记录", shape=box3d, style="filled", fillcolor="#ECEFF1", color="#607D8B"];
+  D8 [label="D8 业务审计记录", shape=box3d, style="filled", fillcolor="#ECEFF1", color="#607D8B"];
+
+  EO2 -> P5 [label="DF-015 审核/发布操作"];
+  P5 -> EO2 [label="DF-016 结果"];
+  EO2 -> P6 [label="DF-017 统计查询"];
+  P6 -> EO2 [label="DF-018 统计结果"];
+
+  EO3 -> P4 [label="DF-023 本班成绩/提交"];
+  P4 -> EO3 [label="DF-024 状态/退回"];
+  EO3 -> P6 [label="DF-025 本班查询"];
+  P6 -> EO3 [label="DF-026 本班结果"];
+
+  EO4 -> P6 [label="DF-031 本人查询"];
+  P6 -> EO4 [label="DF-032 本人成绩"];
+
+  D3 -> P4 [label="DF-110 当前任职班级"];
+  D4 -> P4 [label="DF-114 适用科目/满分/线"];
+  P4 -> D5 [label="DF-116 任务保存"];
+  D5 -> P4 [label="DF-117 任务读取"];
+  P4 -> D6 [label="DF-121 成绩/草稿"];
+  D6 -> P4 [label="DF-122 成绩"];
+
+  D4 -> P5 [label="DF-115 考试范围/发布条件"];
+  D5 -> P5 [label="DF-118 待审任务"];
+  P5 -> D5 [label="DF-119 审核结果"];
+  D6 -> P5 [label="DF-124 成绩"];
+  P5 -> D6 [label="DF-123 更正"];
+  P5 -> D7 [label="DF-126 发布/撤回"];
+  D7 -> P5 [label="DF-127 版本"];
+
+  D5 -> P6 [label="DF-120 任务状态/范围"];
+  D6 -> P6 [label="DF-125 成绩"];
+  D7 -> P6 [label="DF-128 发布成绩"];
+  D2 -> P6 [label="DF-107 班级/学生基础"];
+  D3 -> P6 [label="DF-111 任职班级"];
+
+  P4 -> D8 [label="DF-132 成绩审计", color="#90A4AE"];
+  P5 -> D8 [label="DF-133 发布审计", color="#90A4AE"];
+}

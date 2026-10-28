@@ -1,0 +1,31 @@
+digraph FIG01 {
+  graph [rankdir=LR, bgcolor="white", pad="0.45", nodesep="0.45", ranksep="1.25",
+         fontname="Noto Sans CJK SC", fontsize=12, labelloc=t,
+         label="FIG-01 系统上下文 DFD（P0 主链路）\n基线 BL-REQ-001 v1.2-provisional；外部实体仅四类；P1 复核不混入本图", dpi=220];
+  node [fontname="Noto Sans CJK SC", fontsize=10];
+  edge [fontname="Noto Sans CJK SC", fontsize=8.5, color="#4A6572", arrowsize=0.7];
+
+  SYS [label="高中学生信息与成绩管理系统\nP0：基础资料→考试配置→成绩录入\n→审核发布→学生查询→业务审计", shape=box, style="rounded,filled",
+       fillcolor="#FFF2CC", color="#B8860B", penwidth=2, fontsize=13, width=3.6, height=1.2];
+
+  SYSADM [label="EO-01\n系统管理员", shape=box, style="rounded,filled", fillcolor="#E3F0FB", color="#2F5D8A", width=1.9, height=0.8];
+  ACAD [label="EO-02\n教务管理员", shape=box, style="rounded,filled", fillcolor="#E3F0FB", color="#2F5D8A", width=1.9, height=0.8];
+  HEAD [label="EO-03\n班主任", shape=box, style="rounded,filled", fillcolor="#E8F5E9", color="#2E7D32", width=1.9, height=0.8];
+  STUD [label="EO-04\n学生", shape=box, style="rounded,filled", fillcolor="#F3E5F5", color="#6A1B9A", width=1.9, height=0.8];
+
+  SYSADM -> SYS [label="CF-01 登录凭据\n账号/角色/菜单/权限配置\n审计查询条件", color="#2F5D8A"];
+  SYS -> SYSADM [label="CF-02 认证结果与权限\n配置结果\n脱敏审计结果", color="#2F5D8A"];
+
+  ACAD -> SYS [label="CF-03 登录凭据\n基础资料（学年/班级/学生/班主任/科目）\n业务账号绑定\n考试配置\n审核/发布/撤回/更正操作\n统计/审计查询条件", color="#2F5D8A"];
+  SYS -> ACAD [label="CF-04 认证结果与权限\n基础资料/考试配置结果\n审核/发布结果\n统计/审计结果", color="#2F5D8A"];
+
+  HEAD -> SYS [label="CF-05 登录凭据\n本班全科成绩/提交\n本班统计/审计查询条件", color="#2E7D32"];
+  SYS -> HEAD [label="CF-06 认证结果与权限\n任务状态/退回原因\n本班成绩/统计/审计结果", color="#2E7D32"];
+
+  STUD -> SYS [label="CF-07 登录凭据\n本人成绩查询条件", color="#6A1B9A"];
+  SYS -> STUD [label="CF-08 认证结果与权限\n本人已发布成绩", color="#6A1B9A"];
+
+  NOTE [shape=note, style=filled, fillcolor="#FAFAFA", color="#999999", fontsize=8.5,
+        label="说明：上下文层按业务交互聚合（CF-01～CF-08），每个标签列出具体业务数据；\lFIG-02 将其展开为独立数据流并做平衡检查。\lP1 复核不纳入本图，见 FIG-02C。\l"];
+  SYS -> NOTE [style=dotted, arrowhead=none, color="#999999"];
+}

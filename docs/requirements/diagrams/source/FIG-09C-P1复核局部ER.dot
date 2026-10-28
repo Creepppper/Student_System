@@ -1,0 +1,24 @@
+digraph FIG09C {
+  graph [rankdir=TB, bgcolor="white", pad="0.4", nodesep="0.35", ranksep="0.75",
+         fontname="Noto Sans CJK SC", fontsize=11, labelloc=t,
+         label="FIG-09C P1 成绩复核局部 ER（扩展，不进入 P0）\n学生申请、班主任受理并核查、教务最终确认/更正；无任课教师", dpi=220];
+  node [fontname="Noto Sans CJK SC", fontsize=9, shape=box, style="rounded,dashed,filled", fillcolor="#F3E5F5", color="#6A1B9A", width=2.15];
+  edge [fontname="Noto Sans CJK SC", fontsize=7.8, color="#6A1B9A", arrowsize=0.55];
+
+  STUD [label="ENT-05 学生\nDR-STU-001\nPK 学生ID"];
+  EXAM [label="ENT-10 考试\nDR-EXAM-001\nPK 考试ID"];
+  SUBJ [label="ENT-09 科目\nDR-TCH-002\nPK 科目ID"];
+  SCORE [label="ENT-14 成绩记录\nDR-SCORE-002\n任务+学生唯一"];
+  HEAD [label="ENT-07 班主任\nDR-TCH-001\n受理/核查人"];
+  REVIEW [label="ENT-18 复核申请（P1）\nDR-REVIEW-001\n学生+考试+科目+成绩"];
+
+  STUD -> REVIEW [label="1:N 申请"];
+  EXAM -> REVIEW [label="1:N 涉及"];
+  SUBJ -> REVIEW [label="1:N 涉及"];
+  SCORE -> REVIEW [label="0..1:N 基于成绩版本"];
+  HEAD -> REVIEW [label="1:N 受理/核查"];
+
+  N1 [shape=note, style=filled, fillcolor="#FAFAFA", color="#6A1B9A", fontsize=8.4,
+      label="约束：\l• 同一学生+考试+科目最多 1 个活跃申请；终态后同成绩版本不再受理。\l• 班主任只能受理/核查本班申请，不能直接改分。\l• 教务最终确认：无需修改/更正/驳回；更正复用 FR-PUB-004。\l• 状态：REV_PENDING/PROCESSING/NO_CHANGE/CORRECTED/REJECTED/WITHDRAWN。\l"];
+  REVIEW -> N1 [style=dotted, arrowhead=none, color="#6A1B9A"];
+}

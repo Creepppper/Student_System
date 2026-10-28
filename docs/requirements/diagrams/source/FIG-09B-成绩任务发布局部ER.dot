@@ -1,0 +1,38 @@
+digraph FIG09B {
+  graph [rankdir=TB, bgcolor="white", pad="0.4", nodesep="0.28", ranksep="0.65",
+         fontname="Noto Sans CJK SC", fontsize=11, labelloc=t,
+         label="FIG-09B 考试、成绩任务、成绩记录、发布与审计局部 ER\n重点：任务唯一考试×班级×科目；成绩唯一任务×学生；发布唯一考试×班级并版本化", dpi=220];
+  node [fontname="Noto Sans CJK SC", fontsize=8.8, shape=box, style="rounded,filled", fillcolor="#F5F7FA", color="#546E7A", width=2.15];
+  edge [fontname="Noto Sans CJK SC", fontsize=7.6, color="#2E7D32", arrowsize=0.55];
+
+  SUBJ [label="ENT-09 科目\nDR-TCH-002\nPK 科目ID"];
+  EXAM [label="ENT-10 考试\nDR-EXAM-001\nPK 考试ID"];
+  CLASS [label="ENT-04 班级\nDR-ORG-004\nPK 班级ID"];
+  ECLASS [label="ENT-11 考试班级范围\nDR-EXAM-002（关联实体）\n考试+班级唯一"];
+  ESUBJ [label="ENT-12 考试科目\nDR-EXAM-003（关联实体）\n考试+科目唯一"];
+  TASK [label="ENT-13 成绩任务\nDR-SCORE-001\n考试+班级+科目唯一"];
+  SCORE [label="ENT-14 成绩记录\nDR-SCORE-002\n任务+学生唯一"];
+  PUB [label="ENT-15 班级发布\nDR-PUB-001\n考试+班级唯一；版本"];
+  STUD [label="ENT-05 学生\nDR-STU-001\nPK 学生ID"];
+  HEAD [label="ENT-07 班主任\nDR-TCH-001\n第一责任人快照"];
+  AUDIT [label="ENT-16 业务变更记录\nDR-AUDIT-001\n事件日志，多态引用"];
+
+  SUBJ -> ESUBJ [label="1:N 被考"];
+  EXAM -> ESUBJ [label="1:N 设置"];
+  EXAM -> ECLASS [label="1:N 范围"];
+  CLASS -> ECLASS [label="1:N 参加"];
+  ECLASS -> TASK [label="1:N 生成"];
+  ESUBJ -> TASK [label="1:N 生成"];
+  HEAD -> TASK [label="1:N 第一责任人"];
+  TASK -> SCORE [label="1:N 含"];
+  STUD -> SCORE [label="1:N 取得"];
+  EXAM -> PUB [label="1:N 发布"];
+  CLASS -> PUB [label="1:N 发布"];
+  TASK -> AUDIT [label="记录（多态）", style=dotted, color="#90A4AE"];
+  SCORE -> AUDIT [label="记录（多态）", style=dotted, color="#90A4AE"];
+  PUB -> AUDIT [label="记录（多态）", style=dotted, color="#90A4AE"];
+
+  N1 [shape=note, style=filled, fillcolor="#FAFAFA", color="#2E7D32", fontsize=8.2,
+      label="约束：\l• 成绩任务唯一 (考试,班级,科目)；一个任务对应一组成绩记录。\l• 成绩记录唯一 (任务,学生)；缺考/未录入/零分是状态与值组合。\l• 班级发布唯一 (考试,班级)，版本随更正/重发递增。\l• 第一责任人为班主任，任务生成时快照；换班主任不改历史快照。\l• 审计按 entity_type/entity_id 多态引用，不声明物理外键。\l"];
+  AUDIT -> N1 [style=dotted, arrowhead=none, color="#2E7D32"];
+}

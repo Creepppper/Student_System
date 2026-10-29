@@ -1,0 +1,30 @@
+digraph SDDER {
+  graph [rankdir=LR, newrank=true, splines=polyline, nodesep=0.4, ranksep=0.55, pad=0.2,
+         bgcolor="#FFFFFF", fontname="SimHei", fontsize=19, labelloc="t",
+         label="图 5-1  学生业务核心关系示意（由 D6A/D6C 简化）"];
+  node [shape=box, style="rounded,filled", fontname="SimHei", fontsize=19, margin="0.15,0.08", penwidth=1.3];
+  edge [fontname="SimHei", fontsize=14, arrowsize=0.7, penwidth=1.1, color="#52616B"];
+  cls [label="班级\n学年+年级\n唯一编码/名称", fillcolor="#FFE7CF", color="#D97706"];
+  stu [label="学生档案\n学号唯一\n不是 sys_user", fillcolor="#FFE7CF", color="#D97706"];
+  sc [label="学生归属\n历史/当前唯一", fillcolor="#FFE7CF", color="#D97706"];
+  tch [label="班主任任职\n每班最多一个当前", fillcolor="#FFE7CF", color="#D97706"];
+  exam [label="考试\nEXAM_*", fillcolor="#FFE7CF", color="#D97706"];
+  task [label="成绩任务\n考试×班级×科目唯一\n第一责任人快照", fillcolor="#FFE7CF", color="#D97706"];
+  score [label="成绩记录\n任务×学生唯一\n三态/0.5", fillcolor="#FFE7CF", color="#D97706"];
+  pub [label="发布版本\n当前+不可变版本+明细", fillcolor="#FFE7CF", color="#D97706"];
+  audit [label="业务审计\n多态/只插入", fillcolor="#FFE7CF", color="#D97706"];
+  cls -> sc [label="1 : N"];
+  stu -> sc [label="1 : N"];
+  cls -> tch [label="1 : N\n当前唯一"];
+  exam -> task [label="1 : N"];
+  cls -> task [label="1 : N"];
+  task -> score [label="1 : N"];
+  stu -> score [label="1 : N"];
+  exam -> pub [label="1 : N"];
+  cls -> pub [label="1 : N"];
+  task -> audit [label="多态", style=dashed, color="#6A1B9A"];
+  score -> audit [label="多态", style=dashed, color="#6A1B9A"];
+  pub -> audit [label="多态", style=dashed, color="#6A1B9A"];
+  { rank=same; cls; stu; sc; tch; }
+  { rank=same; exam; task; score; pub; }
+}

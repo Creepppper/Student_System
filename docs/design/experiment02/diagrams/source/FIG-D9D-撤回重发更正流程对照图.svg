@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1500" height="650" viewBox="0 0 1500 650">
+<defs><marker id="arrow" markerWidth="9" markerHeight="9" refX="8" refY="4.5" orient="auto"><path d="M0,0 L9,4.5 L0,9 z" fill="#52616B"/></marker></defs>
+<rect width="1500" height="650" fill="#FFFFFF"/>
+<text x="750.0" y="30" text-anchor="middle" font-family="SimHei" font-size="20" font-weight="bold" fill="#111827">FIG-D9D  撤回、重发与更正流程对照（计划组件交互）</text>
+<rect x="25" y="52" width="450" height="52" rx="7" fill="#DCEEFF" stroke="#2F6FED" stroke-width="1.3"/><text x="250.0" y="83.0" text-anchor="middle" font-family="SimHei" font-size="14" fill="#111827">撤回 /business/publications/{id}/withdraw</text>
+<rect x="525" y="52" width="450" height="52" rx="7" fill="#DCEEFF" stroke="#2F6FED" stroke-width="1.3"/><text x="750.0" y="83.0" text-anchor="middle" font-family="SimHei" font-size="14" fill="#111827">重新发布 /business/publications/{id}/republish</text>
+<rect x="1025" y="52" width="450" height="52" rx="7" fill="#DCEEFF" stroke="#2F6FED" stroke-width="1.3"/><text x="1250.0" y="83.0" text-anchor="middle" font-family="SimHei" font-size="14" fill="#111827">受控更正 /business/publications/{id}/corrections</text>
+<rect x="25" y="135" width="450" height="46" rx="7" fill="#FFE7CF" stroke="#2F6FED" stroke-width="1.3" stroke-dasharray="6 4"/><text x="250.0" y="163.0" text-anchor="middle" font-family="SimHei" font-size="15" fill="#111827">锁 publication；校验 PUB_PUBLISHED</text>
+<line x1="250" y1="181" x2="250" y2="199" stroke="#2F6FED" stroke-width="1.25" marker-end="url(#arrow)"/>
+<rect x="25" y="199" width="450" height="46" rx="7" fill="#FFE7CF" stroke="#2F6FED" stroke-width="1.3" stroke-dasharray="6 4"/><text x="250.0" y="227.0" text-anchor="middle" font-family="SimHei" font-size="15" fill="#111827">更新 status=PUB_WITHDRAWN</text>
+<line x1="250" y1="245" x2="250" y2="263" stroke="#2F6FED" stroke-width="1.25" marker-end="url(#arrow)"/>
+<rect x="25" y="263" width="450" height="46" rx="7" fill="#FFE7CF" stroke="#2F6FED" stroke-width="1.3" stroke-dasharray="6 4"/><text x="250.0" y="291.0" text-anchor="middle" font-family="SimHei" font-size="15" fill="#111827">保留版本/明细</text>
+<line x1="250" y1="309" x2="250" y2="327" stroke="#2F6FED" stroke-width="1.25" marker-end="url(#arrow)"/>
+<rect x="25" y="327" width="450" height="46" rx="7" fill="#FFE7CF" stroke="#2F6FED" stroke-width="1.3" stroke-dasharray="6 4"/><text x="250.0" y="355.0" text-anchor="middle" font-family="SimHei" font-size="15" fill="#111827">同事务审计</text>
+<line x1="250" y1="373" x2="250" y2="391" stroke="#2F6FED" stroke-width="1.25" marker-end="url(#arrow)"/>
+<rect x="25" y="391" width="450" height="46" rx="7" fill="#FFE7CF" stroke="#2F6FED" stroke-width="1.3" stroke-dasharray="6 4"/><text x="250.0" y="419.0" text-anchor="middle" font-family="SimHei" font-size="15" fill="#111827">返回 AjaxResult</text>
+<rect x="525" y="135" width="450" height="46" rx="7" fill="#FFE7CF" stroke="#2F6FED" stroke-width="1.3" stroke-dasharray="6 4"/><text x="750.0" y="163.0" text-anchor="middle" font-family="SimHei" font-size="15" fill="#111827">锁 publication/任务</text>
+<line x1="750" y1="181" x2="750" y2="199" stroke="#2F6FED" stroke-width="1.25" marker-end="url(#arrow)"/>
+<rect x="525" y="199" width="450" height="46" rx="7" fill="#FFE7CF" stroke="#2F6FED" stroke-width="1.3" stroke-dasharray="6 4"/><text x="750.0" y="227.0" text-anchor="middle" font-family="SimHei" font-size="15" fill="#111827">校验 PUB_WITHDRAWN</text>
+<line x1="750" y1="245" x2="750" y2="263" stroke="#2F6FED" stroke-width="1.25" marker-end="url(#arrow)"/>
+<rect x="525" y="263" width="450" height="46" rx="7" fill="#FFE7CF" stroke="#2F6FED" stroke-width="1.3" stroke-dasharray="6 4"/><text x="750.0" y="291.0" text-anchor="middle" font-family="SimHei" font-size="15" fill="#111827">校验任务仍 APPROVED</text>
+<line x1="750" y1="309" x2="750" y2="327" stroke="#2F6FED" stroke-width="1.25" marker-end="url(#arrow)"/>
+<rect x="525" y="327" width="450" height="46" rx="7" fill="#FFE7CF" stroke="#2F6FED" stroke-width="1.3" stroke-dasharray="6 4"/><text x="750.0" y="355.0" text-anchor="middle" font-family="SimHei" font-size="15" fill="#111827">新 version_no+1</text>
+<line x1="750" y1="373" x2="750" y2="391" stroke="#2F6FED" stroke-width="1.25" marker-end="url(#arrow)"/>
+<rect x="525" y="391" width="450" height="46" rx="7" fill="#FFE7CF" stroke="#2F6FED" stroke-width="1.3" stroke-dasharray="6 4"/><text x="750.0" y="419.0" text-anchor="middle" font-family="SimHei" font-size="15" fill="#111827">插入 version/detail</text>
+<line x1="750" y1="437" x2="750" y2="455" stroke="#2F6FED" stroke-width="1.25" marker-end="url(#arrow)"/>
+<rect x="525" y="455" width="450" height="46" rx="7" fill="#FFE7CF" stroke="#2F6FED" stroke-width="1.3" stroke-dasharray="6 4"/><text x="750.0" y="483.0" text-anchor="middle" font-family="SimHei" font-size="15" fill="#111827">PUB_PUBLISHED；审计</text>
+<rect x="1025" y="135" width="450" height="46" rx="7" fill="#EADCF8" stroke="#6A1B9A" stroke-width="1.3" stroke-dasharray="6 4"/><text x="1250.0" y="163.0" text-anchor="middle" font-family="SimHei" font-size="15" fill="#111827">锁 publication/score</text>
+<line x1="1250" y1="181" x2="1250" y2="199" stroke="#6A1B9A" stroke-width="1.25" marker-end="url(#arrow)"/>
+<rect x="1025" y="199" width="450" height="46" rx="7" fill="#EADCF8" stroke="#6A1B9A" stroke-width="1.3" stroke-dasharray="6 4"/><text x="1250.0" y="227.0" text-anchor="middle" font-family="SimHei" font-size="15" fill="#111827">校验 PUB_PUBLISHED</text>
+<line x1="1250" y1="245" x2="1250" y2="263" stroke="#6A1B9A" stroke-width="1.25" marker-end="url(#arrow)"/>
+<rect x="1025" y="263" width="450" height="46" rx="7" fill="#EADCF8" stroke="#6A1B9A" stroke-width="1.3" stroke-dasharray="6 4"/><text x="1250.0" y="291.0" text-anchor="middle" font-family="SimHei" font-size="15" fill="#111827">校验原因/非自审</text>
+<line x1="1250" y1="309" x2="1250" y2="327" stroke="#6A1B9A" stroke-width="1.25" marker-end="url(#arrow)"/>
+<rect x="1025" y="327" width="450" height="46" rx="7" fill="#EADCF8" stroke="#6A1B9A" stroke-width="1.3" stroke-dasharray="6 4"/><text x="1250.0" y="355.0" text-anchor="middle" font-family="SimHei" font-size="15" fill="#111827">新版本 + 全量明细快照</text>
+<line x1="1250" y1="373" x2="1250" y2="391" stroke="#6A1B9A" stroke-width="1.25" marker-end="url(#arrow)"/>
+<rect x="1025" y="391" width="450" height="46" rx="7" fill="#EADCF8" stroke="#6A1B9A" stroke-width="1.3" stroke-dasharray="6 4"/><text x="1250.0" y="419.0" text-anchor="middle" font-family="SimHei" font-size="15" fill="#111827">current_version_id 更新</text>
+<line x1="1250" y1="437" x2="1250" y2="455" stroke="#6A1B9A" stroke-width="1.25" marker-end="url(#arrow)"/>
+<rect x="1025" y="455" width="450" height="46" rx="7" fill="#EADCF8" stroke="#6A1B9A" stroke-width="1.3" stroke-dasharray="6 4"/><text x="1250.0" y="483.0" text-anchor="middle" font-family="SimHei" font-size="15" fill="#111827">审计 before/after</text>
+<rect x="25" y="578" width="1450" height="50" rx="6" fill="#F8FAFC" stroke="#9AA7B4"/><text x="35" y="598" font-family="SimHei" font-size="12" fill="#374151">FIG-D9D 为三条计划分支对照（不是生命周期状态机）：撤回不删历史；重发版本+1；更正保持 PUB_PUBLISHED 并生成新版本。</text><text x="35" y="614" font-family="SimHei" font-size="12" fill="#374151">所有状态/版本/审计在同一事务，失败回滚；并发冲突 409；学生只读当前 PUB_PUBLISHED。</text></svg>

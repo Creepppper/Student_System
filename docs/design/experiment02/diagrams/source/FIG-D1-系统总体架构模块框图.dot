@@ -1,0 +1,88 @@
+digraph D1 {
+  graph [rankdir=TB, newrank=true, compound=true, splines=polyline, nodesep=0.45, ranksep=0.55,
+         pad=0.2, bgcolor="#FFFFFF", fontname="SimHei", fontsize=13, labelloc="t",
+         label="FIG-D1  系统总体架构模块框图"];
+  node [shape=box, style="rounded,filled", fontname="SimHei", fontsize=13, margin="0.14,0.07", penwidth=1.2];
+  edge [fontname="SimHei", fontsize=11, arrowsize=0.7, penwidth=1.1, color="#52616B"];
+
+  subgraph cluster_front {
+    label="前端（A 现状）"; fontsize=13; color="#2F6FED"; style="rounded"; bgcolor="#EAF2FF";
+    vue [label="Vue3 SPA\n页面 / 组件", fillcolor="#DCEEFF", color="#2F6FED"];
+    router [label="Vue Router\n固定 + 动态路由", fillcolor="#DCEEFF", color="#2F6FED"];
+    pinia [label="Pinia\n用户/权限/菜单状态", fillcolor="#DCEEFF", color="#2F6FED"];
+    axios [label="Axios\nToken / 错误码 / 请求封装", fillcolor="#DCEEFF", color="#2F6FED"];
+  }
+
+  subgraph cluster_gateway {
+    label="接入与安全（A 现状）"; fontsize=13; color="#2F6FED"; style="rounded"; bgcolor="#F2F7FF";
+    security [label="Spring Security + JWT\n认证 / 授权 / 数据范围入口", fillcolor="#DCEEFF", color="#2F6FED"];
+    springdoc [label="Springdoc OpenAPI\nAPI 文档旁路", fillcolor="#DCEEFF", color="#2F6FED", style="rounded,filled,dashed"];
+  }
+
+  subgraph cluster_base {
+    label="若依基础能力（A 现状）"; fontsize=13; color="#2F6FED"; style="rounded"; bgcolor="#F7FAFF";
+    baseCtrl [label="Controller\n系统 / 监控 / 工具", fillcolor="#DCEEFF", color="#2F6FED"];
+    baseSvc [label="Service\n用户 / 角色 / 菜单 / 部门\n日志 / 调度 / 代码生成", fillcolor="#DCEEFF", color="#2F6FED"];
+    baseMapper [label="Mapper + MyBatis XML\n系统 SQL", fillcolor="#DCEEFF", color="#2F6FED"];
+  }
+
+  subgraph cluster_biz {
+    label="学生业务（C 规划，未实现）"; fontsize=13; color="#D97706"; style="rounded"; bgcolor="#FFF7ED";
+    bizCtrl [label="业务 Controller（规划）\n拟放 ruoyi-admin", fillcolor="#FFE7CF", color="#D97706", style="rounded,filled,dashed"];
+    bizSvc [label="业务 Service（规划）\n组织 / 学生 / 考试 / 成绩\n发布 / 查询 / 统计 / 审计", fillcolor="#FFE7CF", color="#D97706", style="rounded,filled,dashed"];
+    bizMapper [label="业务 Mapper（规划）\nMyBatis XML", fillcolor="#FFE7CF", color="#D97706", style="rounded,filled,dashed"];
+    p1 [label="P1（规划）\n复核 / 导入导出 / 趋势 / 对比", fillcolor="#EADCF8", color="#6A1B9A", style="rounded,filled,dashed"];
+  }
+
+  subgraph cluster_data {
+    label="数据存储"; fontsize=13; color="#2E7D32"; style="rounded"; bgcolor="#F2FBF4";
+    db [label="MariaDB 11.8\nstudent_system\n31 张基础表（实测）", fillcolor="#DFF3E4", color="#2E7D32"];
+    valkey [label="Valkey 9\n验证码 / LoginUser / 缓存", fillcolor="#DFF3E4", color="#2E7D32"];
+    dbBiz [label="学生业务表（规划）\n当前 0 张", fillcolor="#DFF3E4", color="#2E7D32", style="rounded,filled,dashed"];
+  }
+
+  subgraph cluster_legend {
+    label="图例"; fontsize=11; color="#9AA7B4"; style="rounded"; bgcolor="#FFFFFF";
+    legA [label="A 现有/可复用", fillcolor="#DCEEFF", color="#2F6FED", fontsize=11];
+    legB [label="B 需适配", fillcolor="#E8F0FF", color="#2F6FED", fontsize=11];
+    legC [label="C 待新建 P0", fillcolor="#FFE7CF", color="#D97706", fontsize=11];
+    legP [label="P1 规划", fillcolor="#EADCF8", color="#6A1B9A", fontsize=11];
+    legD [label="数据存储", fillcolor="#DFF3E4", color="#2E7D32", fontsize=11];
+  }
+
+  // 用户与前端
+  user [label="浏览器用户\n系统管理员 / 教务管理员\n班主任 / 学生", fillcolor="#F4F7FA", color="#7A8FA6"];
+  user -> vue [label="HTTPS"];
+  vue -> router [label="导航"];
+  router -> pinia [label="权限状态"];
+  router -> axios [label="页面 API"];
+  axios -> security [label="HTTP/JSON\nBearer Token"];
+
+  // 安全与文档
+  security -> valkey [label="登录态/验证码"];
+  springdoc -> baseCtrl [label="扫描", style=dashed];
+  springdoc -> bizCtrl [label="规划扫描", style=dashed, color="#D97706"];
+  security -> baseCtrl [label="现有权限"];
+  security -> bizCtrl [label="规划权限", style=dashed, color="#D97706"];
+
+  // 基础链
+  baseCtrl -> baseSvc [label="@PreAuthorize"];
+  baseSvc -> baseMapper [label="调用"];
+  baseMapper -> db [label="系统表"];
+
+  // 业务链（规划）
+  bizCtrl -> bizSvc [label="业务范围", style=dashed, color="#D97706"];
+  bizSvc -> bizMapper [label="事务", style=dashed, color="#D97706"];
+  bizMapper -> dbBiz [label="未来", style=dashed, color="#D97706"];
+  bizSvc -> p1 [label="独立开关", style=dashed, color="#6A1B9A"];
+
+  // 关键分层约束
+  { rank=same; user; }
+  { rank=same; vue; router; pinia; axios; }
+  { rank=same; security; springdoc; valkey; }
+  { rank=same; baseCtrl; bizCtrl; }
+  { rank=same; baseSvc; bizSvc; }
+  { rank=same; baseMapper; bizMapper; }
+  { rank=same; db; dbBiz; }
+  { rank=same; legA; legB; legC; legP; legD; }
+}

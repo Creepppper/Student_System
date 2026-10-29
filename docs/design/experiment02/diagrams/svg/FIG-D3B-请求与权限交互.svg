@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="920" viewBox="0 0 1600 920">
+<defs>
+  <marker id="arrow" markerWidth="9" markerHeight="9" refX="8" refY="4.5" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L9,4.5 L0,9 z" fill="#52616B"/></marker>
+  <marker id="arrow-d" markerWidth="9" markerHeight="9" refX="8" refY="4.5" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L9,4.5 L0,9 z" fill="#9AA7B4"/></marker>
+</defs>
+<rect width="1600" height="920" fill="#FFFFFF"/>
+<text x="800.0" y="30" text-anchor="middle" font-family="SimHei" font-size="20" font-weight="bold" fill="#111827">FIG-D3B  请求与权限交互（登录初始化 vs 普通业务请求）</text>
+<rect x="40" y="55" width="730" height="790" rx="12" fill="#F7FAFF" stroke="#2F6FED" stroke-width="1.3"/>
+<rect x="820" y="55" width="740" height="790" rx="12" fill="#FFFDF8" stroke="#D97706" stroke-width="1.3"/>
+<text x="405" y="85" text-anchor="middle" font-family="SimHei" font-size="16" font-weight="bold" fill="#2F6FED">登录初始化（现有）</text>
+<text x="1190" y="85" text-anchor="middle" font-family="SimHei" font-size="16" font-weight="bold" fill="#D97706">普通业务请求（学生业务为规划）</text>
+<rect x="160" y="115" width="490" height="55" rx="8" fill="#DCEEFF" stroke="#2F6FED" stroke-width="1.4"/><text x="405.0" y="138.5" text-anchor="middle" font-family="SimHei" font-size="14" fill="#111827">登录页</text><text x="405.0" y="156.5" text-anchor="middle" font-family="SimHei" font-size="14" fill="#111827">login.vue</text>
+<rect x="160" y="210" width="490" height="55" rx="8" fill="#DCEEFF" stroke="#2F6FED" stroke-width="1.4"/><text x="405.0" y="233.5" text-anchor="middle" font-family="SimHei" font-size="14" fill="#111827">api/login.js</text><text x="405.0" y="251.5" text-anchor="middle" font-family="SimHei" font-size="14" fill="#111827">login()</text>
+<rect x="160" y="305" width="490" height="55" rx="8" fill="#DCEEFF" stroke="#2F6FED" stroke-width="1.4"/><text x="405.0" y="328.5" text-anchor="middle" font-family="SimHei" font-size="14" fill="#111827">request.js</text><text x="405.0" y="346.5" text-anchor="middle" font-family="SimHei" font-size="14" fill="#111827">Axios 实例</text>
+<rect x="160" y="400" width="490" height="55" rx="8" fill="#DCEEFF" stroke="#2F6FED" stroke-width="1.4"/><text x="405.0" y="423.5" text-anchor="middle" font-family="SimHei" font-size="14" fill="#111827">SysLoginController</text><text x="405.0" y="441.5" text-anchor="middle" font-family="SimHei" font-size="14" fill="#111827">POST /login</text>
+<rect x="160" y="495" width="490" height="55" rx="8" fill="#DCEEFF" stroke="#2F6FED" stroke-width="1.4"/><text x="405.0" y="518.5" text-anchor="middle" font-family="SimHei" font-size="14" fill="#111827">SysLoginService</text><text x="405.0" y="536.5" text-anchor="middle" font-family="SimHei" font-size="14" fill="#111827">TokenService</text>
+<rect x="160" y="600" width="490" height="55" rx="8" fill="#DFF3E4" stroke="#2E7D32" stroke-width="1.4"/><text x="405.0" y="623.5" text-anchor="middle" font-family="SimHei" font-size="14" fill="#111827">Valkey</text><text x="405.0" y="641.5" text-anchor="middle" font-family="SimHei" font-size="14" fill="#111827">验证码/LoginUser</text>
+<rect x="160" y="695" width="490" height="55" rx="8" fill="#DFF3E4" stroke="#2E7D32" stroke-width="1.4"/><text x="405.0" y="718.5" text-anchor="middle" font-family="SimHei" font-size="14" fill="#111827">SysUser / Role / Menu</text><text x="405.0" y="736.5" text-anchor="middle" font-family="SimHei" font-size="14" fill="#111827">DB 查询</text>
+<line x1="405" y1="170" x2="405" y2="200" stroke="#52616B" stroke-width="1.3" marker-end="url(#arrow)"/>
+<line x1="405" y1="265" x2="405" y2="295" stroke="#52616B" stroke-width="1.3" marker-end="url(#arrow)"/>
+<line x1="405" y1="360" x2="405" y2="390" stroke="#52616B" stroke-width="1.3" marker-end="url(#arrow)"/>
+<line x1="405" y1="455" x2="405" y2="485" stroke="#52616B" stroke-width="1.3" marker-end="url(#arrow)"/>
+<line x1="405" y1="550" x2="405" y2="580" stroke="#52616B" stroke-width="1.3" marker-end="url(#arrow)"/>
+<line x1="405" y1="655" x2="405" y2="685" stroke="#52616B" stroke-width="1.3" marker-end="url(#arrow)"/>
+<rect x="950" y="115" width="480" height="55" rx="8" fill="#FFE7CF" stroke="#D97706" stroke-width="1.4"/><text x="1190.0" y="138.5" text-anchor="middle" font-family="SimHei" font-size="14" fill="#111827">业务页面（规划）</text><text x="1190.0" y="156.5" text-anchor="middle" font-family="SimHei" font-size="14" fill="#111827">src/views/business</text>
+<rect x="950" y="200" width="480" height="55" rx="8" fill="#FFE7CF" stroke="#D97706" stroke-width="1.4"/><text x="1190.0" y="223.5" text-anchor="middle" font-family="SimHei" font-size="14" fill="#111827">业务 API（规划）</text><text x="1190.0" y="241.5" text-anchor="middle" font-family="SimHei" font-size="14" fill="#111827">src/api/business</text>
+<rect x="950" y="285" width="480" height="55" rx="8" fill="#DCEEFF" stroke="#2F6FED" stroke-width="1.4"/><text x="1190.0" y="308.5" text-anchor="middle" font-family="SimHei" font-size="14" fill="#111827">request.js</text><text x="1190.0" y="326.5" text-anchor="middle" font-family="SimHei" font-size="14" fill="#111827">Bearer Token</text>
+<rect x="950" y="370" width="480" height="55" rx="8" fill="#DCEEFF" stroke="#2F6FED" stroke-width="1.4"/><text x="1190.0" y="393.5" text-anchor="middle" font-family="SimHei" font-size="14" fill="#111827">Spring Security</text><text x="1190.0" y="411.5" text-anchor="middle" font-family="SimHei" font-size="14" fill="#111827">JWT Filter</text>
+<rect x="950" y="455" width="480" height="55" rx="8" fill="#FFE7CF" stroke="#D97706" stroke-width="1.4"/><text x="1190.0" y="478.5" text-anchor="middle" font-family="SimHei" font-size="14" fill="#111827">业务 Controller（规划）</text><text x="1190.0" y="496.5" text-anchor="middle" font-family="SimHei" font-size="14" fill="#111827">@PreAuthorize</text>
+<rect x="950" y="540" width="480" height="55" rx="8" fill="#FFE7CF" stroke="#D97706" stroke-width="1.4"/><text x="1190.0" y="563.5" text-anchor="middle" font-family="SimHei" font-size="14" fill="#111827">业务 Service（规划）</text><text x="1190.0" y="581.5" text-anchor="middle" font-family="SimHei" font-size="14" fill="#111827">@DataScope + 业务范围</text>
+<rect x="950" y="625" width="480" height="55" rx="8" fill="#DFF3E4" stroke="#2E7D32" stroke-width="1.4"/><text x="1190.0" y="648.5" text-anchor="middle" font-family="SimHei" font-size="14" fill="#111827">Mapper + MyBatis XML</text><text x="1190.0" y="666.5" text-anchor="middle" font-family="SimHei" font-size="14" fill="#111827">MariaDB（规划业务表）</text>
+<line x1="1190" y1="170" x2="1190" y2="185" stroke="#52616B" stroke-width="1.3" marker-end="url(#arrow)"/>
+<line x1="1190" y1="255" x2="1190" y2="270" stroke="#52616B" stroke-width="1.3" marker-end="url(#arrow)"/>
+<line x1="1190" y1="340" x2="1190" y2="355" stroke="#52616B" stroke-width="1.3" marker-end="url(#arrow)"/>
+<line x1="1190" y1="425" x2="1190" y2="440" stroke="#52616B" stroke-width="1.3" marker-end="url(#arrow)"/>
+<line x1="1190" y1="510" x2="1190" y2="525" stroke="#52616B" stroke-width="1.3" marker-end="url(#arrow)"/>
+<line x1="1190" y1="595" x2="1190" y2="610" stroke="#52616B" stroke-width="1.3" marker-end="url(#arrow)"/>
+<rect x="940" y="700" width="490" height="58" rx="6" fill="#F8FAFC" stroke="#9AA7B4" stroke-width="1"/><text x="950" y="720" font-family="SimHei" font-size="11" fill="#374151">后端必须二次校验；前端按钮隐藏不是安全边界；</text><text x="950" y="736" font-family="SimHei" font-size="11" fill="#374151">学生业务 Controller/Service 尚未实现。</text>
+</svg>

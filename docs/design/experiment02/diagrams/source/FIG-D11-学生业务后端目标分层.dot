@@ -1,0 +1,50 @@
+digraph D11 {
+  graph [rankdir=LR, newrank=true, splines=polyline, nodesep=0.5, ranksep=0.55, pad=0.25,
+         bgcolor="#FFFFFF", fontname="SimHei", fontsize=14, labelloc="t",
+         label="FIG-D11  学生业务后端目标分层（规划；当前无实现）"];
+  node [shape=box, style="rounded,filled", fontname="SimHei", fontsize=13, margin="0.16,0.08", penwidth=1.2];
+  edge [fontname="SimHei", fontsize=11, arrowsize=0.7, penwidth=1.1, color="#52616B"];
+
+  subgraph cluster_entry {
+    label="接入层（复用 A）"; fontsize=12; color="#2F6FED"; style="rounded"; bgcolor="#EAF2FF";
+    sec [label="Spring Security + JWT\n@PreAuthorize", fillcolor="#DCEEFF", color="#2F6FED"];
+    ctrl [label="业务 Controller（规划）\n拟放 ruoyi-admin", fillcolor="#FFE7CF", color="#D97706", style="rounded,filled,dashed"];
+  }
+
+  subgraph cluster_domains {
+    label="P0 业务域（C 待新建）"; fontsize=12; color="#D97706"; style="rounded"; bgcolor="#FFF7ED";
+    d1 [label="基础资料域\n组织/学年/班级（ORG）\n学生档案（STU）\n班主任任职/科目（TCH）", fillcolor="#FFE7CF", color="#D97706", style="rounded,filled,dashed"];
+    d2 [label="考试与成绩域\n考试配置（EXAM）\n任务/录入（SCORE）\n审核发布/更正（PUB）", fillcolor="#FFE7CF", color="#D97706", style="rounded,filled,dashed"];
+    d3 [label="查询与统计域\n本人查询（QUERY）\n班级/全校统计（STAT）", fillcolor="#FFE7CF", color="#D97706", style="rounded,filled,dashed"];
+    d4 [label="审计域\n业务变更/发布记录（AUDIT）", fillcolor="#FFE7CF", color="#D97706", style="rounded,filled,dashed"];
+    p1 [label="P1 扩展（不进入 P0）\n复核 / 导入导出 / 趋势 / 对比", fillcolor="#EADCF8", color="#6A1B9A", style="rounded,filled,dashed"];
+  }
+
+  subgraph cluster_lower {
+    label="服务与数据访问（规划）"; fontsize=12; color="#D97706"; style="rounded"; bgcolor="#FFFDF8";
+    svc [label="业务 Service\n事务 / 状态机 / 数据范围\n同事务写业务审计", fillcolor="#FFE7CF", color="#D97706", style="rounded,filled,dashed"];
+    mapper [label="Mapper + MyBatis XML\n业务表（当前 0 张）", fillcolor="#FFE7CF", color="#D97706", style="rounded,filled,dashed"];
+    db [label="MariaDB 11.8\nstudent_system\n业务表（规划）", fillcolor="#DFF3E4", color="#2E7D32", style="rounded,filled,dashed"];
+  }
+  base [label="若依基础能力（A）\n登录 / RBAC / 菜单 / 统一响应\n系统日志（不能替代业务审计）", fillcolor="#DCEEFF", color="#2F6FED"];
+
+  sec -> ctrl [label="认证/权限"];
+  ctrl -> d1 [label="基础资料"];
+  ctrl -> d2 [label="考试/成绩"];
+  ctrl -> d3 [label="查询/统计"];
+  ctrl -> d4 [label="审计"];
+  ctrl -> p1 [label="P1", style=dashed, color="#6A1B9A"];
+  d1 -> svc [label="Service"];
+  d2 -> svc [label="Service"];
+  d3 -> svc [label="Service"];
+  d4 -> svc [label="Service"];
+  p1 -> svc [label="Service", style=dashed, color="#6A1B9A"];
+  svc -> mapper [label="Mapper"];
+  mapper -> db [label="SQL"];
+  ctrl -> base [label="复用响应/权限", style=dashed];
+  svc -> base [label="复用响应/日志", style=dashed];
+
+  { rank=same; sec; ctrl; }
+  { rank=same; d1; d2; d3; d4; p1; }
+  { rank=same; svc; mapper; db; }
+}

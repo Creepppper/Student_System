@@ -49,13 +49,19 @@ b.append('<rect x="40" y="55" width="730" height="790" rx="12" fill="#F7FAFF" st
 b.append('<rect x="820" y="55" width="740" height="790" rx="12" fill="#FFFDF8" stroke="#D97706" stroke-width="1.3"/>')
 b.append('<text x="405" y="85" text-anchor="middle" font-family="SimHei" font-size="16" font-weight="bold" fill="#2F6FED">登录初始化（现有）</text>')
 b.append('<text x="1190" y="85" text-anchor="middle" font-family="SimHei" font-size="16" font-weight="bold" fill="#D97706">普通业务请求（学生业务为规划）</text>')
-# login column
-login=[('登录页\nlogin.vue','#DCEEFF','#2F6FED',False),('api/login.js\nlogin()','#DCEEFF','#2F6FED',False),('request.js\nAxios 实例','#DCEEFF','#2F6FED',False),('SysLoginController\nPOST /login','#DCEEFF','#2F6FED',False),('SysLoginService\nTokenService','#DCEEFF','#2F6FED',False),('Valkey\n验证码/LoginUser','#DFF3E4','#2E7D32',False),('SysUser / Role / Menu\nDB 查询','#DFF3E4','#2E7D32',False)]
-ys=[115,210,305,400,495,600,695]
-for (lab,fill,st,dash),y in zip(login,ys):
+# login column: controller -> service -> two independent stores (no sequential KV->DB)
+login=[('登录页\nlogin.vue','#DCEEFF','#2F6FED'),('api/login.js\nlogin()','#DCEEFF','#2F6FED'),('request.js\nAxios 实例','#DCEEFF','#2F6FED'),('SysLoginController\nPOST /login','#DCEEFF','#2F6FED'),('SysLoginService\nTokenService','#DCEEFF','#2F6FED')]
+ys=[115,210,305,400,495]
+for (lab,fill,st),y in zip(login,ys):
     b.append(box(160,y,490,55,lab,fill,st,False))
 for i in range(len(login)-1):
-    b.append(line(405,ys[i]+55,405,ys[i]+85,'',False))
+    b.append(line(405,ys[i]+55,405,ys[i]+70,'',False))
+# parallel stores: both are reached from SysLoginService; no edge between them
+b.append(box(155,610,240,55,'Valkey\n验证码/LoginUser','#DFF3E4','#2E7D32',False))
+b.append(box(460,610,240,55,'MariaDB\n用户/角色/菜单','#DFF3E4','#2E7D32',False))
+b.append(line(405,550,275,610,'验证码/登录态',False))
+b.append(line(405,550,580,610,'用户/角色/权限',False))
+b.append(note(150,700,550,52,['SysLoginService 分别访问 Valkey 与 MariaDB；', '两者不是顺序依赖关系。']))
 # business column
 biz=[('业务页面（规划）\nsrc/views/business','#FFE7CF','#D97706',True),('业务 API（规划）\nsrc/api/business','#FFE7CF','#D97706',True),('request.js\nBearer Token','#DCEEFF','#2F6FED',False),('Spring Security\nJWT Filter','#DCEEFF','#2F6FED',False),('业务 Controller（规划）\n@PreAuthorize','#FFE7CF','#D97706',True),('业务 Service（规划）\n@DataScope + 业务范围','#FFE7CF','#D97706',True),('Mapper + MyBatis XML\nMariaDB（规划业务表）','#DFF3E4','#2E7D32',True)]
 bys=[115,200,285,370,455,540,625]
@@ -86,19 +92,19 @@ def seq(title, actors, messages, note_lines, outname):
     Path(OUT/outname).write_text(svg(W,H,'\n'.join(b),title),encoding='utf-8')
 
 seq('FIG-D7  登录与权限获取时序图',
-    [('登录页\nlogin.vue',False),('Axios\nrequest.js',False),('SysLoginController\n/login',False),('SysLoginService\nTokenService',False),('Valkey\n验证码/LoginUser',False),('SysUser/Role/Menu\nDB 查询',False)],
-    [(0,1,'GET /captchaImage',False),(1,2,'转发',False),(2,4,'生成验证码/UUID',False),(2,0,'uuid + 图片（返回）',True),
-     (0,1,'POST /login',False),(1,2,'转发',False),(2,3,'login(username,password,code,uuid)',False),
-     (3,4,'校验验证码',False),(3,5,'selectUserByUserName / getRolePermission / getMenuPermission',False),(3,4,'保存 LoginUser',False),
-     (2,0,'JWT Token（不展开）',True),(0,1,'GET /getInfo + Bearer',False),(1,2,'转发 + Bearer',False),
-     (2,5,'getInfo / roles / permissions',False),(2,0,'roles / permissions（返回）',True),
-     (0,1,'GET /getRouters',False),(1,2,'转发',False),(2,5,'selectMenuTreeByUserId',False),(2,0,'菜单树（返回）',True)],
-    ['依据：SysLoginController / SysLoginService / TokenService / SysPermissionService / SecurityConfig；Token 不应出现在文档中。'],
+    [('登录页\nlogin.vue',False),('Axios\nrequest.js',False),('CaptchaController\n/captchaImage',False),('SysLoginController\n/login /getInfo /getRouters',False),('SysLoginService\nTokenService',False),('Valkey\n验证码/LoginUser',False),('SysUser/Role/Menu\nDB 查询',False)],
+    [(0,1,'GET /captchaImage',False),(1,2,'转发',False),(2,5,'生成验证码/UUID',False),(2,0,'uuid + 图片（返回）',True),
+     (0,1,'POST /login',False),(1,3,'转发',False),(3,4,'login(username,password,code,uuid)',False),
+     (4,5,'校验验证码',False),(4,6,'selectUserByUserName / getRolePermission / getMenuPermission',False),(4,5,'保存 LoginUser',False),
+     (3,0,'JWT Token（不展开）',True),(0,1,'GET /getInfo + Bearer',False),(1,3,'转发 + Bearer',False),
+     (3,6,'getInfo / roles / permissions',False),(3,0,'roles / permissions（返回）',True),
+     (0,1,'GET /getRouters',False),(1,3,'转发',False),(3,6,'selectMenuTreeByUserId',False),(3,0,'菜单树（返回）',True)],
+    ['依据：CaptchaController / SysLoginController / SysLoginService / TokenService / SysPermissionService / SecurityConfig；Token 不应出现在文档中。'],
     'FIG-D7-登录与权限获取时序图.svg')
 
 seq('FIG-D8  用户管理调用链时序图',
     [('用户页\nsystem/user/index.vue',False),('API\napi/system/user.js',False),('Axios\nrequest.js',False),('SysUserController\n/system/user',False),('SysUserServiceImpl\nISysUserService',False),('SysUserMapper +\nXML',False),('MariaDB\n(sys_user/sys_dept)',False)],
-    [(0,1,'getList() → listUser(query)',False),(1,2,'GET /system/user/list',False),(2,3,'Authorization: Bearer',False),
+    [(0,1,'getList() → listUser(query)',False),(1,2,'GET /system/user/list',False),(2,3,'JWT Filter 认证\nAuthorization: Bearer',False),
      (3,4,'@PreAuthorize("system:user:list")\nselectUserList(query)',False),(4,5,'@DataScope(...)\nselectUserList(query)',False),
      (5,6,'SQL: select ...',False),(6,5,'用户记录 rows',True),(5,4,'List<SysUser>',True),(4,3,'TableDataInfo(rows,total)',True),
      (3,2,'JSON 响应',True),(2,0,'userList + total → 表格',True)],

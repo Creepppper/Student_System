@@ -9,11 +9,11 @@
 <g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(18 397.05)">
 <title>D4</title>
 <polygon fill="#ffffff" stroke="none" points="-18,18 -18,-397.05 1050,-397.05 1050,18 -18,18"/>
-<text xml:space="preserve" text-anchor="middle" x="516" y="-361.75" font-family="SimHei" font-size="14.00">FIG&#45;D4 &#160;部署架构与运行环境（Fedora 44 开发环境）</text>
+<text xml:space="preserve" text-anchor="middle" x="516" y="-361.75" font-family="SimHei" font-size="14.00">FIG&#45;D4 &#160;系统开发与部署拓扑图（组件与端口）</text>
 <g id="clust1" class="cluster">
 <title>cluster_host</title>
 <path fill="#f7faff" stroke="#2f6fed" d="M20,-8C20,-8 650,-8 650,-8 656,-8 662,-14 662,-20 662,-20 662,-260.54 662,-260.54 662,-266.54 656,-272.54 650,-272.54 650,-272.54 20,-272.54 20,-272.54 14,-272.54 8,-266.54 8,-260.54 8,-260.54 8,-20 8,-20 8,-14 14,-8 20,-8"/>
-<text xml:space="preserve" text-anchor="middle" x="335" y="-256.19" font-family="SimHei" font-size="13.00">Fedora 44 开发主机（本机）</text>
+<text xml:space="preserve" text-anchor="middle" x="335" y="-256.19" font-family="SimHei" font-size="13.00">开发主机（本地）</text>
 </g>
 <g id="clust2" class="cluster">
 <title>cluster_planned</title>

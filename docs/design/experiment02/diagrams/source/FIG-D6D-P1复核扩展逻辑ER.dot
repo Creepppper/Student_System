@@ -1,0 +1,23 @@
+digraph D6D {
+  graph [rankdir=LR, newrank=true, splines=polyline, nodesep=0.4, ranksep=0.55, pad=0.2,
+         bgcolor="#FFFFFF", fontname="SimHei", fontsize=13, labelloc="t",
+         label="FIG-D6D  P1 成绩复核扩展（逻辑 ER；紫色=P1，不进入 P0）"];
+  node [shape=box, style="rounded,filled", fontname="SimHei", fontsize=12, margin="0.14,0.07", penwidth=1.2];
+  edge [fontname="SimHei", fontsize=10, arrowsize=0.65, color="#52616B"];
+
+  stu [label="学生\nDR-STU-001", fillcolor="#FFE7CF", color="#D97706"];
+  exam [label="考试\nDR-EXAM-001", fillcolor="#FFE7CF", color="#D97706"];
+  subj [label="科目\nDR-TCH-002", fillcolor="#FFE7CF", color="#D97706"];
+  score [label="成绩记录\nDR-SCORE-002", fillcolor="#FFE7CF", color="#D97706"];
+  ver [label="发布版本\n不可变", fillcolor="#FFE7CF", color="#D97706"];
+  review [label="复核申请\nDR-REVIEW-001（P1）\n同一学生+考试+科目\n最多一个活跃", fillcolor="#EADCF8", color="#6A1B9A", style="rounded,filled,dashed"];
+  action [label="复核处理动作（P1）\n受理/驳回/核查/确认\n状态码待评审", fillcolor="#EADCF8", color="#6A1B9A", style="rounded,filled,dashed"];
+
+  stu -> review [label="1 : N"];
+  exam -> review [label="1 : N"];
+  subj -> review [label="1 : N"];
+  score -> review [label="1 : N\n申请依据"];
+  ver -> review [label="1 : N\n版本依据"];
+  review -> action [label="1 : N\n处理历史"];
+  note [shape=note, label="P1 不在 P0 建表范围；复核状态、时限、结论代码需 P1 专项评审。\n复核更正复用 P0 发布后更正能力，不直接改已发布成绩。", fillcolor="#F6F0FF", color="#6A1B9A", fontsize=10];
+}

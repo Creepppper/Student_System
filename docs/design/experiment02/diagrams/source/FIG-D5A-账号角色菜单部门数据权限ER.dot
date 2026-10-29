@@ -1,0 +1,65 @@
+digraph D5A {
+  graph [rankdir=LR, newrank=true, splines=polyline, nodesep=0.35, ranksep=0.55, pad=0.2,
+         bgcolor="#FFFFFF", fontname="SimHei", fontsize=13, labelloc="t",
+         label="FIG-D5A  若依账号/角色/菜单/部门/数据权限关系（现有；逻辑关联）"];
+  node [shape=plaintext, fontname="SimHei", fontsize=11];
+  edge [fontname="SimHei", fontsize=10, arrowsize=0.65, color="#8A97A5", style=dashed];
+
+  dept [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4" COLOR="#2F6FED">
+    <TR><TD BGCOLOR="#DCEEFF" COLSPAN="2"><B>sys_dept</B></TD></TR>
+    <TR><TD ALIGN="LEFT">PK</TD><TD ALIGN="LEFT">dept_id BIGINT</TD></TR>
+    <TR><TD ALIGN="LEFT">FK?</TD><TD ALIGN="LEFT">parent_id BIGINT</TD></TR>
+    <TR><TD ALIGN="LEFT"></TD><TD ALIGN="LEFT">dept_name / status</TD></TR></TABLE>>];
+  user [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4" COLOR="#2F6FED">
+    <TR><TD BGCOLOR="#DCEEFF" COLSPAN="2"><B>sys_user</B></TD></TR>
+    <TR><TD ALIGN="LEFT">PK</TD><TD ALIGN="LEFT">user_id BIGINT</TD></TR>
+    <TR><TD ALIGN="LEFT">FK?</TD><TD ALIGN="LEFT">dept_id BIGINT</TD></TR>
+    <TR><TD ALIGN="LEFT"></TD><TD ALIGN="LEFT">user_name / status</TD></TR></TABLE>>];
+  role [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4" COLOR="#2F6FED">
+    <TR><TD BGCOLOR="#DCEEFF" COLSPAN="2"><B>sys_role</B></TD></TR>
+    <TR><TD ALIGN="LEFT">PK</TD><TD ALIGN="LEFT">role_id BIGINT</TD></TR>
+    <TR><TD ALIGN="LEFT"></TD><TD ALIGN="LEFT">role_key / data_scope</TD></TR>
+    <TR><TD ALIGN="LEFT"></TD><TD ALIGN="LEFT">status / del_flag</TD></TR></TABLE>>];
+  menu [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4" COLOR="#2F6FED">
+    <TR><TD BGCOLOR="#DCEEFF" COLSPAN="2"><B>sys_menu</B></TD></TR>
+    <TR><TD ALIGN="LEFT">PK</TD><TD ALIGN="LEFT">menu_id BIGINT</TD></TR>
+    <TR><TD ALIGN="LEFT">FK?</TD><TD ALIGN="LEFT">parent_id BIGINT</TD></TR>
+    <TR><TD ALIGN="LEFT"></TD><TD ALIGN="LEFT">perms / menu_type</TD></TR></TABLE>>];
+  post [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4" COLOR="#2F6FED">
+    <TR><TD BGCOLOR="#DCEEFF" COLSPAN="2"><B>sys_post</B></TD></TR>
+    <TR><TD ALIGN="LEFT">PK</TD><TD ALIGN="LEFT">post_id BIGINT</TD></TR>
+    <TR><TD ALIGN="LEFT"></TD><TD ALIGN="LEFT">post_code / status</TD></TR></TABLE>>];
+
+  ur [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4" COLOR="#6A1B9A">
+    <TR><TD BGCOLOR="#EADCF8" COLSPAN="2"><B>sys_user_role</B></TD></TR>
+    <TR><TD ALIGN="LEFT">PK/FK?</TD><TD ALIGN="LEFT">user_id</TD></TR>
+    <TR><TD ALIGN="LEFT">PK/FK?</TD><TD ALIGN="LEFT">role_id</TD></TR></TABLE>>];
+  rm [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4" COLOR="#6A1B9A">
+    <TR><TD BGCOLOR="#EADCF8" COLSPAN="2"><B>sys_role_menu</B></TD></TR>
+    <TR><TD ALIGN="LEFT">PK/FK?</TD><TD ALIGN="LEFT">role_id</TD></TR>
+    <TR><TD ALIGN="LEFT">PK/FK?</TD><TD ALIGN="LEFT">menu_id</TD></TR></TABLE>>];
+  rd [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4" COLOR="#6A1B9A">
+    <TR><TD BGCOLOR="#EADCF8" COLSPAN="2"><B>sys_role_dept</B></TD></TR>
+    <TR><TD ALIGN="LEFT">PK/FK?</TD><TD ALIGN="LEFT">role_id</TD></TR>
+    <TR><TD ALIGN="LEFT">PK/FK?</TD><TD ALIGN="LEFT">dept_id</TD></TR></TABLE>>];
+  up [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4" COLOR="#6A1B9A">
+    <TR><TD BGCOLOR="#EADCF8" COLSPAN="2"><B>sys_user_post</B></TD></TR>
+    <TR><TD ALIGN="LEFT">PK/FK?</TD><TD ALIGN="LEFT">user_id</TD></TR>
+    <TR><TD ALIGN="LEFT">PK/FK?</TD><TD ALIGN="LEFT">post_id</TD></TR></TABLE>>];
+
+  dept -> user [label="1 : N\n部门用户"];
+  dept -> dept [label="1 : N\n上级部门", style=dashed];
+  user -> ur [label="1 : N"];
+  role -> ur [label="1 : N\nN:M 关联"];
+  role -> rm [label="1 : N"];
+  menu -> rm [label="1 : N\nN:M 关联"];
+  role -> rd [label="1 : N"];
+  dept -> rd [label="1 : N\n数据范围"];
+  user -> up [label="1 : N"];
+  post -> up [label="1 : N"];
+  role -> menu [label="N:M（经关联表）", style=invis];
+
+  { rank=same; dept; user; role; menu; post; }
+  { rank=same; ur; rm; rd; up; }
+  note [shape=note, label="实线/虚线均为逻辑关联；若依基础表没有物理 FOREIGN KEY。\nPK/FK? 表示列用途，不是数据库已声明外键。", fillcolor="#F8FAFC", color="#9AA7B4", fontsize=10];
+}

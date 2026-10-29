@@ -1,12 +1,12 @@
 digraph D4 {
   graph [rankdir=TB, newrank=true, splines=polyline, nodesep=0.5, ranksep=0.55, pad=0.25,
          bgcolor="#FFFFFF", fontname="SimHei", fontsize=14, labelloc="t",
-         label="FIG-D4  部署架构与运行环境（Fedora 44 开发环境）"];
+         label="FIG-D4  系统开发与部署拓扑图（组件与端口）"];
   node [shape=box, style="rounded,filled", fontname="SimHei", fontsize=13, margin="0.16,0.08", penwidth=1.2];
   edge [fontname="SimHei", fontsize=11, arrowsize=0.7, penwidth=1.1, color="#52616B"];
 
   subgraph cluster_host {
-    label="Fedora 44 开发主机（本机）"; fontsize=13; color="#2F6FED"; style="rounded"; bgcolor="#F7FAFF";
+    label="开发主机（本地）"; fontsize=13; color="#2F6FED"; style="rounded"; bgcolor="#F7FAFF";
     browser [label="浏览器\nChrome / Edge / Firefox", fillcolor="#F4F7FA", color="#7A8FA6"];
     vite [label="Vite 6 开发服务器\n:3000\n当前未运行", fillcolor="#DCEEFF", color="#2F6FED", style="rounded,filled,dashed"];
     spring [label="Spring Boot 3.5.16\n:8080\n当前未运行", fillcolor="#DCEEFF", color="#2F6FED", style="rounded,filled,dashed"];

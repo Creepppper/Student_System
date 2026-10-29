@@ -1,0 +1,15 @@
+digraph D5B2 {
+  graph [rankdir=LR, newrank=true, splines=polyline, nodesep=0.45, ranksep=0.7, pad=0.2,
+         bgcolor="#FFFFFF", fontname="SimHei", fontsize=13, labelloc="t",
+         label="FIG-D5B2  若依日志/配置与 Quartz 关系（现有）"];
+  node [shape=plaintext, fontname="SimHei", fontsize=11];
+  edge [fontname="SimHei", fontsize=10, arrowsize=0.65, color="#8A97A5", style=dashed];
+  cfg [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="5" COLOR="#2F6FED"><TR><TD BGCOLOR="#DCEEFF" COLSPAN="2"><B>sys_config</B></TD></TR><TR><TD>PK</TD><TD>config_id BIGINT</TD></TR><TR><TD>UK</TD><TD>config_key</TD></TR></TABLE>>];
+  log [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="5" COLOR="#2F6FED"><TR><TD BGCOLOR="#DCEEFF" COLSPAN="2"><B>sys_oper_log</B></TD></TR><TR><TD>PK</TD><TD>oper_id BIGINT</TD></TR><TR><TD>IDX</TD><TD>business_type/status/oper_time</TD></TR></TABLE>>];
+  login [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="5" COLOR="#2F6FED"><TR><TD BGCOLOR="#DCEEFF" COLSPAN="2"><B>sys_logininfor</B></TD></TR><TR><TD>PK</TD><TD>info_id BIGINT</TD></TR><TR><TD>IDX</TD><TD>status/login_time</TD></TR></TABLE>>];
+  quartz [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="5" COLOR="#2E7D32"><TR><TD BGCOLOR="#DFF3E4" COLSPAN="2"><B>Quartz 子系统</B></TD></TR><TR><TD>11 tables</TD><TD>QRTZ_*</TD></TR><TR><TD>5 FK</TD><TD>触发器 → 任务</TD></TR><TR><TD>说明</TD><TD>单独初始化 SQL</TD></TR></TABLE>>];
+  cfg -> login [style=invis];
+  login -> log [style=invis];
+  log -> quartz [style=invis];
+  note [shape=note, label="日志/配置是独立表；不要用 sys_oper_log 替代成绩业务审计。\nQuartz 的 5 个物理外键只在 QRTZ_* 子系统内。", fillcolor="#F8FAFC", color="#9AA7B4", fontsize=10];
+}

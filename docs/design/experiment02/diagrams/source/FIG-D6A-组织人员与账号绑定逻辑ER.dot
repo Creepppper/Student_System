@@ -1,0 +1,33 @@
+digraph D6A {
+  graph [rankdir=LR, newrank=true, splines=polyline, nodesep=0.45, ranksep=0.65, pad=0.2,
+         bgcolor="#FFFFFF", fontname="SimHei", fontsize=13, labelloc="t",
+         label="FIG-D6A  组织、人员、班级归属与账号绑定（逻辑 ER；橙色=规划）"];
+  node [shape=box, style="rounded,filled", fontname="SimHei", fontsize=12, margin="0.15,0.08", penwidth=1.2];
+  edge [fontname="SimHei", fontsize=10, arrowsize=0.65, color="#52616B"];
+
+  year [label="学年\nDR-ORG-001\nyear_code / 当前唯一", fillcolor="#FFE7CF", color="#D97706"];
+  term [label="学期\nDR-ORG-002\nterm_no", fillcolor="#FFE7CF", color="#D97706"];
+  grade [label="年级\nDR-ORG-003\ngrade_code", fillcolor="#FFE7CF", color="#D97706"];
+  cls [label="班级\nDR-ORG-004\n学年+年级", fillcolor="#FFE7CF", color="#D97706"];
+  stu [label="学生\nDR-STU-001\nstudent_no 唯一", fillcolor="#FFE7CF", color="#D97706"];
+  sc [label="学生班级归属\nDR-STU-002\n起止/当前", fillcolor="#FFE7CF", color="#D97706"];
+  tch [label="班主任\nDR-TCH-001\nteacher_no 唯一", fillcolor="#FFE7CF", color="#D97706"];
+  assign [label="班主任任职\nENT-08\n每班最多一个当前", fillcolor="#FFE7CF", color="#D97706"];
+  bind [label="账号—档案绑定\nDR-AUTH-001\n类型/有效", fillcolor="#E8F0FF", color="#2F6FED", style="rounded,filled,dashed"];
+  sysuser [label="sys_user\n若依账号（A）\nuser_id BIGINT", fillcolor="#DCEEFF", color="#2F6FED"];
+
+  year -> term [label="1 : N"];
+  year -> cls [label="1 : N"];
+  grade -> cls [label="1 : N"];
+  stu -> sc [label="1 : N"];
+  cls -> sc [label="1 : N"];
+  tch -> assign [label="1 : N\n可多班"];
+  cls -> assign [label="1 : N\n当前唯一"];
+  stu -> bind [label="1 : N\n最多一个有效"];
+  tch -> bind [label="1 : N\n最多一个有效"];
+  sysuser -> bind [label="1 : N\n账号类型匹配"];
+
+  { rank=same; year; term; grade; }
+  { rank=same; cls; stu; tch; }
+  { rank=same; sc; assign; bind; sysuser; }
+}

@@ -1,0 +1,30 @@
+digraph D6C {
+  graph [rankdir=TB, newrank=true, splines=polyline, nodesep=0.45, ranksep=0.55, pad=0.2,
+         bgcolor="#FFFFFF", fontname="SimHei", fontsize=13, labelloc="t",
+         label="FIG-D6C  成绩、审核、发布、版本与审计（逻辑 ER；橙色=P0 规划）"];
+  node [shape=box, style="rounded,filled", fontname="SimHei", fontsize=12, margin="0.14,0.07", penwidth=1.2];
+  edge [fontname="SimHei", fontsize=10, arrowsize=0.65, color="#52616B"];
+
+  task [label="成绩任务\nDR-SCORE-001\nTASK_*", fillcolor="#FFE7CF", color="#D97706"];
+  score [label="成绩记录\nDR-SCORE-002\n任务×学生\n三态/0.5", fillcolor="#FFE7CF", color="#D97706"];
+  exam [label="考试\nDR-EXAM-001\nEXAM_*", fillcolor="#FFE7CF", color="#D97706"];
+  cls [label="班级\nDR-ORG-004", fillcolor="#FFE7CF", color="#D97706"];
+  pub [label="班级发布当前状态\nDR-PUB-001\n考试×班级唯一\nPUB_*", fillcolor="#FFE7CF", color="#D97706"];
+  ver [label="发布版本（不可变）\nversion_no 递增\n快照/审计", fillcolor="#FFE7CF", color="#D97706"];
+  detail [label="版本成绩明细\n不可变快照\n版本×学生×科目", fillcolor="#FFE7CF", color="#D97706"];
+  stu [label="学生\nDR-STU-001", fillcolor="#FFE7CF", color="#D97706"];
+  subj [label="科目\nDR-TCH-002", fillcolor="#FFE7CF", color="#D97706"];
+  audit [label="业务审计\nDR-AUDIT-001\n多态/只插入", fillcolor="#FFE7CF", color="#D97706"];
+
+  task -> score [label="1 : N"];
+  exam -> pub [label="1 : N"];
+  cls -> pub [label="1 : N"];
+  pub -> ver [label="1 : N\n历史版本"];
+  pub -> ver [label="1 : 1\ncurrent_version", style=dashed];
+  ver -> detail [label="1 : N"];
+  stu -> detail [label="1 : N"];
+  subj -> detail [label="1 : N"];
+  task -> audit [label="多态引用", style=dashed, color="#6A1B9A"];
+  score -> audit [label="多态引用", style=dashed, color="#6A1B9A"];
+  ver -> audit [label="多态引用", style=dashed, color="#6A1B9A"];
+}

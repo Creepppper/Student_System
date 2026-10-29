@@ -1,0 +1,10 @@
+digraph G {
+  graph [rankdir=TB, newrank=true, splines=polyline, nodesep=0.35, ranksep=0.55, pad=0.2, bgcolor="#FFFFFF", fontname="SimHei", fontsize=13, labelloc="t", label="FIG-D6P-C2  审计/账号绑定物理 ER（规划）"];
+  node [shape=plaintext, fontname="SimHei", fontsize=10];
+  edge [fontname="SimHei", fontsize=9, arrowsize=0.6, color="#52616B"];
+  sys_user [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="3" COLOR="#2F6FED"><TR><TD BGCOLOR="#DCEEFF" COLSPAN="2"><B>sys_user（A 现有）</B></TD></TR><TR><TD>context</TD><TD>参见 D5</TD></TR></TABLE>>];
+  stu_audit_log [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="3" COLOR="#D97706"><TR><TD BGCOLOR="#FFE7CF" COLSPAN="2"><B>stu_audit_log</B></TD></TR><TR><TD ALIGN="LEFT">PK</TD><TD ALIGN="LEFT">id INT</TD></TR><TR><TD ALIGN="LEFT">FK</TD><TD ALIGN="LEFT">—</TD></TR><TR><TD ALIGN="LEFT">UK</TD><TD ALIGN="LEFT">—</TD></TR><TR><TD ALIGN="LEFT">列</TD><TD ALIGN="LEFT">event_type, object_type, object_id</TD></TR></TABLE>>];
+  stu_account_binding [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="3" COLOR="#D97706"><TR><TD BGCOLOR="#FFE7CF" COLSPAN="2"><B>stu_account_binding</B></TD></TR><TR><TD ALIGN="LEFT">PK</TD><TD ALIGN="LEFT">id INT</TD></TR><TR><TD ALIGN="LEFT">FK</TD><TD ALIGN="LEFT">student_id, head_teacher_id</TD></TR><TR><TD ALIGN="LEFT">UK</TD><TD ALIGN="LEFT">active_user_key, active_profile_key</TD></TR><TR><TD ALIGN="LEFT">列</TD><TD ALIGN="LEFT">user_id, profile_type, student_id</TD></TR></TABLE>>];
+  stu_account_binding -> sys_user [label="逻辑 user_id", style=dashed, color="#6A1B9A", dir=none];
+  note [shape=note, label="物理模型：PK/FK/UK 来自 P0 设计草稿；\n字段字典见 03-完整数据库字段字典.md。", fillcolor="#F8FAFC", color="#9AA7B4", fontsize=10];
+}

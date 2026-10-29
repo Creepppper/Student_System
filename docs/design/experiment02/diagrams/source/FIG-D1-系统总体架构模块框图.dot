@@ -36,7 +36,7 @@ digraph D1 {
 
   subgraph cluster_data {
     label="数据存储"; fontsize=13; color="#2E7D32"; style="rounded"; bgcolor="#F2FBF4";
-    db [label="MariaDB 11.8\nstudent_system\n31 张基础表（实测）", fillcolor="#DFF3E4", color="#2E7D32"];
+    db [label="MariaDB 11.8\nstudent_system\n31 张：18 sys + 2 gen\n+ 11 QRTZ（实测）", fillcolor="#DFF3E4", color="#2E7D32"];
     valkey [label="Valkey 9\n验证码 / LoginUser / 缓存", fillcolor="#DFF3E4", color="#2E7D32"];
     dbBiz [label="学生业务表（规划）\n当前 0 张", fillcolor="#DFF3E4", color="#2E7D32", style="rounded,filled,dashed"];
   }
@@ -52,11 +52,11 @@ digraph D1 {
 
   // 用户与前端
   user [label="浏览器用户\n系统管理员 / 教务管理员\n班主任 / 学生", fillcolor="#F4F7FA", color="#7A8FA6"];
-  user -> vue [label="HTTPS"];
+  user -> vue [label="本地 HTTP\n可选 HTTPS"];
   vue -> router [label="导航"];
   router -> pinia [label="权限状态"];
   router -> axios [label="页面 API"];
-  axios -> security [label="HTTP/JSON\nBearer Token"];
+  axios -> security [label="HTTP/JSON（本地开发）\nHTTPS（可选部署）\nBearer Token"];
 
   // 安全与文档
   security -> valkey [label="登录态/验证码"];

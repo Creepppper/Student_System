@@ -1,0 +1,19 @@
+digraph D6P {
+  graph [rankdir=LR, newrank=true, splines=polyline, nodesep=0.5, ranksep=0.8, pad=0.25,
+         bgcolor="#FFFFFF", fontname="SimHei", fontsize=14, labelloc="t",
+         label="FIG-D6P  学生业务 P0 物理 ER 总览（规划；19 张表，局部见 D6P-A1/A2/B/C1/C2）"];
+  node [shape=box, style="rounded,filled", fontname="SimHei", fontsize=12, margin="0.16,0.08", penwidth=1.2];
+  edge [fontname="SimHei", fontsize=10, arrowsize=0.65, color="#52616B"];
+
+  org [label="组织 / 人员 / 档案\n9 张表\nstu_year, stu_term, stu_grade,\nstu_class, stu_student,\nstu_student_class, stu_head_teacher,\nstu_head_teacher_assignment, stu_subject", fillcolor="#FFE7CF", color="#D97706", style="rounded,filled,dashed"];
+  exam [label="考试 / 成绩\n5 张表\nstu_exam, stu_exam_class,\nstu_exam_subject, stu_score_task,\nstu_score", fillcolor="#FFE7CF", color="#D97706", style="rounded,filled,dashed"];
+  pub [label="发布 / 审计 / 绑定\n5 张表\nstu_publication,\nstu_publication_version,\nstu_publication_version_detail,\nstu_audit_log, stu_account_binding", fillcolor="#FFE7CF", color="#D97706", style="rounded,filled,dashed"];
+  user [label="sys_user\n若依账号（A）\nBIGINT", fillcolor="#DCEEFF", color="#2F6FED"];
+  note [shape=note, label="总览只表达三个物理域及跨域关联；\n字段/约束以 D6P-A/B/C 与字段字典为准。\n所有业务主表 id INT AUTO_INCREMENT。", fillcolor="#F8FAFC", color="#9AA7B4", fontsize=10];
+
+  org -> exam [label="class/student/teacher\n→ exam/score"];
+  exam -> pub [label="task/score/exam/class\n→ publication/version"];
+  org -> pub [label="class/exam\n→ publication"];
+  pub -> user [label="逻辑 user_id", style=dashed, color="#6A1B9A"];
+  { rank=same; org; exam; pub; }
+}

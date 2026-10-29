@@ -1,0 +1,17 @@
+digraph D5B1 {
+  graph [rankdir=LR, newrank=true, splines=polyline, nodesep=0.45, ranksep=0.8, pad=0.2,
+         bgcolor="#FFFFFF", fontname="SimHei", fontsize=13, labelloc="t",
+         label="FIG-D5B1  若依字典/通知/代码生成辅助数据关系（现有；逻辑关联）"];
+  node [shape=plaintext, fontname="SimHei", fontsize=11];
+  edge [fontname="SimHei", fontsize=10, arrowsize=0.65, color="#8A97A5", style=dashed];
+  dt [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="5" COLOR="#2F6FED"><TR><TD BGCOLOR="#DCEEFF" COLSPAN="2"><B>sys_dict_type</B></TD></TR><TR><TD>PK</TD><TD>dict_id BIGINT</TD></TR><TR><TD>UK</TD><TD>dict_type</TD></TR></TABLE>>];
+  dd [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="5" COLOR="#2F6FED"><TR><TD BGCOLOR="#DCEEFF" COLSPAN="2"><B>sys_dict_data</B></TD></TR><TR><TD>PK</TD><TD>dict_code BIGINT</TD></TR><TR><TD>FK?</TD><TD>dict_type</TD></TR></TABLE>>];
+  notice [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="5" COLOR="#2F6FED"><TR><TD BGCOLOR="#DCEEFF" COLSPAN="2"><B>sys_notice</B></TD></TR><TR><TD>PK</TD><TD>notice_id BIGINT</TD></TR><TR><TD></TD><TD>title/status</TD></TR></TABLE>>];
+  nr [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="5" COLOR="#2F6FED"><TR><TD BGCOLOR="#DCEEFF" COLSPAN="2"><B>sys_notice_read</B></TD></TR><TR><TD>PK</TD><TD>read_id BIGINT</TD></TR><TR><TD>FK?</TD><TD>notice_id</TD></TR><TR><TD>UK</TD><TD>user_id+notice_id</TD></TR></TABLE>>];
+  gen [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="5" COLOR="#2F6FED"><TR><TD BGCOLOR="#DCEEFF" COLSPAN="2"><B>gen_table</B></TD></TR><TR><TD>PK</TD><TD>table_id BIGINT</TD></TR><TR><TD></TD><TD>table_name</TD></TR></TABLE>>];
+  genc [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="5" COLOR="#2F6FED"><TR><TD BGCOLOR="#DCEEFF" COLSPAN="2"><B>gen_table_column</B></TD></TR><TR><TD>PK</TD><TD>column_id BIGINT</TD></TR><TR><TD>FK?</TD><TD>table_id</TD></TR></TABLE>>];
+  dt -> dd [label="1 : N"];
+  notice -> nr [label="1 : N"];
+  gen -> genc [label="1 : N"];
+  note [shape=note, label="这些辅助表没有物理 FOREIGN KEY；FK? 表示逻辑关联。\nsys_notice_read 的 (user_id,notice_id) 为唯一键。", fillcolor="#F8FAFC", color="#9AA7B4", fontsize=10];
+}

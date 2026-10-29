@@ -1,0 +1,33 @@
+digraph D6B {
+  graph [rankdir=TB, newrank=true, splines=polyline, nodesep=0.4, ranksep=0.55, pad=0.2,
+         bgcolor="#FFFFFF", fontname="SimHei", fontsize=13, labelloc="t",
+         label="FIG-D6B  考试范围、考试科目与成绩任务（逻辑 ER；橙色=规划）"];
+  node [shape=box, style="rounded,filled", fontname="SimHei", fontsize=12, margin="0.14,0.07", penwidth=1.2];
+  edge [fontname="SimHei", fontsize=10, arrowsize=0.65, color="#52616B"];
+
+  year [label="学年\nDR-ORG-001", fillcolor="#FFE7CF", color="#D97706"];
+  term [label="学期\nDR-ORG-002", fillcolor="#FFE7CF", color="#D97706"];
+  exam [label="考试\nDR-EXAM-001\nEXAM_*", fillcolor="#FFE7CF", color="#D97706"];
+  cls [label="班级\nDR-ORG-004", fillcolor="#FFE7CF", color="#D97706"];
+  ec [label="考试班级范围\nDR-EXAM-002\n考试×班级唯一", fillcolor="#FFE7CF", color="#D97706"];
+  subj [label="科目\nDR-TCH-002", fillcolor="#FFE7CF", color="#D97706"];
+  es [label="考试科目\nDR-EXAM-003\n满分/及格/优秀", fillcolor="#FFE7CF", color="#D97706"];
+  task [label="成绩任务\nDR-SCORE-001\n考试×班级×科目唯一\n第一责任人快照", fillcolor="#FFE7CF", color="#D97706"];
+  score [label="成绩记录\nDR-SCORE-002\n任务×学生唯一\n三态/0.5", fillcolor="#FFE7CF", color="#D97706"];
+  stu [label="学生\nDR-STU-001", fillcolor="#FFE7CF", color="#D97706"];
+  tch [label="班主任\nDR-TCH-001\n第一责任人来源", fillcolor="#FFE7CF", color="#D97706"];
+
+  year -> exam [label="1 : N"];
+  term -> exam [label="1 : N"];
+  exam -> ec [label="1 : N"];
+  cls -> ec [label="1 : N"];
+  exam -> es [label="1 : N"];
+  subj -> es [label="1 : N"];
+  ec -> task [label="1 : N"];
+  es -> task [label="1 : N"];
+  cls -> task [label="1 : N"];
+  tch -> task [label="1 : N\n快照/可多班"];
+  task -> score [label="1 : N"];
+  stu -> score [label="1 : N"];
+
+}

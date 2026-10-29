@@ -1,0 +1,8 @@
+SQL STATIC CHECK (no DB connection, no execution)
+P0 tables: 19; P1 tables: 3
+P0 id INT AI: 19/19; P1 id INT AI: 3/3
+P0 catalog FKs: 28; P1 catalog FKs: 7
+P0 SQL ALTER FK lines: 29
+P1 SQL ALTER FK lines: 7
+mutation statements: none
+RESULT: PASS (static only; DDL not executed)

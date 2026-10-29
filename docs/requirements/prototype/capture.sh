@@ -16,6 +16,7 @@ shot() {
 }
 
 shot "UI-01-登录页面" "view=login&state=error"
+shot "UI-01A-登录页面（正常）" "view=login"
 shot "UI-02-学生信息管理" "view=students"
 shot "UI-02A-学生信息编辑" "view=students&modal=edit"
 shot "UI-03-班主任与班级管理" "view=classes"

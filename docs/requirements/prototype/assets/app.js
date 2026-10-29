@@ -407,7 +407,7 @@ function returnModal(){
 function publishModal(){
   return `<div class="modal-backdrop"><div class="modal">
     <div class="modal-head"><div><div class="modal-title">发布班级成绩 · 高二(3)班</div><div class="modal-sub">发布后学生可见；生成版本 1；发布不等于审核通过。</div></div><button class="close" onclick="location.href='?view=review'">×</button></div>
-    <div class="modal-body"><div class="note info" style="margin-bottom:12px"><b>发布前检查</b>：该班 6 个适用科目任务均须为 TASK_APPROVED，且无 SCORE_NOT_ENTERED。</div>
+    <div class="modal-body"><div class="note info" style="margin-bottom:12px"><b>发布前检查</b>：该班 6 个适用科目任务均须为 TASK_APPROVED，且无 SCORE_NOT_ENTERED。<br><span class="muted">演示数据说明：此处为“审核完成后的发布快照”，与 UI-06 审核中的列表不是同一时点。</span></div>
       <div class="table-wrap"><table><thead><tr><th>科目</th><th>任务状态</th><th>未录入</th><th>检查</th></tr></thead><tbody>
         <tr><td>语文</td><td>${tag('TASK_APPROVED','green')}</td><td>0</td><td>通过</td></tr><tr><td>数学</td><td>${tag('TASK_APPROVED','green')}</td><td>0</td><td>通过</td></tr><tr><td>英语</td><td>${tag('TASK_APPROVED','green')}</td><td>0</td><td>通过</td></tr><tr><td>物理</td><td>${tag('TASK_APPROVED','green')}</td><td>0</td><td>通过</td></tr><tr><td>化学</td><td>${tag('TASK_APPROVED','green')}</td><td>0</td><td>通过</td></tr><tr><td>生物</td><td>${tag('TASK_APPROVED','green')}</td><td>0</td><td>通过</td></tr>
       </tbody></table></div>

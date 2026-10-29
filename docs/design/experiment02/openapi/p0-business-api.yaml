@@ -1,0 +1,6228 @@
+openapi: 3.0.3
+info:
+  title: 学生管理系统 P0 业务 API（设计草稿）
+  version: 0.1-draft
+  description: 设计草稿；未实现、未部署；68 个 P0 API。
+servers:
+- url: http://localhost:8080
+  description: 本地开发（不是部署地址）
+paths:
+  /business/me/identity:
+    get:
+      tags:
+      - 认证与业务身份
+      summary: 获取当前登录人的业务身份
+      description: API-AUTH-001；状态：规划（未实现）。
+      operationId: op_api_auth_001
+      parameters: []
+      responses:
+        '200':
+          description: 成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '400':
+          description: 参数/业务校验失败
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '401':
+          description: 未登录/Token 失效
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '403':
+          description: 无权限/数据范围拒绝
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '404':
+          description: 资源不存在
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '409':
+          description: 状态/版本/重复冲突
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+      x-api-id: API-AUTH-001
+      x-status: NEW_P0
+      x-fr: FR-AUTH-003/004
+      x-br: BR-AUTH-004/007/012
+      x-ac: AC-FR-AUTH-003/004
+      x-permission: business:me:identity
+      x-roles:
+      - SYSTEM_ADMIN
+      - ACADEMIC
+      - HEAD_TEACHER
+      - STUDENT
+      x-scope: SCOPE_SELF
+      x-tables: stu_account_binding、sys_user
+      x-controller: BusinessIdentityController#me
+      x-service: BusinessIdentityService#currentIdentity
+      x-frontend: src/api/business/identity.js
+      x-idempotency: N/A
+      x-version: N/A
+      x-transaction: N/A
+      x-data-schema: '#/components/schemas/Identity'
+  /business/account-bindings:
+    post:
+      tags:
+      - 认证与业务身份
+      summary: 绑定账号到学生/班主任档案
+      description: API-AUTH-002；状态：规划（未实现）。
+      operationId: op_api_auth_002
+      parameters: []
+      responses:
+        '200':
+          description: 成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '400':
+          description: 参数/业务校验失败
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '401':
+          description: 未登录/Token 失效
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '403':
+          description: 无权限/数据范围拒绝
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '404':
+          description: 资源不存在
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '409':
+          description: 状态/版本/重复冲突
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+      x-api-id: API-AUTH-002
+      x-status: NEW_P0
+      x-fr: FR-AUTH-003
+      x-br: BR-AUTH-004/007
+      x-ac: AC-FR-AUTH-003
+      x-permission: business:binding:add
+      x-roles:
+      - SYSTEM_ADMIN
+      x-scope: SCOPE_SYSTEM
+      x-tables: stu_account_binding、sys_user
+      x-controller: AccountBindingController#create
+      x-service: AccountBindingService#bind
+      x-frontend: src/api/business/binding.js
+      x-idempotency: Idempotency-Key 可选
+      x-version: N/A
+      x-transaction: 单事务：校验账号/档案唯一、插入绑定、审计
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BindingCreate'
+      x-data-schema: '#/components/schemas/Binding'
+  /business/account-bindings/{bindingId}:
+    delete:
+      tags:
+      - 认证与业务身份
+      summary: 撤销账号档案绑定
+      description: API-AUTH-003；状态：规划（未实现）。
+      operationId: op_api_auth_003
+      parameters:
+      - name: bindingId
+        in: path
+        required: true
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: 成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '400':
+          description: 参数/业务校验失败
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '401':
+          description: 未登录/Token 失效
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '403':
+          description: 无权限/数据范围拒绝
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '404':
+          description: 资源不存在
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '409':
+          description: 状态/版本/重复冲突
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+      x-api-id: API-AUTH-003
+      x-status: NEW_P0
+      x-fr: FR-AUTH-003/005
+      x-br: BR-AUTH-004/007/011
+      x-ac: AC-FR-AUTH-003/005
+      x-permission: business:binding:remove
+      x-roles:
+      - SYSTEM_ADMIN
+      x-scope: SCOPE_SYSTEM
+      x-tables: stu_account_binding
+      x-controller: AccountBindingController#revoke
+      x-service: AccountBindingService#revoke
+      x-frontend: src/api/business/binding.js
+      x-idempotency: N/A
+      x-version: required
+      x-transaction: 单事务：校验、关闭绑定、审计
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RevokeRequest'
+  /business/org/years:
+    get:
+      tags:
+      - 组织与学年
+      summary: 学年列表
+      description: API-ORG-001；状态：规划（未实现）。
+      operationId: op_api_org_001
+      parameters:
+      - name: pageNum
+        in: query
+        required: false
+        schema:
+          type: integer
+        description: 页码
+      - name: pageSize
+        in: query
+        required: false
+        schema:
+          type: integer
+        description: 每页条数
+      - name: status
+        in: query
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: 成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TableDataInfo'
+        '400':
+          description: 参数/业务校验失败
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '401':
+          description: 未登录/Token 失效
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '403':
+          description: 无权限/数据范围拒绝
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '404':
+          description: 资源不存在
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '409':
+          description: 状态/版本/重复冲突
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+      x-api-id: API-ORG-001
+      x-status: NEW_P0
+      x-fr: FR-ORG-001
+      x-br: BR-ORG-001/002
+      x-ac: AC-FR-ORG-001
+      x-permission: business:org:year:list
+      x-roles:
+      - ACADEMIC
+      x-scope: SCOPE_ALL
+      x-tables: stu_year
+      x-controller: OrgYearController#list
+      x-service: OrgYearService#list
+      x-frontend: src/api/business/org.js
+      x-idempotency: N/A
+      x-version: N/A
+      x-transaction: N/A
+    post:
+      tags:
+      - 组织与学年
+      summary: 创建学年
+      description: API-ORG-002；状态：规划（未实现）。
+      operationId: op_api_org_002
+      parameters: []
+      responses:
+        '200':
+          description: 成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '400':
+          description: 参数/业务校验失败
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '401':
+          description: 未登录/Token 失效
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '403':
+          description: 无权限/数据范围拒绝
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '404':
+          description: 资源不存在
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '409':
+          description: 状态/版本/重复冲突
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+      x-api-id: API-ORG-002
+      x-status: NEW_P0
+      x-fr: FR-ORG-001
+      x-br: BR-ORG-001/002
+      x-ac: AC-FR-ORG-001
+      x-permission: business:org:year:add
+      x-roles:
+      - ACADEMIC
+      x-scope: SCOPE_ALL
+      x-tables: stu_year
+      x-controller: OrgYearController#create
+      x-service: OrgYearService#create
+      x-frontend: src/api/business/org.js
+      x-idempotency: N/A
+      x-version: N/A
+      x-transaction: 单事务：校验编码唯一/日期
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/YearUpsert'
+      x-data-schema: '#/components/schemas/Year'
+  /business/org/years/{id}:
+    put:
+      tags:
+      - 组织与学年
+      summary: 修改学年
+      description: API-ORG-003；状态：规划（未实现）。
+      operationId: op_api_org_003
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: 成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '400':
+          description: 参数/业务校验失败
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '401':
+          description: 未登录/Token 失效
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '403':
+          description: 无权限/数据范围拒绝
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '404':
+          description: 资源不存在
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '409':
+          description: 状态/版本/重复冲突
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+      x-api-id: API-ORG-003
+      x-status: NEW_P0
+      x-fr: FR-ORG-001
+      x-br: BR-ORG-001/002
+      x-ac: AC-FR-ORG-001
+      x-permission: business:org:year:edit
+      x-roles:
+      - ACADEMIC
+      x-scope: SCOPE_ALL
+      x-tables: stu_year
+      x-controller: OrgYearController#update
+      x-service: OrgYearService#update
+      x-frontend: src/api/business/org.js
+      x-idempotency: N/A
+      x-version: required
+      x-transaction: 单事务：版本校验
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/YearUpsert'
+      x-data-schema: '#/components/schemas/Year'
+  /business/org/years/{id}/current:
+    put:
+      tags:
+      - 组织与学年
+      summary: 设为当前学年
+      description: API-ORG-004；状态：规划（未实现）。
+      operationId: op_api_org_004
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: 成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '400':
+          description: 参数/业务校验失败
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '401':
+          description: 未登录/Token 失效
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '403':
+          description: 无权限/数据范围拒绝
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '404':
+          description: 资源不存在
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '409':
+          description: 状态/版本/重复冲突
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+      x-api-id: API-ORG-004
+      x-status: NEW_P0
+      x-fr: FR-ORG-001
+      x-br: BR-ORG-002
+      x-ac: AC-FR-ORG-001
+      x-permission: business:org:year:current
+      x-roles:
+      - ACADEMIC
+      x-scope: SCOPE_ALL
+      x-tables: stu_year
+      x-controller: OrgYearController#setCurrent
+      x-service: OrgYearService#setCurrent
+      x-frontend: src/api/business/org.js
+      x-idempotency: N/A
+      x-version: required
+      x-transaction: 单事务：清旧当前+设新当前+审计
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/YearCurrentRequest'
+      x-data-schema: '#/components/schemas/Year'
+  /business/org/terms:
+    get:
+      tags:
+      - 组织与学年
+      summary: 学期列表
+      description: API-ORG-005；状态：规划（未实现）。
+      operationId: op_api_org_005
+      parameters:
+      - name: pageNum
+        in: query
+        required: false
+        schema:
+          type: integer
+        description: 页码
+      - name: pageSize
+        in: query
+        required: false
+        schema:
+          type: integer
+        description: 每页条数
+      - name: yearId
+        in: query
+        required: false
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: 成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TableDataInfo'
+        '400':
+          description: 参数/业务校验失败
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '401':
+          description: 未登录/Token 失效
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '403':
+          description: 无权限/数据范围拒绝
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '404':
+          description: 资源不存在
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '409':
+          description: 状态/版本/重复冲突
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+      x-api-id: API-ORG-005
+      x-status: NEW_P0
+      x-fr: FR-ORG-002
+      x-br: BR-ORG-003/004
+      x-ac: AC-FR-ORG-002
+      x-permission: business:org:term:list
+      x-roles:
+      - ACADEMIC
+      x-scope: SCOPE_ALL
+      x-tables: stu_term
+      x-controller: OrgTermController#list
+      x-service: OrgTermService#list
+      x-frontend: src/api/business/org.js
+      x-idempotency: N/A
+      x-version: N/A
+      x-transaction: N/A
+    post:
+      tags:
+      - 组织与学年
+      summary: 创建学期
+      description: API-ORG-006；状态：规划（未实现）。
+      operationId: op_api_org_006
+      parameters: []
+      responses:
+        '200':
+          description: 成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '400':
+          description: 参数/业务校验失败
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '401':
+          description: 未登录/Token 失效
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '403':
+          description: 无权限/数据范围拒绝
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '404':
+          description: 资源不存在
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '409':
+          description: 状态/版本/重复冲突
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+      x-api-id: API-ORG-006
+      x-status: NEW_P0
+      x-fr: FR-ORG-002
+      x-br: BR-ORG-003/004
+      x-ac: AC-FR-ORG-002
+      x-permission: business:org:term:add
+      x-roles:
+      - ACADEMIC
+      x-scope: SCOPE_ALL
+      x-tables: stu_term
+      x-controller: OrgTermController#create
+      x-service: OrgTermService#create
+      x-frontend: src/api/business/org.js
+      x-idempotency: N/A
+      x-version: N/A
+      x-transaction: 单事务：year+term_no 唯一
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TermUpsert'
+      x-data-schema: '#/components/schemas/Term'
+  /business/org/terms/{id}:
+    put:
+      tags:
+      - 组织与学年
+      summary: 修改学期
+      description: API-ORG-007；状态：规划（未实现）。
+      operationId: op_api_org_007
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: 成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '400':
+          description: 参数/业务校验失败
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '401':
+          description: 未登录/Token 失效
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '403':
+          description: 无权限/数据范围拒绝
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '404':
+          description: 资源不存在
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '409':
+          description: 状态/版本/重复冲突
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+      x-api-id: API-ORG-007
+      x-status: NEW_P0
+      x-fr: FR-ORG-002
+      x-br: BR-ORG-003/004
+      x-ac: AC-FR-ORG-002
+      x-permission: business:org:term:edit
+      x-roles:
+      - ACADEMIC
+      x-scope: SCOPE_ALL
+      x-tables: stu_term
+      x-controller: OrgTermController#update
+      x-service: OrgTermService#update
+      x-frontend: src/api/business/org.js
+      x-idempotency: N/A
+      x-version: required
+      x-transaction: 单事务：版本
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TermUpsert'
+      x-data-schema: '#/components/schemas/Term'
+  /business/org/grades:
+    get:
+      tags:
+      - 组织与学年
+      summary: 年级列表
+      description: API-ORG-008；状态：规划（未实现）。
+      operationId: op_api_org_008
+      parameters:
+      - name: pageNum
+        in: query
+        required: false
+        schema:
+          type: integer
+        description: 页码
+      - name: pageSize
+        in: query
+        required: false
+        schema:
+          type: integer
+        description: 每页条数
+      responses:
+        '200':
+          description: 成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TableDataInfo'
+        '400':
+          description: 参数/业务校验失败
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '401':
+          description: 未登录/Token 失效
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '403':
+          description: 无权限/数据范围拒绝
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '404':
+          description: 资源不存在
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '409':
+          description: 状态/版本/重复冲突
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+      x-api-id: API-ORG-008
+      x-status: NEW_P0
+      x-fr: FR-ORG-003
+      x-br: BR-ORG-005/006
+      x-ac: AC-FR-ORG-003
+      x-permission: business:org:grade:list
+      x-roles:
+      - ACADEMIC
+      x-scope: SCOPE_ALL
+      x-tables: stu_grade
+      x-controller: OrgGradeController#list
+      x-service: OrgGradeService#list
+      x-frontend: src/api/business/org.js
+      x-idempotency: N/A
+      x-version: N/A
+      x-transaction: N/A
+    post:
+      tags:
+      - 组织与学年
+      summary: 创建年级
+      description: API-ORG-009；状态：规划（未实现）。
+      operationId: op_api_org_009
+      parameters: []
+      responses:
+        '200':
+          description: 成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '400':
+          description: 参数/业务校验失败
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '401':
+          description: 未登录/Token 失效
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '403':
+          description: 无权限/数据范围拒绝
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '404':
+          description: 资源不存在
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '409':
+          description: 状态/版本/重复冲突
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+      x-api-id: API-ORG-009
+      x-status: NEW_P0
+      x-fr: FR-ORG-003
+      x-br: BR-ORG-005/006
+      x-ac: AC-FR-ORG-003
+      x-permission: business:org:grade:add
+      x-roles:
+      - ACADEMIC
+      x-scope: SCOPE_ALL
+      x-tables: stu_grade
+      x-controller: OrgGradeController#create
+      x-service: OrgGradeService#create
+      x-frontend: src/api/business/org.js
+      x-idempotency: N/A
+      x-version: N/A
+      x-transaction: 单事务：code/name 唯一
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GradeUpsert'
+      x-data-schema: '#/components/schemas/Grade'
+  /business/org/grades/{id}:
+    put:
+      tags:
+      - 组织与学年
+      summary: 修改年级
+      description: API-ORG-010；状态：规划（未实现）。
+      operationId: op_api_org_010
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: 成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '400':
+          description: 参数/业务校验失败
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '401':
+          description: 未登录/Token 失效
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '403':
+          description: 无权限/数据范围拒绝
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '404':
+          description: 资源不存在
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '409':
+          description: 状态/版本/重复冲突
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+      x-api-id: API-ORG-010
+      x-status: NEW_P0
+      x-fr: FR-ORG-003
+      x-br: BR-ORG-005/006
+      x-ac: AC-FR-ORG-003
+      x-permission: business:org:grade:edit
+      x-roles:
+      - ACADEMIC
+      x-scope: SCOPE_ALL
+      x-tables: stu_grade
+      x-controller: OrgGradeController#update
+      x-service: OrgGradeService#update
+      x-frontend: src/api/business/org.js
+      x-idempotency: N/A
+      x-version: required
+      x-transaction: 单事务：版本
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GradeUpsert'
+      x-data-schema: '#/components/schemas/Grade'
+  /business/org/classes:
+    get:
+      tags:
+      - 组织与学年
+      summary: 班级列表
+      description: API-ORG-011；状态：规划（未实现）。
+      operationId: op_api_org_011
+      parameters:
+      - name: pageNum
+        in: query
+        required: false
+        schema:
+          type: integer
+        description: 页码
+      - name: pageSize
+        in: query
+        required: false
+        schema:
+          type: integer
+        description: 每页条数
+      - name: yearId
+        in: query
+        required: false
+        schema:
+          type: integer
+      - name: gradeId
+        in: query
+        required: false
+        schema:
+          type: integer
+      - name: status
+        in: query
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: 成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TableDataInfo'
+        '400':
+          description: 参数/业务校验失败
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '401':
+          description: 未登录/Token 失效
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '403':
+          description: 无权限/数据范围拒绝
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '404':
+          description: 资源不存在
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '409':
+          description: 状态/版本/重复冲突
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+      x-api-id: API-ORG-011
+      x-status: NEW_P0
+      x-fr: FR-ORG-004
+      x-br: BR-ORG-007/008
+      x-ac: AC-FR-ORG-004
+      x-permission: business:org:class:list
+      x-roles:
+      - ACADEMIC
+      - HEAD_TEACHER
+      x-scope: SCOPE_ALL/CLASS_READ
+      x-tables: stu_class、stu_student_class
+      x-controller: OrgClassController#list
+      x-service: OrgClassService#list
+      x-frontend: src/api/business/org.js
+      x-idempotency: N/A
+      x-version: N/A
+      x-transaction: N/A
+    post:
+      tags:
+      - 组织与学年
+      summary: 创建班级
+      description: API-ORG-012；状态：规划（未实现）。
+      operationId: op_api_org_012
+      parameters: []
+      responses:
+        '200':
+          description: 成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '400':
+          description: 参数/业务校验失败
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '401':
+          description: 未登录/Token 失效
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '403':
+          description: 无权限/数据范围拒绝
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '404':
+          description: 资源不存在
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '409':
+          description: 状态/版本/重复冲突
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+      x-api-id: API-ORG-012
+      x-status: NEW_P0
+      x-fr: FR-ORG-004
+      x-br: BR-ORG-007/008
+      x-ac: AC-FR-ORG-004
+      x-permission: business:org:class:add
+      x-roles:
+      - ACADEMIC
+      x-scope: SCOPE_ALL
+      x-tables: stu_class
+      x-controller: OrgClassController#create
+      x-service: OrgClassService#create
+      x-frontend: src/api/business/org.js
+      x-idempotency: N/A
+      x-version: N/A
+      x-transaction: 单事务：year+name/code 唯一
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ClassUpsert'
+      x-data-schema: '#/components/schemas/Class'
+  /business/org/classes/{id}:
+    put:
+      tags:
+      - 组织与学年
+      summary: 修改班级
+      description: API-ORG-013；状态：规划（未实现）。
+      operationId: op_api_org_013
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: 成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '400':
+          description: 参数/业务校验失败
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '401':
+          description: 未登录/Token 失效
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '403':
+          description: 无权限/数据范围拒绝
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '404':
+          description: 资源不存在
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '409':
+          description: 状态/版本/重复冲突
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+      x-api-id: API-ORG-013
+      x-status: NEW_P0
+      x-fr: FR-ORG-004
+      x-br: BR-ORG-007/008
+      x-ac: AC-FR-ORG-004
+      x-permission: business:org:class:edit
+      x-roles:
+      - ACADEMIC
+      x-scope: SCOPE_ALL
+      x-tables: stu_class
+      x-controller: OrgClassController#update
+      x-service: OrgClassService#update
+      x-frontend: src/api/business/org.js
+      x-idempotency: N/A
+      x-version: required
+      x-transaction: 单事务：版本/历史检查
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ClassUpsert'
+      x-data-schema: '#/components/schemas/Class'
+  /business/org/classes/{classId}/head-teachers:
+    get:
+      tags:
+      - 组织与学年
+      summary: 班级当前/历史班主任
+      description: API-ORG-014；状态：规划（未实现）。
+      operationId: op_api_org_014
+      parameters:
+      - name: classId
+        in: path
+        required: true
+        schema:
+          type: integer
+      - name: currentOnly
+        in: query
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: 成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '400':
+          description: 参数/业务校验失败
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '401':
+          description: 未登录/Token 失效
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '403':
+          description: 无权限/数据范围拒绝
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '404':
+          description: 资源不存在
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '409':
+          description: 状态/版本/重复冲突
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+      x-api-id: API-ORG-014
+      x-status: NEW_P0
+      x-fr: FR-ORG-005
+      x-br: BR-ORG-009/010
+      x-ac: AC-FR-ORG-005
+      x-permission: business:org:class:teacher:list
+      x-roles:
+      - ACADEMIC
+      - HEAD_TEACHER
+      x-scope: SCOPE_ALL/CLASS_SELF
+      x-tables: stu_head_teacher_assignment
+      x-controller: OrgHeadTeacherController#listByClass
+      x-service: OrgHeadTeacherService#listByClass
+      x-frontend: src/api/business/org.js
+      x-idempotency: N/A
+      x-version: N/A
+      x-transaction: N/A
+  /business/org/classes/{classId}/head-teacher-assignments:
+    post:
+      tags:
+      - 组织与学年
+      summary: 指派班主任
+      description: API-ORG-015；状态：规划（未实现）。
+      operationId: op_api_org_015
+      parameters:
+      - name: classId
+        in: path
+        required: true
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: 成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '400':
+          description: 参数/业务校验失败
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '401':
+          description: 未登录/Token 失效
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '403':
+          description: 无权限/数据范围拒绝
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '404':
+          description: 资源不存在
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '409':
+          description: 状态/版本/重复冲突
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+      x-api-id: API-ORG-015
+      x-status: NEW_P0
+      x-fr: FR-ORG-005
+      x-br: BR-ORG-009/010/011
+      x-ac: AC-FR-ORG-005
+      x-permission: business:org:teacher:assign
+      x-roles:
+      - ACADEMIC
+      x-scope: SCOPE_ALL
+      x-tables: stu_head_teacher_assignment、stu_class
+      x-controller: OrgHeadTeacherController#assign
+      x-service: OrgHeadTeacherService#assign
+      x-frontend: src/api/business/org.js
+      x-idempotency: Idempotency-Key 可选
+      x-version: required
+      x-transaction: 单事务：关闭旧当前+插入新+审计
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AssignmentCreate'
+      x-data-schema: '#/components/schemas/Assignment'
+  /business/org/head-teacher-assignments/{assignmentId}/end:
+    put:
+      tags:
+      - 组织与学年
+      summary: 结束班主任任职
+      description: API-ORG-016；状态：规划（未实现）。
+      operationId: op_api_org_016
+      parameters:
+      - name: assignmentId
+        in: path
+        required: true
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: 成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '400':
+          description: 参数/业务校验失败
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '401':
+          description: 未登录/Token 失效
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '403':
+          description: 无权限/数据范围拒绝
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '404':
+          description: 资源不存在
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '409':
+          description: 状态/版本/重复冲突
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+      x-api-id: API-ORG-016
+      x-status: NEW_P0
+      x-fr: FR-ORG-005
+      x-br: BR-ORG-009/010/011
+      x-ac: AC-FR-ORG-005
+      x-permission: business:org:teacher:end
+      x-roles:
+      - ACADEMIC
+      x-scope: SCOPE_ALL
+      x-tables: stu_head_teacher_assignment
+      x-controller: OrgHeadTeacherController#end
+      x-service: OrgHeadTeacherService#end
+      x-frontend: src/api/business/org.js
+      x-idempotency: N/A
+      x-version: required
+      x-transaction: 单事务：关闭当前+审计
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EndAssignmentRequest'
+      x-data-schema: '#/components/schemas/Assignment'
+  /business/students:
+    get:
+      tags:
+      - 学生档案
+      summary: 学生列表
+      description: API-STU-001；状态：规划（未实现）。
+      operationId: op_api_stu_001
+      parameters:
+      - name: pageNum
+        in: query
+        required: false
+        schema:
+          type: integer
+        description: 页码
+      - name: pageSize
+        in: query
+        required: false
+        schema:
+          type: integer
+        description: 每页条数
+      - name: studentNo
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: name
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: status
+        in: query
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: 成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TableDataInfo'
+        '400':
+          description: 参数/业务校验失败
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '401':
+          description: 未登录/Token 失效
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '403':
+          description: 无权限/数据范围拒绝
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '404':
+          description: 资源不存在
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '409':
+          description: 状态/版本/重复冲突
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+      x-api-id: API-STU-001
+      x-status: NEW_P0
+      x-fr: FR-STU-001
+      x-br: BR-STU-001/002
+      x-ac: AC-FR-STU-001
+      x-permission: business:student:list
+      x-roles:
+      - ACADEMIC
+      x-scope: SCOPE_ALL
+      x-tables: stu_student
+      x-controller: StudentController#list
+      x-service: StudentService#list
+      x-frontend: src/api/business/student.js
+      x-idempotency: N/A
+      x-version: N/A
+      x-transaction: N/A
+    post:
+      tags:
+      - 学生档案
+      summary: 创建学生档案
+      description: API-STU-003；状态：规划（未实现）。
+      operationId: op_api_stu_003
+      parameters: []
+      responses:
+        '200':
+          description: 成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '400':
+          description: 参数/业务校验失败
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '401':
+          description: 未登录/Token 失效
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '403':
+          description: 无权限/数据范围拒绝
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '404':
+          description: 资源不存在
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '409':
+          description: 状态/版本/重复冲突
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+      x-api-id: API-STU-003
+      x-status: NEW_P0
+      x-fr: FR-STU-001
+      x-br: BR-STU-001/002
+      x-ac: AC-FR-STU-001
+      x-permission: business:student:add
+      x-roles:
+      - ACADEMIC
+      x-scope: SCOPE_ALL
+      x-tables: stu_student
+      x-controller: StudentController#create
+      x-service: StudentService#create
+      x-frontend: src/api/business/student.js
+      x-idempotency: N/A
+      x-version: N/A
+      x-transaction: 单事务：学号唯一
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StudentUpsert'
+      x-data-schema: '#/components/schemas/Student'
+  /business/students/{id}:
+    get:
+      tags:
+      - 学生档案
+      summary: 学生详情
+      description: API-STU-002；状态：规划（未实现）。
+      operationId: op_api_stu_002
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: 成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '400':
+          description: 参数/业务校验失败
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '401':
+          description: 未登录/Token 失效
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '403':
+          description: 无权限/数据范围拒绝
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '404':
+          description: 资源不存在
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '409':
+          description: 状态/版本/重复冲突
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+      x-api-id: API-STU-002
+      x-status: NEW_P0
+      x-fr: FR-STU-001
+      x-br: BR-STU-001/002
+      x-ac: AC-FR-STU-001
+      x-permission: business:student:query
+      x-roles:
+      - ACADEMIC
+      - HEAD_TEACHER
+      - STUDENT
+      x-scope: SCOPE_ALL/CLASS_SELF/SELF
+      x-tables: stu_student
+      x-controller: StudentController#detail
+      x-service: StudentService#detail
+      x-frontend: src/api/business/student.js
+      x-idempotency: N/A
+      x-version: N/A
+      x-transaction: N/A
+      x-data-schema: '#/components/schemas/Student'
+    put:
+      tags:
+      - 学生档案
+      summary: 修改学生档案
+      description: API-STU-004；状态：规划（未实现）。
+      operationId: op_api_stu_004
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: 成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '400':
+          description: 参数/业务校验失败
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '401':
+          description: 未登录/Token 失效
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '403':
+          description: 无权限/数据范围拒绝
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '404':
+          description: 资源不存在
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '409':
+          description: 状态/版本/重复冲突
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+      x-api-id: API-STU-004
+      x-status: NEW_P0
+      x-fr: FR-STU-001
+      x-br: BR-STU-001/002
+      x-ac: AC-FR-STU-001
+      x-permission: business:student:edit
+      x-roles:
+      - ACADEMIC
+      x-scope: SCOPE_ALL
+      x-tables: stu_student
+      x-controller: StudentController#update
+      x-service: StudentService#update
+      x-frontend: src/api/business/student.js
+      x-idempotency: N/A
+      x-version: required
+      x-transaction: 单事务：版本
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StudentUpsert'
+      x-data-schema: '#/components/schemas/Student'
+  /business/students/{id}/status:
+    put:
+      tags:
+      - 学生档案
+      summary: 修改学生状态
+      description: API-STU-005；状态：规划（未实现）。
+      operationId: op_api_stu_005
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: 成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '400':
+          description: 参数/业务校验失败
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '401':
+          description: 未登录/Token 失效
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '403':
+          description: 无权限/数据范围拒绝
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '404':
+          description: 资源不存在
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '409':
+          description: 状态/版本/重复冲突
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+      x-api-id: API-STU-005
+      x-status: NEW_P0
+      x-fr: FR-STU-004
+      x-br: BR-STU-008/009
+      x-ac: AC-FR-STU-004
+      x-permission: business:student:status
+      x-roles:
+      - ACADEMIC
+      x-scope: SCOPE_ALL
+      x-tables: stu_student
+      x-controller: StudentController#changeStatus
+      x-service: StudentService#changeStatus
+      x-frontend: src/api/business/student.js
+      x-idempotency: N/A
+      x-version: required
+      x-transaction: 单事务：状态+审计
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StatusRequest'
+      x-data-schema: '#/components/schemas/Student'
+  /business/students/{id}/class-changes:
+    post:
+      tags:
+      - 学生档案
+      summary: 学生转班/归属变更
+      description: API-STU-006；状态：规划（未实现）。
+      operationId: op_api_stu_006
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: 成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '400':
+          description: 参数/业务校验失败
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '401':
+          description: 未登录/Token 失效
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '403':
+          description: 无权限/数据范围拒绝
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '404':
+          description: 资源不存在
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '409':
+          description: 状态/版本/重复冲突
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+      x-api-id: API-STU-006
+      x-status: NEW_P0
+      x-fr: FR-STU-002
+      x-br: BR-STU-003/004/005
+      x-ac: AC-FR-STU-002
+      x-permission: business:student:class:change
+      x-roles:
+      - ACADEMIC
+      x-scope: SCOPE_ALL
+      x-tables: stu_student_class、stu_student
+      x-controller: StudentController#changeClass
+      x-service: StudentService#changeClass
+      x-frontend: src/api/business/student.js
+      x-idempotency: Idempotency-Key 可选
+      x-version: required
+      x-transaction: 单事务：关闭旧归属+插入新+审计
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ClassChangeRequest'
+      x-data-schema: '#/components/schemas/StudentClass'
+  /business/students/{id}/class-history:
+    get:
+      tags:
+      - 学生档案
+      summary: 学生归属历史
+      description: API-STU-007；状态：规划（未实现）。
+      operationId: op_api_stu_007
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+      - name: pageNum
+        in: query
+        required: false
+        schema:
+          type: integer
+        description: 页码
+      - name: pageSize
+        in: query
+        required: false
+        schema:
+          type: integer
+        description: 每页条数
+      responses:
+        '200':
+          description: 成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TableDataInfo'
+        '400':
+          description: 参数/业务校验失败
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '401':
+          description: 未登录/Token 失效
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '403':
+          description: 无权限/数据范围拒绝
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '404':
+          description: 资源不存在
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '409':
+          description: 状态/版本/重复冲突
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+      x-api-id: API-STU-007
+      x-status: NEW_P0
+      x-fr: FR-STU-002
+      x-br: BR-STU-003/004/005
+      x-ac: AC-FR-STU-002
+      x-permission: business:student:class:history
+      x-roles:
+      - ACADEMIC
+      - HEAD_TEACHER
+      - STUDENT
+      x-scope: SCOPE_ALL/CLASS_SELF/SELF
+      x-tables: stu_student_class
+      x-controller: StudentController#classHistory
+      x-service: StudentService#classHistory
+      x-frontend: src/api/business/student.js
+      x-idempotency: N/A
+      x-version: N/A
+      x-transaction: N/A
+  /business/students/{id}/account-binding:
+    get:
+      tags:
+      - 学生档案
+      summary: 查询学生账号绑定
+      description: API-STU-008；状态：规划（未实现）。
+      operationId: op_api_stu_008
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: 成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '400':
+          description: 参数/业务校验失败
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '401':
+          description: 未登录/Token 失效
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '403':
+          description: 无权限/数据范围拒绝
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '404':
+          description: 资源不存在
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '409':
+          description: 状态/版本/重复冲突
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+      x-api-id: API-STU-008
+      x-status: NEW_P0
+      x-fr: FR-STU-003
+      x-br: BR-STU-006/007
+      x-ac: AC-FR-STU-003
+      x-permission: business:student:binding:query
+      x-roles:
+      - ACADEMIC
+      - STUDENT
+      x-scope: SCOPE_ALL/SELF
+      x-tables: stu_account_binding
+      x-controller: StudentController#binding
+      x-service: StudentService#binding
+      x-frontend: src/api/business/student.js
+      x-idempotency: N/A
+      x-version: N/A
+      x-transaction: N/A
+      x-data-schema: '#/components/schemas/Binding'
+    post:
+      tags:
+      - 学生档案
+      summary: 学生账号绑定
+      description: API-STU-009；状态：规划（未实现）。
+      operationId: op_api_stu_009
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: 成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '400':
+          description: 参数/业务校验失败
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '401':
+          description: 未登录/Token 失效
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '403':
+          description: 无权限/数据范围拒绝
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '404':
+          description: 资源不存在
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '409':
+          description: 状态/版本/重复冲突
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+      x-api-id: API-STU-009
+      x-status: NEW_P0
+      x-fr: FR-STU-003
+      x-br: BR-STU-006/007
+      x-ac: AC-FR-STU-003
+      x-permission: business:student:binding:add
+      x-roles:
+      - ACADEMIC
+      - SYSTEM_ADMIN
+      x-scope: SCOPE_ALL/SYSTEM
+      x-tables: stu_account_binding、sys_user
+      x-controller: StudentController#bindAccount
+      x-service: AccountBindingService#bindStudent
+      x-frontend: src/api/business/student.js
+      x-idempotency: Idempotency-Key 可选
+      x-version: N/A
+      x-transaction: 单事务：账号/档案唯一+审计
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BindingCreate'
+      x-data-schema: '#/components/schemas/Binding'
+  /business/students/{id}/account-binding/{bindingId}:
+    delete:
+      tags:
+      - 学生档案
+      summary: 撤销学生账号绑定
+      description: API-STU-010；状态：规划（未实现）。
+      operationId: op_api_stu_010
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+      - name: bindingId
+        in: path
+        required: true
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: 成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '400':
+          description: 参数/业务校验失败
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '401':
+          description: 未登录/Token 失效
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '403':
+          description: 无权限/数据范围拒绝
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '404':
+          description: 资源不存在
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '409':
+          description: 状态/版本/重复冲突
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+      x-api-id: API-STU-010
+      x-status: NEW_P0
+      x-fr: FR-STU-003
+      x-br: BR-STU-006/007
+      x-ac: AC-FR-STU-003
+      x-permission: business:student:binding:remove
+      x-roles:
+      - ACADEMIC
+      - SYSTEM_ADMIN
+      x-scope: SCOPE_ALL/SYSTEM
+      x-tables: stu_account_binding
+      x-controller: StudentController#unbindAccount
+      x-service: AccountBindingService#revoke
+      x-frontend: src/api/business/student.js
+      x-idempotency: N/A
+      x-version: required
+      x-transaction: 单事务：关闭绑定+审计
+  /business/head-teachers:
+    get:
+      tags:
+      - 班主任与科目
+      summary: 班主任列表
+      description: API-TCH-001；状态：规划（未实现）。
+      operationId: op_api_tch_001
+      parameters:
+      - name: pageNum
+        in: query
+        required: false
+        schema:
+          type: integer
+        description: 页码
+      - name: pageSize
+        in: query
+        required: false
+        schema:
+          type: integer
+        description: 每页条数
+      - name: teacherNo
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: name
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: status
+        in: query
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: 成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TableDataInfo'
+        '400':
+          description: 参数/业务校验失败
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '401':
+          description: 未登录/Token 失效
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '403':
+          description: 无权限/数据范围拒绝
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '404':
+          description: 资源不存在
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '409':
+          description: 状态/版本/重复冲突
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+      x-api-id: API-TCH-001
+      x-status: NEW_P0
+      x-fr: FR-TCH-001
+      x-br: BR-TCH-001/003
+      x-ac: AC-FR-TCH-001
+      x-permission: business:teacher:list
+      x-roles:
+      - ACADEMIC
+      x-scope: SCOPE_ALL
+      x-tables: stu_head_teacher
+      x-controller: HeadTeacherController#list
+      x-service: HeadTeacherService#list
+      x-frontend: src/api/business/teacher.js
+      x-idempotency: N/A
+      x-version: N/A
+      x-transaction: N/A
+    post:
+      tags:
+      - 班主任与科目
+      summary: 创建班主任档案
+      description: API-TCH-002；状态：规划（未实现）。
+      operationId: op_api_tch_002
+      parameters: []
+      responses:
+        '200':
+          description: 成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '400':
+          description: 参数/业务校验失败
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '401':
+          description: 未登录/Token 失效
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '403':
+          description: 无权限/数据范围拒绝
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '404':
+          description: 资源不存在
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '409':
+          description: 状态/版本/重复冲突
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+      x-api-id: API-TCH-002
+      x-status: NEW_P0
+      x-fr: FR-TCH-001
+      x-br: BR-TCH-001/003
+      x-ac: AC-FR-TCH-001
+      x-permission: business:teacher:add
+      x-roles:
+      - ACADEMIC
+      x-scope: SCOPE_ALL
+      x-tables: stu_head_teacher
+      x-controller: HeadTeacherController#create
+      x-service: HeadTeacherService#create
+      x-frontend: src/api/business/teacher.js
+      x-idempotency: N/A
+      x-version: N/A
+      x-transaction: 单事务：工号唯一
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/HeadTeacherUpsert'
+      x-data-schema: '#/components/schemas/HeadTeacher'
+  /business/head-teachers/{id}:
+    put:
+      tags:
+      - 班主任与科目
+      summary: 修改班主任档案
+      description: API-TCH-003；状态：规划（未实现）。
+      operationId: op_api_tch_003
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: 成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '400':
+          description: 参数/业务校验失败
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '401':
+          description: 未登录/Token 失效
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '403':
+          description: 无权限/数据范围拒绝
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '404':
+          description: 资源不存在
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '409':
+          description: 状态/版本/重复冲突
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+      x-api-id: API-TCH-003
+      x-status: NEW_P0
+      x-fr: FR-TCH-001
+      x-br: BR-TCH-001/003
+      x-ac: AC-FR-TCH-001
+      x-permission: business:teacher:edit
+      x-roles:
+      - ACADEMIC
+      x-scope: SCOPE_ALL
+      x-tables: stu_head_teacher
+      x-controller: HeadTeacherController#update
+      x-service: HeadTeacherService#update
+      x-frontend: src/api/business/teacher.js
+      x-idempotency: N/A
+      x-version: required
+      x-transaction: 单事务：版本
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/HeadTeacherUpsert'
+      x-data-schema: '#/components/schemas/HeadTeacher'
+  /business/head-teachers/{id}/assignments:
+    get:
+      tags:
+      - 班主任与科目
+      summary: 班主任任职历史
+      description: API-TCH-004；状态：规划（未实现）。
+      operationId: op_api_tch_004
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+      - name: pageNum
+        in: query
+        required: false
+        schema:
+          type: integer
+        description: 页码
+      - name: pageSize
+        in: query
+        required: false
+        schema:
+          type: integer
+        description: 每页条数
+      responses:
+        '200':
+          description: 成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TableDataInfo'
+        '400':
+          description: 参数/业务校验失败
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '401':
+          description: 未登录/Token 失效
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '403':
+          description: 无权限/数据范围拒绝
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '404':
+          description: 资源不存在
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '409':
+          description: 状态/版本/重复冲突
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+      x-api-id: API-TCH-004
+      x-status: NEW_P0
+      x-fr: FR-TCH-001
+      x-br: BR-TCH-004/005
+      x-ac: AC-FR-TCH-001
+      x-permission: business:teacher:assignment:list
+      x-roles:
+      - ACADEMIC
+      - HEAD_TEACHER
+      x-scope: SCOPE_ALL/SELF
+      x-tables: stu_head_teacher_assignment
+      x-controller: HeadTeacherController#assignments
+      x-service: HeadTeacherService#assignments
+      x-frontend: src/api/business/teacher.js
+      x-idempotency: N/A
+      x-version: N/A
+      x-transaction: N/A
+    post:
+      tags:
+      - 班主任与科目
+      summary: 班主任指派（按班主任）
+      description: API-TCH-005；状态：规划（未实现）。
+      operationId: op_api_tch_005
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: 成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '400':
+          description: 参数/业务校验失败
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '401':
+          description: 未登录/Token 失效
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '403':
+          description: 无权限/数据范围拒绝
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '404':
+          description: 资源不存在
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '409':
+          description: 状态/版本/重复冲突
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+      x-api-id: API-TCH-005
+      x-status: NEW_P0
+      x-fr: FR-TCH-001
+      x-br: BR-TCH-004/005
+      x-ac: AC-FR-TCH-001
+      x-permission: business:teacher:assign
+      x-roles:
+      - ACADEMIC
+      x-scope: SCOPE_ALL
+      x-tables: stu_head_teacher_assignment
+      x-controller: HeadTeacherController#assign
+      x-service: HeadTeacherService#assign
+      x-frontend: src/api/business/teacher.js
+      x-idempotency: Idempotency-Key 可选
+      x-version: required
+      x-transaction: 单事务：关闭旧当前+插入新+审计
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TeacherAssignmentCreate'
+      x-data-schema: '#/components/schemas/Assignment'
+  /business/subjects:
+    get:
+      tags:
+      - 班主任与科目
+      summary: 科目列表
+      description: API-SUB-001；状态：规划（未实现）。
+      operationId: op_api_sub_001
+      parameters:
+      - name: pageNum
+        in: query
+        required: false
+        schema:
+          type: integer
+        description: 页码
+      - name: pageSize
+        in: query
+        required: false
+        schema:
+          type: integer
+        description: 每页条数
+      responses:
+        '200':
+          description: 成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TableDataInfo'
+        '400':
+          description: 参数/业务校验失败
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '401':
+          description: 未登录/Token 失效
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '403':
+          description: 无权限/数据范围拒绝
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '404':
+          description: 资源不存在
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '409':
+          description: 状态/版本/重复冲突
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+      x-api-id: API-SUB-001
+      x-status: NEW_P0
+      x-fr: FR-TCH-002
+      x-br: BR-SUB-001/002/003
+      x-ac: AC-FR-TCH-002
+      x-permission: business:subject:list
+      x-roles:
+      - ACADEMIC
+      - HEAD_TEACHER
+      x-scope: SCOPE_ALL
+      x-tables: stu_subject
+      x-controller: SubjectController#list
+      x-service: SubjectService#list
+      x-frontend: src/api/business/subject.js
+      x-idempotency: N/A
+      x-version: N/A
+      x-transaction: N/A
+    post:
+      tags:
+      - 班主任与科目
+      summary: 创建科目
+      description: API-SUB-002；状态：规划（未实现）。
+      operationId: op_api_sub_002
+      parameters: []
+      responses:
+        '200':
+          description: 成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '400':
+          description: 参数/业务校验失败
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '401':
+          description: 未登录/Token 失效
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '403':
+          description: 无权限/数据范围拒绝
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '404':
+          description: 资源不存在
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '409':
+          description: 状态/版本/重复冲突
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+      x-api-id: API-SUB-002
+      x-status: NEW_P0
+      x-fr: FR-TCH-002
+      x-br: BR-SUB-001/002/003
+      x-ac: AC-FR-TCH-002
+      x-permission: business:subject:add
+      x-roles:
+      - ACADEMIC
+      x-scope: SCOPE_ALL
+      x-tables: stu_subject
+      x-controller: SubjectController#create
+      x-service: SubjectService#create
+      x-frontend: src/api/business/subject.js
+      x-idempotency: N/A
+      x-version: N/A
+      x-transaction: 单事务：code/name 唯一
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SubjectUpsert'
+      x-data-schema: '#/components/schemas/Subject'
+  /business/subjects/{id}:
+    put:
+      tags:
+      - 班主任与科目
+      summary: 修改科目
+      description: API-SUB-003；状态：规划（未实现）。
+      operationId: op_api_sub_003
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: 成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '400':
+          description: 参数/业务校验失败
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '401':
+          description: 未登录/Token 失效
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '403':
+          description: 无权限/数据范围拒绝
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '404':
+          description: 资源不存在
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '409':
+          description: 状态/版本/重复冲突
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+      x-api-id: API-SUB-003
+      x-status: NEW_P0
+      x-fr: FR-TCH-002
+      x-br: BR-SUB-001/002/003
+      x-ac: AC-FR-TCH-002
+      x-permission: business:subject:edit
+      x-roles:
+      - ACADEMIC
+      x-scope: SCOPE_ALL
+      x-tables: stu_subject
+      x-controller: SubjectController#update
+      x-service: SubjectService#update
+      x-frontend: src/api/business/subject.js
+      x-idempotency: N/A
+      x-version: required
+      x-transaction: 单事务：版本
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SubjectUpsert'
+      x-data-schema: '#/components/schemas/Subject'
+  /business/exams:
+    get:
+      tags:
+      - 考试与配置
+      summary: 考试列表
+      description: API-EXAM-001；状态：规划（未实现）。
+      operationId: op_api_exam_001
+      parameters:
+      - name: pageNum
+        in: query
+        required: false
+        schema:
+          type: integer
+        description: 页码
+      - name: pageSize
+        in: query
+        required: false
+        schema:
+          type: integer
+        description: 每页条数
+      - name: yearId
+        in: query
+        required: false
+        schema:
+          type: integer
+      - name: termId
+        in: query
+        required: false
+        schema:
+          type: integer
+      - name: status
+        in: query
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: 成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TableDataInfo'
+        '400':
+          description: 参数/业务校验失败
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '401':
+          description: 未登录/Token 失效
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '403':
+          description: 无权限/数据范围拒绝
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '404':
+          description: 资源不存在
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '409':
+          description: 状态/版本/重复冲突
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+      x-api-id: API-EXAM-001
+      x-status: NEW_P0
+      x-fr: FR-EXAM-001/004
+      x-br: BR-EXAM-001～004/009
+      x-ac: AC-FR-EXAM-001/004
+      x-permission: business:exam:list
+      x-roles:
+      - ACADEMIC
+      - HEAD_TEACHER
+      x-scope: SCOPE_ALL/CLASS_READ
+      x-tables: stu_exam
+      x-controller: ExamController#list
+      x-service: ExamService#list
+      x-frontend: src/api/business/exam.js
+      x-idempotency: N/A
+      x-version: N/A
+      x-transaction: N/A
+    post:
+      tags:
+      - 考试与配置
+      summary: 创建考试
+      description: API-EXAM-002；状态：规划（未实现）。
+      operationId: op_api_exam_002
+      parameters: []
+      responses:
+        '200':
+          description: 成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '400':
+          description: 参数/业务校验失败
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '401':
+          description: 未登录/Token 失效
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '403':
+          description: 无权限/数据范围拒绝
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '404':
+          description: 资源不存在
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '409':
+          description: 状态/版本/重复冲突
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+      x-api-id: API-EXAM-002
+      x-status: NEW_P0
+      x-fr: FR-EXAM-001
+      x-br: BR-EXAM-001～004
+      x-ac: AC-FR-EXAM-001
+      x-permission: business:exam:add
+      x-roles:
+      - ACADEMIC
+      x-scope: SCOPE_ALL
+      x-tables: stu_exam
+      x-controller: ExamController#create
+      x-service: ExamService#create
+      x-frontend: src/api/business/exam.js
+      x-idempotency: N/A
+      x-version: N/A
+      x-transaction: 单事务：名称/编码唯一
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ExamUpsert'
+      x-data-schema: '#/components/schemas/Exam'
+  /business/exams/{id}:
+    get:
+      tags:
+      - 考试与配置
+      summary: 考试详情
+      description: API-EXAM-003；状态：规划（未实现）。
+      operationId: op_api_exam_003
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: 成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '400':
+          description: 参数/业务校验失败
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '401':
+          description: 未登录/Token 失效
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '403':
+          description: 无权限/数据范围拒绝
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '404':
+          description: 资源不存在
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '409':
+          description: 状态/版本/重复冲突
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+      x-api-id: API-EXAM-003
+      x-status: NEW_P0
+      x-fr: FR-EXAM-001/002/003/004
+      x-br: BR-EXAM-001～012
+      x-ac: AC-FR-EXAM-001～004
+      x-permission: business:exam:query
+      x-roles:
+      - ACADEMIC
+      - HEAD_TEACHER
+      x-scope: SCOPE_ALL/CLASS_READ
+      x-tables: stu_exam、exam_class、exam_subject
+      x-controller: ExamController#detail
+      x-service: ExamService#detail
+      x-frontend: src/api/business/exam.js
+      x-idempotency: N/A
+      x-version: N/A
+      x-transaction: N/A
+      x-data-schema: '#/components/schemas/ExamDetail'
+    put:
+      tags:
+      - 考试与配置
+      summary: 修改考试
+      description: API-EXAM-004；状态：规划（未实现）。
+      operationId: op_api_exam_004
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: 成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '400':
+          description: 参数/业务校验失败
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '401':
+          description: 未登录/Token 失效
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '403':
+          description: 无权限/数据范围拒绝
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '404':
+          description: 资源不存在
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '409':
+          description: 状态/版本/重复冲突
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+      x-api-id: API-EXAM-004
+      x-status: NEW_P0
+      x-fr: FR-EXAM-001
+      x-br: BR-EXAM-001～004
+      x-ac: AC-FR-EXAM-001
+      x-permission: business:exam:edit
+      x-roles:
+      - ACADEMIC
+      x-scope: SCOPE_ALL
+      x-tables: stu_exam
+      x-controller: ExamController#update
+      x-service: ExamService#update
+      x-frontend: src/api/business/exam.js
+      x-idempotency: N/A
+      x-version: required
+      x-transaction: 单事务：版本/状态
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ExamUpsert'
+      x-data-schema: '#/components/schemas/Exam'
+  /business/exams/{id}/status:
+    put:
+      tags:
+      - 考试与配置
+      summary: 考试状态转换
+      description: API-EXAM-005；状态：规划（未实现）。
+      operationId: op_api_exam_005
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: 成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '400':
+          description: 参数/业务校验失败
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '401':
+          description: 未登录/Token 失效
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '403':
+          description: 无权限/数据范围拒绝
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '404':
+          description: 资源不存在
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '409':
+          description: 状态/版本/重复冲突
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+      x-api-id: API-EXAM-005
+      x-status: NEW_P0
+      x-fr: FR-EXAM-004
+      x-br: BR-EXAM-009～012
+      x-ac: AC-FR-EXAM-004
+      x-permission: business:exam:status
+      x-roles:
+      - ACADEMIC
+      x-scope: SCOPE_ALL
+      x-tables: stu_exam
+      x-controller: ExamController#changeStatus
+      x-service: ExamService#changeStatus
+      x-frontend: src/api/business/exam.js
+      x-idempotency: N/A
+      x-version: required
+      x-transaction: 单事务：状态机+审计
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ExamStatusRequest'
+      x-data-schema: '#/components/schemas/Exam'
+  /business/exams/{id}/classes:
+    get:
+      tags:
+      - 考试与配置
+      summary: 考试参与班级
+      description: API-EXAM-006；状态：规划（未实现）。
+      operationId: op_api_exam_006
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: 成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '400':
+          description: 参数/业务校验失败
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '401':
+          description: 未登录/Token 失效
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '403':
+          description: 无权限/数据范围拒绝
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '404':
+          description: 资源不存在
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '409':
+          description: 状态/版本/重复冲突
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+      x-api-id: API-EXAM-006
+      x-status: NEW_P0
+      x-fr: FR-EXAM-002
+      x-br: BR-EXAM-005/006
+      x-ac: AC-FR-EXAM-002
+      x-permission: business:exam:class:list
+      x-roles:
+      - ACADEMIC
+      - HEAD_TEACHER
+      x-scope: SCOPE_ALL/CLASS_READ
+      x-tables: stu_exam_class
+      x-controller: ExamController#classes
+      x-service: ExamService#classes
+      x-frontend: src/api/business/exam.js
+      x-idempotency: N/A
+      x-version: N/A
+      x-transaction: N/A
+    put:
+      tags:
+      - 考试与配置
+      summary: 设置考试参与班级
+      description: API-EXAM-007；状态：规划（未实现）。
+      operationId: op_api_exam_007
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: 成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '400':
+          description: 参数/业务校验失败
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '401':
+          description: 未登录/Token 失效
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '403':
+          description: 无权限/数据范围拒绝
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '404':
+          description: 资源不存在
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '409':
+          description: 状态/版本/重复冲突
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+      x-api-id: API-EXAM-007
+      x-status: NEW_P0
+      x-fr: FR-EXAM-002
+      x-br: BR-EXAM-005/006
+      x-ac: AC-FR-EXAM-002
+      x-permission: business:exam:class:edit
+      x-roles:
+      - ACADEMIC
+      x-scope: SCOPE_ALL
+      x-tables: stu_exam_class
+      x-controller: ExamController#setClasses
+      x-service: ExamService#setClasses
+      x-frontend: src/api/business/exam.js
+      x-idempotency: N/A
+      x-version: required
+      x-transaction: 单事务：范围增删+审计
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ExamClassSet'
+  /business/exams/{id}/subjects:
+    get:
+      tags:
+      - 考试与配置
+      summary: 考试科目配置
+      description: API-EXAM-008；状态：规划（未实现）。
+      operationId: op_api_exam_008
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: 成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '400':
+          description: 参数/业务校验失败
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '401':
+          description: 未登录/Token 失效
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '403':
+          description: 无权限/数据范围拒绝
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '404':
+          description: 资源不存在
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '409':
+          description: 状态/版本/重复冲突
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+      x-api-id: API-EXAM-008
+      x-status: NEW_P0
+      x-fr: FR-EXAM-003
+      x-br: BR-EXAM-005/007/008
+      x-ac: AC-FR-EXAM-003
+      x-permission: business:exam:subject:list
+      x-roles:
+      - ACADEMIC
+      - HEAD_TEACHER
+      x-scope: SCOPE_ALL/CLASS_READ
+      x-tables: stu_exam_subject
+      x-controller: ExamController#subjects
+      x-service: ExamService#subjects
+      x-frontend: src/api/business/exam.js
+      x-idempotency: N/A
+      x-version: N/A
+      x-transaction: N/A
+    put:
+      tags:
+      - 考试与配置
+      summary: 设置考试科目/满分/线
+      description: API-EXAM-009；状态：规划（未实现）。
+      operationId: op_api_exam_009
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: 成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '400':
+          description: 参数/业务校验失败
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '401':
+          description: 未登录/Token 失效
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '403':
+          description: 无权限/数据范围拒绝
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '404':
+          description: 资源不存在
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '409':
+          description: 状态/版本/重复冲突
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+      x-api-id: API-EXAM-009
+      x-status: NEW_P0
+      x-fr: FR-EXAM-003
+      x-br: BR-EXAM-005/007/008
+      x-ac: AC-FR-EXAM-003
+      x-permission: business:exam:subject:edit
+      x-roles:
+      - ACADEMIC
+      x-scope: SCOPE_ALL
+      x-tables: stu_exam_subject
+      x-controller: ExamController#setSubjects
+      x-service: ExamService#setSubjects
+      x-frontend: src/api/business/exam.js
+      x-idempotency: N/A
+      x-version: required
+      x-transaction: 单事务：0.5/线校验+审计
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ExamSubjectSet'
+  /business/exams/{id}/tasks/generate:
+    post:
+      tags:
+      - 考试与配置
+      summary: 生成成绩任务
+      description: API-EXAM-010；状态：规划（未实现）。
+      operationId: op_api_exam_010
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: 成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '400':
+          description: 参数/业务校验失败
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '401':
+          description: 未登录/Token 失效
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '403':
+          description: 无权限/数据范围拒绝
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '404':
+          description: 资源不存在
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '409':
+          description: 状态/版本/重复冲突
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+      x-api-id: API-EXAM-010
+      x-status: NEW_P0
+      x-fr: FR-SCORE-001
+      x-br: BR-SCORE-001/002/003
+      x-ac: AC-FR-SCORE-001
+      x-permission: business:score:task:generate
+      x-roles:
+      - ACADEMIC
+      x-scope: SCOPE_ALL
+      x-tables: stu_score_task、stu_score、stu_class
+      x-controller: ScoreTaskController#generate
+      x-service: ScoreTaskService#generate
+      x-frontend: src/api/business/score.js
+      x-idempotency: Idempotency-Key 必须
+      x-version: N/A
+      x-transaction: 单事务：按考试×班级×科目生成/补齐+责任人快照+审计
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GenerateTasksRequest'
+      x-data-schema: '#/components/schemas/GenerateTasksResult'
+  /business/score-tasks:
+    get:
+      tags:
+      - 成绩任务
+      summary: 我的成绩任务列表
+      description: API-SCORE-001；状态：规划（未实现）。
+      operationId: op_api_score_001
+      parameters:
+      - name: pageNum
+        in: query
+        required: false
+        schema:
+          type: integer
+        description: 页码
+      - name: pageSize
+        in: query
+        required: false
+        schema:
+          type: integer
+        description: 每页条数
+      - name: examId
+        in: query
+        required: false
+        schema:
+          type: integer
+      - name: classId
+        in: query
+        required: false
+        schema:
+          type: integer
+      - name: subjectId
+        in: query
+        required: false
+        schema:
+          type: integer
+      - name: status
+        in: query
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: 成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TableDataInfo'
+        '400':
+          description: 参数/业务校验失败
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '401':
+          description: 未登录/Token 失效
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '403':
+          description: 无权限/数据范围拒绝
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '404':
+          description: 资源不存在
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '409':
+          description: 状态/版本/重复冲突
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+      x-api-id: API-SCORE-001
+      x-status: NEW_P0
+      x-fr: FR-SCORE-001/002
+      x-br: BR-SCORE-001～005
+      x-ac: AC-FR-SCORE-001/002
+      x-permission: business:score:task:list
+      x-roles:
+      - HEAD_TEACHER
+      - ACADEMIC
+      x-scope: SCOPE_CLASS/ALL
+      x-tables: stu_score_task
+      x-controller: ScoreTaskController#list
+      x-service: ScoreTaskService#list
+      x-frontend: src/api/business/score.js
+      x-idempotency: N/A
+      x-version: N/A
+      x-transaction: N/A
+  /business/score-tasks/{id}:
+    get:
+      tags:
+      - 成绩任务
+      summary: 成绩任务详情
+      description: API-SCORE-002；状态：规划（未实现）。
+      operationId: op_api_score_002
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: 成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '400':
+          description: 参数/业务校验失败
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '401':
+          description: 未登录/Token 失效
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '403':
+          description: 无权限/数据范围拒绝
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '404':
+          description: 资源不存在
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '409':
+          description: 状态/版本/重复冲突
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+      x-api-id: API-SCORE-002
+      x-status: NEW_P0
+      x-fr: FR-SCORE-001/002
+      x-br: BR-SCORE-001～005
+      x-ac: AC-FR-SCORE-001/002
+      x-permission: business:score:task:query
+      x-roles:
+      - HEAD_TEACHER
+      - ACADEMIC
+      x-scope: SCOPE_CLASS/ALL
+      x-tables: stu_score_task
+      x-controller: ScoreTaskController#detail
+      x-service: ScoreTaskService#detail
+      x-frontend: src/api/business/score.js
+      x-idempotency: N/A
+      x-version: N/A
+      x-transaction: N/A
+      x-data-schema: '#/components/schemas/ScoreTask'
+  /business/score-tasks/{id}/scores:
+    get:
+      tags:
+      - 成绩任务
+      summary: 读取任务成绩
+      description: API-SCORE-003；状态：规划（未实现）。
+      operationId: op_api_score_003
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: 成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '400':
+          description: 参数/业务校验失败
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '401':
+          description: 未登录/Token 失效
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '403':
+          description: 无权限/数据范围拒绝
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '404':
+          description: 资源不存在
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '409':
+          description: 状态/版本/重复冲突
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+      x-api-id: API-SCORE-003
+      x-status: NEW_P0
+      x-fr: FR-SCORE-002/005
+      x-br: BR-SCORE-004/005/013/014/015
+      x-ac: AC-FR-SCORE-002/005
+      x-permission: business:score:list
+      x-roles:
+      - HEAD_TEACHER
+      - ACADEMIC
+      x-scope: SCOPE_CLASS/ALL
+      x-tables: stu_score
+      x-controller: ScoreTaskController#scores
+      x-service: ScoreTaskService#scores
+      x-frontend: src/api/business/score.js
+      x-idempotency: N/A
+      x-version: N/A
+      x-transaction: N/A
+    put:
+      tags:
+      - 成绩任务
+      summary: 保存成绩草稿（批量）
+      description: API-SCORE-004；状态：规划（未实现）。
+      operationId: op_api_score_004
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: 成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '400':
+          description: 参数/业务校验失败
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '401':
+          description: 未登录/Token 失效
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '403':
+          description: 无权限/数据范围拒绝
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '404':
+          description: 资源不存在
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '409':
+          description: 状态/版本/重复冲突
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+      x-api-id: API-SCORE-004
+      x-status: NEW_P0
+      x-fr: FR-SCORE-002/003/005
+      x-br: BR-SCORE-004/005/008/009/013～015
+      x-ac: AC-FR-SCORE-002/003/005
+      x-permission: business:score:edit
+      x-roles:
+      - HEAD_TEACHER
+      x-scope: SCOPE_CLASS
+      x-tables: stu_score、stu_score_task、stu_audit_log
+      x-controller: ScoreTaskController#saveDraft
+      x-service: ScoreTaskService#saveDraft
+      x-frontend: src/api/business/score.js
+      x-idempotency: Idempotency-Key 可选
+      x-version: required
+      x-transaction: 单事务：锁任务/成绩、三态/0.5/满分/花名册/版本+审计
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ScoreBatchRequest'
+      x-data-schema: '#/components/schemas/ScoreSaveResult'
+  /business/score-tasks/{id}/submit:
+    post:
+      tags:
+      - 成绩任务
+      summary: 提交成绩任务
+      description: API-SCORE-005；状态：规划（未实现）。
+      operationId: op_api_score_005
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: 成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '400':
+          description: 参数/业务校验失败
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '401':
+          description: 未登录/Token 失效
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '403':
+          description: 无权限/数据范围拒绝
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '404':
+          description: 资源不存在
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '409':
+          description: 状态/版本/重复冲突
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+      x-api-id: API-SCORE-005
+      x-status: NEW_P0
+      x-fr: FR-SCORE-004
+      x-br: BR-SCORE-006/007/008、BR-PUB-001/013
+      x-ac: AC-FR-SCORE-004
+      x-permission: business:score:submit
+      x-roles:
+      - HEAD_TEACHER
+      x-scope: SCOPE_CLASS
+      x-tables: stu_score_task、stu_score、stu_audit_log
+      x-controller: ScoreTaskController#submit
+      x-service: ScoreTaskService#submit
+      x-frontend: src/api/business/score.js
+      x-idempotency: Idempotency-Key 必须
+      x-version: required
+      x-transaction: 单事务：校验无未录入/状态/版本，提交锁定+审计
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VersionRequest'
+      x-data-schema: '#/components/schemas/ScoreTask'
+  /business/score-tasks/{id}/status:
+    get:
+      tags:
+      - 成绩任务
+      summary: 任务状态/进度
+      description: API-SCORE-006；状态：规划（未实现）。
+      operationId: op_api_score_006
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: 成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '400':
+          description: 参数/业务校验失败
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '401':
+          description: 未登录/Token 失效
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '403':
+          description: 无权限/数据范围拒绝
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '404':
+          description: 资源不存在
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '409':
+          description: 状态/版本/重复冲突
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+      x-api-id: API-SCORE-006
+      x-status: NEW_P0
+      x-fr: FR-SCORE-001/004/005
+      x-br: BR-SCORE-001～008
+      x-ac: AC-FR-SCORE-004
+      x-permission: business:score:task:status
+      x-roles:
+      - HEAD_TEACHER
+      - ACADEMIC
+      x-scope: SCOPE_CLASS/ALL
+      x-tables: stu_score_task、stu_score
+      x-controller: ScoreTaskController#status
+      x-service: ScoreTaskService#status
+      x-frontend: src/api/business/score.js
+      x-idempotency: N/A
+      x-version: N/A
+      x-transaction: N/A
+      x-data-schema: '#/components/schemas/TaskProgress'
+  /business/score-tasks/{id}/review:
+    post:
+      tags:
+      - 成绩任务
+      summary: 审核/退回成绩任务
+      description: API-SCORE-007；状态：规划（未实现）。
+      operationId: op_api_score_007
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: 成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '400':
+          description: 参数/业务校验失败
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '401':
+          description: 未登录/Token 失效
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '403':
+          description: 无权限/数据范围拒绝
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '404':
+          description: 资源不存在
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '409':
+          description: 状态/版本/重复冲突
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+      x-api-id: API-SCORE-007
+      x-status: NEW_P0
+      x-fr: FR-PUB-001
+      x-br: BR-PUB-001/002/003/013、BR-AUTH-012
+      x-ac: AC-FR-PUB-001
+      x-permission: business:score:review
+      x-roles:
+      - ACADEMIC
+      x-scope: SCOPE_ALL
+      x-tables: stu_score_task、stu_audit_log
+      x-controller: ScoreReviewController#review
+      x-service: ScoreReviewService#review
+      x-frontend: src/api/business/score.js
+      x-idempotency: Idempotency-Key 必须
+      x-version: required
+      x-transaction: 单事务：锁任务、非自审、状态/原因、审计
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReviewRequest'
+      x-data-schema: '#/components/schemas/ScoreTask'
+  /business/publications/publishable:
+    get:
+      tags:
+      - 成绩发布
+      summary: 可发布班级列表
+      description: API-PUB-001；状态：规划（未实现）。
+      operationId: op_api_pub_001
+      parameters:
+      - name: examId
+        in: query
+        required: false
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: 成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '400':
+          description: 参数/业务校验失败
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '401':
+          description: 未登录/Token 失效
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '403':
+          description: 无权限/数据范围拒绝
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '404':
+          description: 资源不存在
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '409':
+          description: 状态/版本/重复冲突
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+      x-api-id: API-PUB-001
+      x-status: NEW_P0
+      x-fr: FR-PUB-002
+      x-br: BR-PUB-001～004
+      x-ac: AC-FR-PUB-002
+      x-permission: business:publish:list
+      x-roles:
+      - ACADEMIC
+      x-scope: SCOPE_ALL
+      x-tables: stu_score_task、stu_publication
+      x-controller: PublicationController#publishable
+      x-service: PublicationService#publishable
+      x-frontend: src/api/business/publication.js
+      x-idempotency: N/A
+      x-version: N/A
+      x-transaction: N/A
+  /business/publications:
+    post:
+      tags:
+      - 成绩发布
+      summary: 发布班级成绩
+      description: API-PUB-002；状态：规划（未实现）。
+      operationId: op_api_pub_002
+      parameters: []
+      responses:
+        '200':
+          description: 成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '400':
+          description: 参数/业务校验失败
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '401':
+          description: 未登录/Token 失效
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '403':
+          description: 无权限/数据范围拒绝
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '404':
+          description: 资源不存在
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '409':
+          description: 状态/版本/重复冲突
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+      x-api-id: API-PUB-002
+      x-status: NEW_P0
+      x-fr: FR-PUB-002
+      x-br: BR-PUB-001～004/009
+      x-ac: AC-FR-PUB-002
+      x-permission: business:publish:create
+      x-roles:
+      - ACADEMIC
+      x-scope: SCOPE_ALL
+      x-tables: stu_publication、version、detail、audit
+      x-controller: PublicationController#publish
+      x-service: PublicationService#publish
+      x-frontend: src/api/business/publication.js
+      x-idempotency: Idempotency-Key 必须
+      x-version: required
+      x-transaction: 单事务：全部 APPROVED/无未录入/版本+明细+审计
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PublishRequest'
+      x-data-schema: '#/components/schemas/Publication'
+  /business/publications/{id}:
+    get:
+      tags:
+      - 成绩发布
+      summary: 发布详情/当前版本
+      description: API-PUB-003；状态：规划（未实现）。
+      operationId: op_api_pub_003
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: 成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '400':
+          description: 参数/业务校验失败
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '401':
+          description: 未登录/Token 失效
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '403':
+          description: 无权限/数据范围拒绝
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '404':
+          description: 资源不存在
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '409':
+          description: 状态/版本/重复冲突
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+      x-api-id: API-PUB-003
+      x-status: NEW_P0
+      x-fr: FR-PUB-002/003
+      x-br: BR-PUB-001～007
+      x-ac: AC-FR-PUB-002/003
+      x-permission: business:publish:query
+      x-roles:
+      - ACADEMIC
+      x-scope: SCOPE_ALL
+      x-tables: stu_publication、version
+      x-controller: PublicationController#detail
+      x-service: PublicationService#detail
+      x-frontend: src/api/business/publication.js
+      x-idempotency: N/A
+      x-version: N/A
+      x-transaction: N/A
+      x-data-schema: '#/components/schemas/Publication'
+  /business/publications/{id}/withdraw:
+    post:
+      tags:
+      - 成绩发布
+      summary: 撤回发布
+      description: API-PUB-004；状态：规划（未实现）。
+      operationId: op_api_pub_004
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: 成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '400':
+          description: 参数/业务校验失败
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '401':
+          description: 未登录/Token 失效
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '403':
+          description: 无权限/数据范围拒绝
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '404':
+          description: 资源不存在
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '409':
+          description: 状态/版本/重复冲突
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+      x-api-id: API-PUB-004
+      x-status: NEW_P0
+      x-fr: FR-PUB-003
+      x-br: BR-PUB-005/006/007
+      x-ac: AC-FR-PUB-003
+      x-permission: business:publish:withdraw
+      x-roles:
+      - ACADEMIC
+      x-scope: SCOPE_ALL
+      x-tables: stu_publication、audit
+      x-controller: PublicationController#withdraw
+      x-service: PublicationService#withdraw
+      x-frontend: src/api/business/publication.js
+      x-idempotency: Idempotency-Key 必须
+      x-version: required
+      x-transaction: 单事务：状态/原因/审计；不删历史
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WithdrawRequest'
+      x-data-schema: '#/components/schemas/Publication'
+  /business/publications/{id}/republish:
+    post:
+      tags:
+      - 成绩发布
+      summary: 重新发布
+      description: API-PUB-005；状态：规划（未实现）。
+      operationId: op_api_pub_005
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: 成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '400':
+          description: 参数/业务校验失败
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '401':
+          description: 未登录/Token 失效
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '403':
+          description: 无权限/数据范围拒绝
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '404':
+          description: 资源不存在
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '409':
+          description: 状态/版本/重复冲突
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+      x-api-id: API-PUB-005
+      x-status: NEW_P0
+      x-fr: FR-PUB-003
+      x-br: BR-PUB-005/005/009
+      x-ac: AC-FR-PUB-003
+      x-permission: business:publish:republish
+      x-roles:
+      - ACADEMIC
+      x-scope: SCOPE_ALL
+      x-tables: stu_publication、version、detail、audit
+      x-controller: PublicationController#republish
+      x-service: PublicationService#republish
+      x-frontend: src/api/business/publication.js
+      x-idempotency: Idempotency-Key 必须
+      x-version: required
+      x-transaction: 单事务：校验任务仍 APPROVED+新版本+审计
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RepublishRequest'
+      x-data-schema: '#/components/schemas/Publication'
+  /business/publications/{id}/corrections:
+    post:
+      tags:
+      - 成绩发布
+      summary: 发布后受控更正
+      description: API-PUB-006；状态：规划（未实现）。
+      operationId: op_api_pub_006
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: 成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '400':
+          description: 参数/业务校验失败
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '401':
+          description: 未登录/Token 失效
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '403':
+          description: 无权限/数据范围拒绝
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '404':
+          description: 资源不存在
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '409':
+          description: 状态/版本/重复冲突
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+      x-api-id: API-PUB-006
+      x-status: NEW_P0
+      x-fr: FR-PUB-004
+      x-br: BR-PUB-008～014
+      x-ac: AC-FR-PUB-004
+      x-permission: business:publish:correct
+      x-roles:
+      - ACADEMIC
+      x-scope: SCOPE_ALL
+      x-tables: stu_score、version、detail、audit
+      x-controller: PublicationController#correct
+      x-service: PublicationService#correct
+      x-frontend: src/api/business/publication.js
+      x-idempotency: Idempotency-Key 必须
+      x-version: required
+      x-transaction: 单事务：锁发布/成绩、原因/非自审、新版本+全量快照+审计
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CorrectionRequest'
+      x-data-schema: '#/components/schemas/Publication'
+  /business/publications/{id}/versions:
+    get:
+      tags:
+      - 成绩发布
+      summary: 发布版本历史
+      description: API-PUB-007；状态：规划（未实现）。
+      operationId: op_api_pub_007
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+      - name: pageNum
+        in: query
+        required: false
+        schema:
+          type: integer
+        description: 页码
+      - name: pageSize
+        in: query
+        required: false
+        schema:
+          type: integer
+        description: 每页条数
+      responses:
+        '200':
+          description: 成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TableDataInfo'
+        '400':
+          description: 参数/业务校验失败
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '401':
+          description: 未登录/Token 失效
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '403':
+          description: 无权限/数据范围拒绝
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '404':
+          description: 资源不存在
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '409':
+          description: 状态/版本/重复冲突
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+      x-api-id: API-PUB-007
+      x-status: NEW_P0
+      x-fr: FR-PUB-004
+      x-br: BR-PUB-008～014
+      x-ac: AC-FR-PUB-004
+      x-permission: business:publish:version:list
+      x-roles:
+      - ACADEMIC
+      x-scope: SCOPE_ALL
+      x-tables: stu_publication_version
+      x-controller: PublicationController#versions
+      x-service: PublicationService#versions
+      x-frontend: src/api/business/publication.js
+      x-idempotency: N/A
+      x-version: N/A
+      x-transaction: N/A
+  /business/publications/{id}/versions/{versionNo}:
+    get:
+      tags:
+      - 成绩发布
+      summary: 发布版本详情
+      description: API-PUB-008；状态：规划（未实现）。
+      operationId: op_api_pub_008
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+      - name: versionNo
+        in: path
+        required: true
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: 成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '400':
+          description: 参数/业务校验失败
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '401':
+          description: 未登录/Token 失效
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '403':
+          description: 无权限/数据范围拒绝
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '404':
+          description: 资源不存在
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '409':
+          description: 状态/版本/重复冲突
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+      x-api-id: API-PUB-008
+      x-status: NEW_P0
+      x-fr: FR-PUB-004
+      x-br: BR-PUB-008～014
+      x-ac: AC-FR-PUB-004
+      x-permission: business:publish:version:query
+      x-roles:
+      - ACADEMIC
+      x-scope: SCOPE_ALL
+      x-tables: version、detail
+      x-controller: PublicationController#versionDetail
+      x-service: PublicationService#versionDetail
+      x-frontend: src/api/business/publication.js
+      x-idempotency: N/A
+      x-version: N/A
+      x-transaction: N/A
+      x-data-schema: '#/components/schemas/PublicationVersion'
+  /business/my-scores:
+    get:
+      tags:
+      - 学生查询
+      summary: 我的考试已发布成绩列表
+      description: API-QUERY-001；状态：规划（未实现）。
+      operationId: op_api_query_001
+      parameters:
+      - name: pageNum
+        in: query
+        required: false
+        schema:
+          type: integer
+        description: 页码
+      - name: pageSize
+        in: query
+        required: false
+        schema:
+          type: integer
+        description: 每页条数
+      - name: yearId
+        in: query
+        required: false
+        schema:
+          type: integer
+      - name: termId
+        in: query
+        required: false
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: 成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TableDataInfo'
+        '400':
+          description: 参数/业务校验失败
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '401':
+          description: 未登录/Token 失效
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '403':
+          description: 无权限/数据范围拒绝
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '404':
+          description: 资源不存在
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '409':
+          description: 状态/版本/重复冲突
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+      x-api-id: API-QUERY-001
+      x-status: NEW_P0
+      x-fr: FR-QUERY-001
+      x-br: BR-QUERY-001/002/003
+      x-ac: AC-FR-QUERY-001
+      x-permission: business:myscore:list
+      x-roles:
+      - STUDENT
+      x-scope: SCOPE_SELF
+      x-tables: publication、version、detail
+      x-controller: MyScoreController#list
+      x-service: MyScoreService#list
+      x-frontend: src/api/business/query.js
+      x-idempotency: N/A
+      x-version: N/A
+      x-transaction: N/A
+  /business/my-scores/{examId}:
+    get:
+      tags:
+      - 学生查询
+      summary: 我的单场考试已发布成绩
+      description: API-QUERY-002；状态：规划（未实现）。
+      operationId: op_api_query_002
+      parameters:
+      - name: examId
+        in: path
+        required: true
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: 成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '400':
+          description: 参数/业务校验失败
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '401':
+          description: 未登录/Token 失效
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '403':
+          description: 无权限/数据范围拒绝
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '404':
+          description: 资源不存在
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '409':
+          description: 状态/版本/重复冲突
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+      x-api-id: API-QUERY-002
+      x-status: NEW_P0
+      x-fr: FR-QUERY-001/002
+      x-br: BR-QUERY-001～009、BR-CALC
+      x-ac: AC-FR-QUERY-001/002
+      x-permission: business:myscore:query
+      x-roles:
+      - STUDENT
+      x-scope: SCOPE_SELF
+      x-tables: publication、version、detail
+      x-controller: MyScoreController#detail
+      x-service: MyScoreService#detail
+      x-frontend: src/api/business/query.js
+      x-idempotency: N/A
+      x-version: N/A
+      x-transaction: N/A
+      x-data-schema: '#/components/schemas/MyScoreDetail'
+  /business/stats/classes/{classId}/exams/{examId}:
+    get:
+      tags:
+      - 成绩统计
+      summary: 班级成绩统计
+      description: API-STAT-001；状态：规划（未实现）。
+      operationId: op_api_stat_001
+      parameters:
+      - name: classId
+        in: path
+        required: true
+        schema:
+          type: integer
+      - name: examId
+        in: path
+        required: true
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: 成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '400':
+          description: 参数/业务校验失败
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '401':
+          description: 未登录/Token 失效
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '403':
+          description: 无权限/数据范围拒绝
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '404':
+          description: 资源不存在
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '409':
+          description: 状态/版本/重复冲突
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+      x-api-id: API-STAT-001
+      x-status: NEW_P0
+      x-fr: FR-STAT-001/002
+      x-br: BR-STAT-001～010、BR-CALC
+      x-ac: AC-FR-STAT-001/002
+      x-permission: business:stat:class:query
+      x-roles:
+      - HEAD_TEACHER
+      - ACADEMIC
+      x-scope: SCOPE_CLASS/ALL
+      x-tables: version、detail
+      x-controller: StatController#classStat
+      x-service: StatService#classStat
+      x-frontend: src/api/business/stat.js
+      x-idempotency: N/A
+      x-version: N/A
+      x-transaction: N/A
+      x-data-schema: '#/components/schemas/ClassStat'
+  /business/stats/school/exams/{examId}:
+    get:
+      tags:
+      - 成绩统计
+      summary: 全校成绩统计
+      description: API-STAT-002；状态：规划（未实现）。
+      operationId: op_api_stat_002
+      parameters:
+      - name: examId
+        in: path
+        required: true
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: 成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '400':
+          description: 参数/业务校验失败
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '401':
+          description: 未登录/Token 失效
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '403':
+          description: 无权限/数据范围拒绝
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '404':
+          description: 资源不存在
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '409':
+          description: 状态/版本/重复冲突
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+      x-api-id: API-STAT-002
+      x-status: NEW_P0
+      x-fr: FR-STAT-001/002
+      x-br: BR-STAT-001～010、BR-CALC
+      x-ac: AC-FR-STAT-001/002
+      x-permission: business:stat:school:query
+      x-roles:
+      - ACADEMIC
+      x-scope: SCOPE_ALL
+      x-tables: version、detail
+      x-controller: StatController#schoolStat
+      x-service: StatService#schoolStat
+      x-frontend: src/api/business/stat.js
+      x-idempotency: N/A
+      x-version: N/A
+      x-transaction: N/A
+      x-data-schema: '#/components/schemas/SchoolStat'
+  /business/audit/records:
+    get:
+      tags:
+      - 业务审计
+      summary: 业务审计列表
+      description: API-AUDIT-001；状态：规划（未实现）。
+      operationId: op_api_audit_001
+      parameters:
+      - name: pageNum
+        in: query
+        required: false
+        schema:
+          type: integer
+        description: 页码
+      - name: pageSize
+        in: query
+        required: false
+        schema:
+          type: integer
+        description: 每页条数
+      - name: objectType
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: objectId
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: eventType
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: from
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: to
+        in: query
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: 成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TableDataInfo'
+        '400':
+          description: 参数/业务校验失败
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '401':
+          description: 未登录/Token 失效
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '403':
+          description: 无权限/数据范围拒绝
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '404':
+          description: 资源不存在
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '409':
+          description: 状态/版本/重复冲突
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+      x-api-id: API-AUDIT-001
+      x-status: NEW_P0
+      x-fr: FR-AUDIT-001/002
+      x-br: BR-AUDIT-001～008
+      x-ac: AC-FR-AUDIT-001/002
+      x-permission: business:audit:list
+      x-roles:
+      - ACADEMIC
+      - SYSTEM_ADMIN
+      x-scope: SCOPE_ALL/DESENSITIZED
+      x-tables: stu_audit_log
+      x-controller: AuditController#list
+      x-service: AuditService#list
+      x-frontend: src/api/business/audit.js
+      x-idempotency: N/A
+      x-version: N/A
+      x-transaction: N/A
+  /business/audit/records/{id}:
+    get:
+      tags:
+      - 业务审计
+      summary: 业务审计详情
+      description: API-AUDIT-002；状态：规划（未实现）。
+      operationId: op_api_audit_002
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: 成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '400':
+          description: 参数/业务校验失败
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '401':
+          description: 未登录/Token 失效
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '403':
+          description: 无权限/数据范围拒绝
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '404':
+          description: 资源不存在
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '409':
+          description: 状态/版本/重复冲突
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+      x-api-id: API-AUDIT-002
+      x-status: NEW_P0
+      x-fr: FR-AUDIT-001/002
+      x-br: BR-AUDIT-001～008
+      x-ac: AC-FR-AUDIT-001/002
+      x-permission: business:audit:query
+      x-roles:
+      - ACADEMIC
+      - SYSTEM_ADMIN
+      x-scope: SCOPE_ALL/DESENSITIZED
+      x-tables: stu_audit_log
+      x-controller: AuditController#detail
+      x-service: AuditService#detail
+      x-frontend: src/api/business/audit.js
+      x-idempotency: N/A
+      x-version: N/A
+      x-transaction: N/A
+      x-data-schema: '#/components/schemas/AuditRecord'
+components:
+  schemas:
+    AjaxResult:
+      type: object
+      required:
+      - code
+      - msg
+      properties:
+        code:
+          type: integer
+          example: 200
+        msg:
+          type: string
+          example: 操作成功
+        data:
+          type: object
+          nullable: true
+          additionalProperties: true
+    TableDataInfo:
+      type: object
+      required:
+      - total
+      - rows
+      - code
+      - msg
+      properties:
+        total:
+          type: integer
+          format: int64
+        rows:
+          type: array
+          items:
+            type: object
+            additionalProperties: true
+        code:
+          type: integer
+        msg:
+          type: string
+    ErrorData:
+      type: object
+      properties:
+        errorCode:
+          type: string
+          example: SCORE_VERSION_CONFLICT
+        details:
+          type: object
+          additionalProperties: true
+        traceId:
+          type: string
+    PageQuery:
+      type: object
+      description: 分页与排序
+      properties:
+        pageNum:
+          type: integer
+          minimum: 1
+          default: 1
+        pageSize:
+          type: integer
+          minimum: 1
+          maximum: 100
+          default: 10
+        orderByColumn:
+          type: string
+          description: 白名单字段
+        isAsc:
+          type: string
+          enum:
+          - asc
+          - desc
+    YearUpsert:
+      type: object
+      description: 学年新增/修改
+      properties:
+        yearCode:
+          type: string
+          maxLength: 16
+        yearName:
+          type: string
+          maxLength: 32
+        startDate:
+          type: string
+          format: date
+        endDate:
+          type: string
+          format: date
+        status:
+          type: string
+          enum:
+          - ACTIVE
+          - INACTIVE
+        version:
+          type: integer
+          minimum: 0
+      required:
+      - yearCode
+      - yearName
+      - startDate
+      - endDate
+    YearCurrentRequest:
+      type: object
+      description: 设为当前学年
+      properties:
+        version:
+          type: integer
+          minimum: 0
+      required:
+      - version
+    Year:
+      type: object
+      description: 学年
+      properties:
+        id:
+          type: integer
+        yearCode:
+          type: string
+        yearName:
+          type: string
+        startDate:
+          type: string
+          format: date
+        endDate:
+          type: string
+          format: date
+        isCurrent:
+          type: boolean
+        status:
+          type: string
+        version:
+          type: integer
+    TermUpsert:
+      type: object
+      description: 学期新增/修改
+      properties:
+        yearId:
+          type: integer
+        termNo:
+          type: integer
+          minimum: 1
+        termName:
+          type: string
+          maxLength: 32
+        startDate:
+          type: string
+          format: date
+        endDate:
+          type: string
+          format: date
+        status:
+          type: string
+          enum:
+          - ACTIVE
+          - INACTIVE
+        version:
+          type: integer
+      required:
+      - yearId
+      - termNo
+      - termName
+      - startDate
+      - endDate
+    Term:
+      type: object
+      description: 学期
+      properties:
+        id:
+          type: integer
+        yearId:
+          type: integer
+        termNo:
+          type: integer
+        termName:
+          type: string
+        startDate:
+          type: string
+          format: date
+        endDate:
+          type: string
+          format: date
+        status:
+          type: string
+        version:
+          type: integer
+    GradeUpsert:
+      type: object
+      description: 年级新增/修改
+      properties:
+        gradeCode:
+          type: string
+          maxLength: 16
+        gradeName:
+          type: string
+          maxLength: 32
+        sortOrder:
+          type: integer
+        status:
+          type: string
+          enum:
+          - ACTIVE
+          - INACTIVE
+        version:
+          type: integer
+      required:
+      - gradeCode
+      - gradeName
+    Grade:
+      type: object
+      description: 年级
+      properties:
+        id:
+          type: integer
+        gradeCode:
+          type: string
+        gradeName:
+          type: string
+        sortOrder:
+          type: integer
+        status:
+          type: string
+        version:
+          type: integer
+    ClassUpsert:
+      type: object
+      description: 班级新增/修改
+      properties:
+        yearId:
+          type: integer
+        gradeId:
+          type: integer
+        classCode:
+          type: string
+          maxLength: 32
+        className:
+          type: string
+          maxLength: 64
+        status:
+          type: string
+          enum:
+          - ACTIVE
+          - INACTIVE
+        version:
+          type: integer
+      required:
+      - yearId
+      - gradeId
+      - classCode
+      - className
+    Class:
+      type: object
+      description: 班级
+      properties:
+        id:
+          type: integer
+        yearId:
+          type: integer
+        gradeId:
+          type: integer
+        classCode:
+          type: string
+        className:
+          type: string
+        rosterVersion:
+          type: integer
+        status:
+          type: string
+        version:
+          type: integer
+    AssignmentCreate:
+      type: object
+      description: 班主任指派
+      properties:
+        headTeacherId:
+          type: integer
+        effectiveFrom:
+          type: string
+          format: date
+        reason:
+          type: string
+          maxLength: 255
+        version:
+          type: integer
+      required:
+      - headTeacherId
+      - effectiveFrom
+    TeacherAssignmentCreate:
+      type: object
+      description: 按班主任指派
+      properties:
+        classId:
+          type: integer
+        effectiveFrom:
+          type: string
+          format: date
+        reason:
+          type: string
+          maxLength: 255
+      required:
+      - classId
+      - effectiveFrom
+    EndAssignmentRequest:
+      type: object
+      description: 结束任职
+      properties:
+        effectiveTo:
+          type: string
+          format: date
+        reason:
+          type: string
+          maxLength: 255
+        version:
+          type: integer
+      required:
+      - effectiveTo
+      - version
+    Assignment:
+      type: object
+      description: 班主任任职
+      properties:
+        id:
+          type: integer
+        headTeacherId:
+          type: integer
+        classId:
+          type: integer
+        effectiveFrom:
+          type: string
+          format: date
+        effectiveTo:
+          type: string
+          format: date
+          nullable: true
+        isCurrent:
+          type: boolean
+        status:
+          type: string
+        version:
+          type: integer
+    StudentUpsert:
+      type: object
+      description: 学生档案新增/修改
+      properties:
+        studentNo:
+          type: string
+          maxLength: 32
+        studentName:
+          type: string
+          maxLength: 64
+        gender:
+          type: string
+          enum:
+          - M
+          - F
+          - U
+        enrollmentDate:
+          type: string
+          format: date
+          nullable: true
+        status:
+          type: string
+          enum:
+          - ACTIVE
+          - INACTIVE
+          - GRADUATED
+        version:
+          type: integer
+      required:
+      - studentNo
+      - studentName
+    Student:
+      type: object
+      description: 学生档案
+      properties:
+        id:
+          type: integer
+        studentNo:
+          type: string
+        studentName:
+          type: string
+        gender:
+          type: string
+        enrollmentDate:
+          type: string
+          format: date
+          nullable: true
+        status:
+          type: string
+        version:
+          type: integer
+    StatusRequest:
+      type: object
+      description: 状态变更
+      properties:
+        status:
+          type: string
+        reason:
+          type: string
+          maxLength: 255
+        version:
+          type: integer
+      required:
+      - status
+      - version
+    ClassChangeRequest:
+      type: object
+      description: 转班/归属变更
+      properties:
+        classId:
+          type: integer
+        effectiveFrom:
+          type: string
+          format: date
+        reason:
+          type: string
+          maxLength: 255
+        version:
+          type: integer
+      required:
+      - classId
+      - effectiveFrom
+      - version
+    StudentClass:
+      type: object
+      description: 学生班级归属
+      properties:
+        id:
+          type: integer
+        studentId:
+          type: integer
+        classId:
+          type: integer
+        effectiveFrom:
+          type: string
+          format: date
+        effectiveTo:
+          type: string
+          format: date
+          nullable: true
+        isCurrent:
+          type: boolean
+        reason:
+          type: string
+          nullable: true
+        version:
+          type: integer
+    BindingCreate:
+      type: object
+      description: 账号档案绑定
+      properties:
+        userId:
+          type: integer
+          format: int64
+          description: sys_user.user_id BIGINT
+        profileType:
+          type: string
+          enum:
+          - STUDENT
+          - HEAD_TEACHER
+        studentId:
+          type: integer
+          nullable: true
+        headTeacherId:
+          type: integer
+          nullable: true
+      required:
+      - userId
+      - profileType
+    Binding:
+      type: object
+      description: 账号档案绑定
+      properties:
+        id:
+          type: integer
+        userId:
+          type: integer
+          format: int64
+        profileType:
+          type: string
+        studentId:
+          type: integer
+          nullable: true
+        headTeacherId:
+          type: integer
+          nullable: true
+        status:
+          type: string
+          enum:
+          - ACTIVE
+          - REVOKED
+        effectiveFrom:
+          type: string
+          format: date-time
+        effectiveTo:
+          type: string
+          format: date-time
+          nullable: true
+        version:
+          type: integer
+    RevokeRequest:
+      type: object
+      description: 撤销绑定
+      properties:
+        reason:
+          type: string
+          maxLength: 255
+        version:
+          type: integer
+      required:
+      - version
+    Identity:
+      type: object
+      description: 当前业务身份
+      properties:
+        userId:
+          type: integer
+          format: int64
+        userName:
+          type: string
+        roles:
+          type: array
+          items:
+            type: string
+        scope:
+          type: string
+          enum:
+          - SCOPE_SYSTEM
+          - SCOPE_ALL
+          - SCOPE_CLASS
+          - SCOPE_SELF
+        studentId:
+          type: integer
+          nullable: true
+        headTeacherId:
+          type: integer
+          nullable: true
+        bound:
+          type: boolean
+        permissions:
+          type: array
+          items:
+            type: string
+    HeadTeacherUpsert:
+      type: object
+      description: 班主任档案
+      properties:
+        teacherNo:
+          type: string
+          maxLength: 32
+        teacherName:
+          type: string
+          maxLength: 64
+        gender:
+          type: string
+          enum:
+          - M
+          - F
+          - U
+        status:
+          type: string
+          enum:
+          - ACTIVE
+          - INACTIVE
+        version:
+          type: integer
+      required:
+      - teacherNo
+      - teacherName
+    HeadTeacher:
+      type: object
+      description: 班主任
+      properties:
+        id:
+          type: integer
+        teacherNo:
+          type: string
+        teacherName:
+          type: string
+        gender:
+          type: string
+        status:
+          type: string
+        version:
+          type: integer
+    SubjectUpsert:
+      type: object
+      description: 科目
+      properties:
+        subjectCode:
+          type: string
+          maxLength: 16
+        subjectName:
+          type: string
+          maxLength: 32
+        sortOrder:
+          type: integer
+        status:
+          type: string
+          enum:
+          - ACTIVE
+          - INACTIVE
+        version:
+          type: integer
+      required:
+      - subjectCode
+      - subjectName
+    Subject:
+      type: object
+      description: 科目
+      properties:
+        id:
+          type: integer
+        subjectCode:
+          type: string
+        subjectName:
+          type: string
+        sortOrder:
+          type: integer
+        status:
+          type: string
+        version:
+          type: integer
+    ExamUpsert:
+      type: object
+      description: 考试
+      properties:
+        yearId:
+          type: integer
+        termId:
+          type: integer
+        examCode:
+          type: string
+          maxLength: 32
+        examName:
+          type: string
+          maxLength: 128
+        examType:
+          type: string
+          maxLength: 32
+        examDate:
+          type: string
+          format: date
+          nullable: true
+        version:
+          type: integer
+      required:
+      - yearId
+      - termId
+      - examCode
+      - examName
+    ExamStatusRequest:
+      type: object
+      description: 考试状态转换
+      properties:
+        targetStatus:
+          type: string
+          enum:
+          - EXAM_OPEN
+          - EXAM_CLOSED
+          - EXAM_ARCHIVED
+        version:
+          type: integer
+      required:
+      - targetStatus
+      - version
+    Exam:
+      type: object
+      description: 考试
+      properties:
+        id:
+          type: integer
+        yearId:
+          type: integer
+        termId:
+          type: integer
+        examCode:
+          type: string
+        examName:
+          type: string
+        status:
+          type: string
+          enum:
+          - EXAM_DRAFT
+          - EXAM_OPEN
+          - EXAM_CLOSED
+          - EXAM_ARCHIVED
+        version:
+          type: integer
+    ExamClassSet:
+      type: object
+      description: 考试班级范围
+      properties:
+        classIds:
+          type: array
+          items:
+            type: integer
+        version:
+          type: integer
+      required:
+      - classIds
+      - version
+    ExamSubjectItem:
+      type: object
+      description: 考试科目项
+      properties:
+        subjectId:
+          type: integer
+        fullMark:
+          type: number
+          multipleOf: 0.5
+        passLine:
+          type: number
+          multipleOf: 0.5
+        excellentLine:
+          type: number
+          multipleOf: 0.5
+      required:
+      - subjectId
+      - fullMark
+      - passLine
+      - excellentLine
+    ExamSubjectSet:
+      type: object
+      description: 考试科目集合
+      properties:
+        subjects:
+          type: array
+          items:
+            $ref: '#/components/schemas/ExamSubjectItem'
+        version:
+          type: integer
+      required:
+      - subjects
+      - version
+    ExamDetail:
+      type: object
+      description: 考试详情
+      properties:
+        exam:
+          $ref: '#/components/schemas/Exam'
+        classes:
+          type: array
+          items:
+            $ref: '#/components/schemas/Class'
+        subjects:
+          type: array
+          items:
+            $ref: '#/components/schemas/ExamSubjectItem'
+    GenerateTasksRequest:
+      type: object
+      description: 生成成绩任务
+      properties:
+        classIds:
+          type: array
+          items:
+            type: integer
+        subjectIds:
+          type: array
+          items:
+            type: integer
+        idempotencyKey:
+          type: string
+    GenerateTasksResult:
+      type: object
+      description: 任务生成结果
+      properties:
+        created:
+          type: integer
+        skipped:
+          type: integer
+        tasks:
+          type: array
+          items:
+            $ref: '#/components/schemas/ScoreTask'
+    ScoreTask:
+      type: object
+      description: 成绩任务
+      properties:
+        id:
+          type: integer
+        examId:
+          type: integer
+        classId:
+          type: integer
+        subjectId:
+          type: integer
+        status:
+          type: string
+          enum:
+          - TASK_DRAFT
+          - TASK_SUBMITTED
+          - TASK_APPROVED
+          - TASK_RETURNED
+        firstOwnerTeacherId:
+          type: integer
+        rosterVersion:
+          type: integer
+        version:
+          type: integer
+    ScoreItem:
+      type: object
+      description: 成绩项
+      properties:
+        studentId:
+          type: integer
+        scoreStatus:
+          type: string
+          enum:
+          - SCORE_NORMAL
+          - SCORE_ABSENT
+          - SCORE_NOT_ENTERED
+        scoreValue:
+          type: number
+          multipleOf: 0.5
+          nullable: true
+        version:
+          type: integer
+      required:
+      - studentId
+      - scoreStatus
+    ScoreBatchRequest:
+      type: object
+      description: 批量保存成绩
+      properties:
+        version:
+          type: integer
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/ScoreItem'
+        idempotencyKey:
+          type: string
+      required:
+      - version
+      - items
+    ScoreEntry:
+      type: object
+      description: 成绩记录
+      properties:
+        id:
+          type: integer
+        taskId:
+          type: integer
+        studentId:
+          type: integer
+        scoreStatus:
+          type: string
+        scoreValue:
+          type: number
+          nullable: true
+        version:
+          type: integer
+    ScoreSaveResult:
+      type: object
+      description: 保存结果
+      properties:
+        saved:
+          type: integer
+        notEntered:
+          type: integer
+        absent:
+          type: integer
+        normal:
+          type: integer
+        version:
+          type: integer
+    VersionRequest:
+      type: object
+      description: 版本请求
+      properties:
+        version:
+          type: integer
+        idempotencyKey:
+          type: string
+      required:
+      - version
+    TaskProgress:
+      type: object
+      description: 任务进度
+      properties:
+        task:
+          $ref: '#/components/schemas/ScoreTask'
+        total:
+          type: integer
+        normal:
+          type: integer
+        absent:
+          type: integer
+        notEntered:
+          type: integer
+    ReviewRequest:
+      type: object
+      description: 审核任务
+      properties:
+        action:
+          type: string
+          enum:
+          - APPROVE
+          - RETURN
+        reason:
+          type: string
+          maxLength: 500
+        version:
+          type: integer
+        idempotencyKey:
+          type: string
+      required:
+      - action
+      - version
+    PublishRequest:
+      type: object
+      description: 发布请求
+      properties:
+        examId:
+          type: integer
+        classId:
+          type: integer
+        version:
+          type: integer
+        idempotencyKey:
+          type: string
+      required:
+      - examId
+      - classId
+      - version
+    WithdrawRequest:
+      type: object
+      description: 撤回请求
+      properties:
+        reason:
+          type: string
+          maxLength: 500
+        version:
+          type: integer
+        idempotencyKey:
+          type: string
+      required:
+      - reason
+      - version
+    RepublishRequest:
+      type: object
+      description: 重新发布
+      properties:
+        version:
+          type: integer
+        idempotencyKey:
+          type: string
+      required:
+      - version
+    CorrectionRequest:
+      type: object
+      description: 受控更正
+      properties:
+        reason:
+          type: string
+          maxLength: 500
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/ScoreItem'
+        version:
+          type: integer
+        idempotencyKey:
+          type: string
+      required:
+      - reason
+      - items
+      - version
+    Publication:
+      type: object
+      description: 班级发布
+      properties:
+        id:
+          type: integer
+        examId:
+          type: integer
+        classId:
+          type: integer
+        status:
+          type: string
+          enum:
+          - PUB_UNPUBLISHED
+          - PUB_PUBLISHED
+          - PUB_WITHDRAWN
+        currentVersionId:
+          type: integer
+          nullable: true
+        version:
+          type: integer
+    PublicationVersion:
+      type: object
+      description: 发布版本
+      properties:
+        id:
+          type: integer
+        publicationId:
+          type: integer
+        versionNo:
+          type: integer
+        snapshotAt:
+          type: string
+          format: date-time
+        changeReason:
+          type: string
+          nullable: true
+        snapshotHash:
+          type: string
+          nullable: true
+    MyScoreDetail:
+      type: object
+      description: 本人成绩
+      properties:
+        examId:
+          type: integer
+        examName:
+          type: string
+        versionNo:
+          type: integer
+        totalScore:
+          type: number
+          nullable: true
+        rank:
+          type: integer
+          nullable: true
+        classSize:
+          type: integer
+          nullable: true
+        subjects:
+          type: array
+          items:
+            type: object
+            additionalProperties: true
+    ClassStat:
+      type: object
+      description: 班级统计
+      properties:
+        classId:
+          type: integer
+        examId:
+          type: integer
+        subjects:
+          type: array
+          items:
+            type: object
+            additionalProperties: true
+        students:
+          type: array
+          items:
+            type: object
+            additionalProperties: true
+    SchoolStat:
+      type: object
+      description: 全校统计
+      properties:
+        examId:
+          type: integer
+        classes:
+          type: array
+          items:
+            type: object
+            additionalProperties: true
+    AuditRecord:
+      type: object
+      description: 业务审计
+      properties:
+        id:
+          type: integer
+        eventType:
+          type: string
+        objectType:
+          type: string
+        objectId:
+          type: integer
+        objectVersion:
+          type: integer
+          nullable: true
+        reason:
+          type: string
+          nullable: true
+        operatorUserId:
+          type: integer
+          format: int64
+        operatorRole:
+          type: string
+        occurredAt:
+          type: string
+          format: date-time
+        source:
+          type: string
+    BinaryFile:
+      type: object
+      description: 二进制文件
+      properties:
+        fileName:
+          type: string
+        contentType:
+          type: string
+        size:
+          type: integer
+    ReviewApplyRequest:
+      type: object
+      description: P1 复核申请
+      properties:
+        examId:
+          type: integer
+        subjectId:
+          type: integer
+        reason:
+          type: string
+          maxLength: 500
+        idempotencyKey:
+          type: string
+      required:
+      - examId
+      - subjectId
+      - reason
+    ReviewHandleRequest:
+      type: object
+      description: P1 受理/驳回
+      properties:
+        action:
+          type: string
+        comment:
+          type: string
+          maxLength: 500
+        version:
+          type: integer
+      required:
+      - action
+      - comment
+      - version
+    ReviewConfirmRequest:
+      type: object
+      description: P1 教务确认
+      properties:
+        action:
+          type: string
+        comment:
+          type: string
+          maxLength: 500
+        version:
+          type: integer
+      required:
+      - action
+      - version
+    ImportRequest:
+      type: object
+      description: P1 导入请求
+      properties:
+        taskId:
+          type: integer
+        fileName:
+          type: string
+        fileContent:
+          type: string
+          format: byte
+        idempotencyKey:
+          type: string
+      required:
+      - taskId
+      - fileName
+    ExportRequest:
+      type: object
+      description: P1 导出请求
+      properties:
+        examId:
+          type: integer
+        classId:
+          type: integer
+        subjectId:
+          type: integer
+          nullable: true
+        idempotencyKey:
+          type: string
+    Review:
+      type: object
+      description: P1 复核申请
+      properties:
+        id:
+          type: integer
+        studentId:
+          type: integer
+        examId:
+          type: integer
+        subjectId:
+          type: integer
+        status:
+          type: string
+        resultComment:
+          type: string
+          nullable: true
+        deadlineAt:
+          type: string
+          format: date-time
+    ImportPreview:
+      type: object
+      description: P1 导入预检
+      properties:
+        total:
+          type: integer
+        valid:
+          type: integer
+        invalid:
+          type: integer
+        errors:
+          type: array
+          items:
+            type: object
+            additionalProperties: true
+    ImportResult:
+      type: object
+      description: P1 导入结果
+      properties:
+        batchId:
+          type: integer
+        total:
+          type: integer
+        success:
+          type: integer
+        failed:
+          type: integer
+    PersonTrend:
+      type: object
+      description: P1 个人趋势
+      properties:
+        subjects:
+          type: array
+          items:
+            type: object
+            additionalProperties: true
+    ClassTrend:
+      type: object
+      description: P1 班级趋势
+      properties:
+        classId:
+          type: integer
+        subjects:
+          type: array
+          items:
+            type: object
+            additionalProperties: true
+    ClassCompare:
+      type: object
+      description: P1 班级对比
+      properties:
+        examId:
+          type: integer
+        classes:
+          type: array
+          items:
+            type: object
+            additionalProperties: true
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+security:
+- bearerAuth: []

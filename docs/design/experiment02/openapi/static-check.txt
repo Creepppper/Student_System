@@ -1,0 +1,9 @@
+OPENAPI STATIC CHECK (no HTTP, no DB)
+P0 operations: 68; P1 operations: 11
+P0 paths: 53; P1 paths: 11
+unique x-api-id: 79; unique operationId: 79
+P0 only /business/: True
+P1 only /business/: True
+P1 paths excluded from P0: True
+schema refs: OK
+RESULT: PASS (static only; no endpoint deployed)

@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1700" height="980" viewBox="0 0 1700 980">
+<defs><marker id="arrow" markerWidth="9" markerHeight="9" refX="8" refY="4.5" orient="auto"><path d="M0,0 L9,4.5 L0,9 z" fill="#52616B"/></marker></defs>
+<rect width="1700" height="980" fill="#FFFFFF"/>
+<text x="850.0" y="30" text-anchor="middle" font-family="SimHei" font-size="20" font-weight="bold" fill="#111827">FIG-D9C  成绩发布与不可变版本（计划组件交互）</text>
+<rect x="2.0" y="55" width="176" height="58" rx="7" fill="#DCEEFF" stroke="#2F6FED" stroke-width="1.3"/><text x="90.0" y="80.5" text-anchor="middle" font-family="SimHei" font-size="12" fill="#111827">教务页面</text><text x="90.0" y="97.5" text-anchor="middle" font-family="SimHei" font-size="12" fill="#111827">Vue3</text>
+<line x1="90.0" y1="113" x2="90.0" y2="890" stroke="#9CA3AF" stroke-width="1" stroke-dasharray="4 4"/>
+<rect x="306.0" y="55" width="176" height="58" rx="7" fill="#DCEEFF" stroke="#2F6FED" stroke-width="1.3"/><text x="394.0" y="80.5" text-anchor="middle" font-family="SimHei" font-size="12" fill="#111827">Publication</text><text x="394.0" y="97.5" text-anchor="middle" font-family="SimHei" font-size="12" fill="#111827">Controller</text>
+<line x1="394.0" y1="113" x2="394.0" y2="890" stroke="#9CA3AF" stroke-width="1" stroke-dasharray="4 4"/>
+<rect x="610.0" y="55" width="176" height="58" rx="7" fill="#DCEEFF" stroke="#2F6FED" stroke-width="1.3"/><text x="698.0" y="80.5" text-anchor="middle" font-family="SimHei" font-size="12" fill="#111827">Publication</text><text x="698.0" y="97.5" text-anchor="middle" font-family="SimHei" font-size="12" fill="#111827">Service</text>
+<line x1="698.0" y1="113" x2="698.0" y2="890" stroke="#9CA3AF" stroke-width="1" stroke-dasharray="4 4"/>
+<rect x="914.0" y="55" width="176" height="58" rx="7" fill="#DCEEFF" stroke="#2F6FED" stroke-width="1.3"/><text x="1002.0" y="80.5" text-anchor="middle" font-family="SimHei" font-size="12" fill="#111827">Task/Score</text><text x="1002.0" y="97.5" text-anchor="middle" font-family="SimHei" font-size="12" fill="#111827">Mapper</text>
+<line x1="1002.0" y1="113" x2="1002.0" y2="890" stroke="#9CA3AF" stroke-width="1" stroke-dasharray="4 4"/>
+<rect x="1218.0" y="55" width="176" height="58" rx="7" fill="#DCEEFF" stroke="#2F6FED" stroke-width="1.3"/><text x="1306.0" y="80.5" text-anchor="middle" font-family="SimHei" font-size="12" fill="#111827">MariaDB</text><text x="1306.0" y="97.5" text-anchor="middle" font-family="SimHei" font-size="12" fill="#111827">发布/版本/明细</text>
+<line x1="1306.0" y1="113" x2="1306.0" y2="890" stroke="#9CA3AF" stroke-width="1" stroke-dasharray="4 4"/>
+<rect x="1522.0" y="55" width="176" height="58" rx="7" fill="#DCEEFF" stroke="#2F6FED" stroke-width="1.3"/><text x="1610.0" y="80.5" text-anchor="middle" font-family="SimHei" font-size="12" fill="#111827">Audit</text><text x="1610.0" y="97.5" text-anchor="middle" font-family="SimHei" font-size="12" fill="#111827">Service</text>
+<line x1="1610.0" y1="113" x2="1610.0" y2="890" stroke="#9CA3AF" stroke-width="1" stroke-dasharray="4 4"/>
+<line x1="90.0" y1="170" x2="394.0" y2="170" stroke="#52616B" stroke-width="1.25" marker-end="url(#arrow)"/><text x="242.0" y="164" text-anchor="middle" font-family="SimHei" font-size="10" fill="#374151">POST /business/publications</text>
+<text x="25" y="174" font-family="SimHei" font-size="10" fill="#6B7280">1</text>
+<line x1="394.0" y1="220" x2="698.0" y2="220" stroke="#52616B" stroke-width="1.25" marker-end="url(#arrow)"/><text x="546.0" y="214" text-anchor="middle" font-family="SimHei" font-size="10" fill="#374151">JWT + business:publish:create</text>
+<text x="25" y="224" font-family="SimHei" font-size="10" fill="#6B7280">2</text>
+<line x1="698.0" y1="270" x2="1002.0" y2="270" stroke="#52616B" stroke-width="1.25" marker-end="url(#arrow)"/><text x="850.0" y="264" text-anchor="middle" font-family="SimHei" font-size="10" fill="#374151">lock tasks；校验全部 APPROVED/无未录入/至少一科</text>
+<text x="25" y="274" font-family="SimHei" font-size="10" fill="#6B7280">3</text>
+<line x1="1002.0" y1="320" x2="1306.0" y2="320" stroke="#52616B" stroke-width="1.25" marker-end="url(#arrow)"/><text x="1154.0" y="314" text-anchor="middle" font-family="SimHei" font-size="10" fill="#374151">select tasks/scores</text>
+<text x="25" y="324" font-family="SimHei" font-size="10" fill="#6B7280">4</text>
+<line x1="1306.0" y1="370" x2="1002.0" y2="370" stroke="#9AA7B4" stroke-width="1.25" stroke-dasharray="5 4" marker-end="url(#arrow)"/><text x="1154.0" y="364" text-anchor="middle" font-family="SimHei" font-size="10" fill="#374151">rows</text>
+<text x="25" y="374" font-family="SimHei" font-size="10" fill="#6B7280">5</text>
+<line x1="698.0" y1="420" x2="1306.0" y2="420" stroke="#52616B" stroke-width="1.25" marker-end="url(#arrow)"/><text x="1002.0" y="414" text-anchor="middle" font-family="SimHei" font-size="10" fill="#374151">insert publication/version/detail</text>
+<text x="25" y="424" font-family="SimHei" font-size="10" fill="#6B7280">6</text>
+<line x1="698.0" y1="470" x2="1610.0" y2="470" stroke="#52616B" stroke-width="1.25" marker-end="url(#arrow)"/><text x="1154.0" y="464" text-anchor="middle" font-family="SimHei" font-size="10" fill="#374151">同事务审计</text>
+<text x="25" y="474" font-family="SimHei" font-size="10" fill="#6B7280">7</text>
+<line x1="1610.0" y1="520" x2="1306.0" y2="520" stroke="#52616B" stroke-width="1.25" marker-end="url(#arrow)"/><text x="1458.0" y="514" text-anchor="middle" font-family="SimHei" font-size="10" fill="#374151">insert audit</text>
+<text x="25" y="524" font-family="SimHei" font-size="10" fill="#6B7280">8</text>
+<line x1="698.0" y1="570" x2="394.0" y2="570" stroke="#9AA7B4" stroke-width="1.25" stroke-dasharray="5 4" marker-end="url(#arrow)"/><text x="546.0" y="564" text-anchor="middle" font-family="SimHei" font-size="10" fill="#374151">Publication + version</text>
+<text x="25" y="574" font-family="SimHei" font-size="10" fill="#6B7280">9</text>
+<line x1="394.0" y1="620" x2="90.0" y2="620" stroke="#9AA7B4" stroke-width="1.25" stroke-dasharray="5 4" marker-end="url(#arrow)"/><text x="242.0" y="614" text-anchor="middle" font-family="SimHei" font-size="10" fill="#374151">AjaxResult</text>
+<text x="25" y="624" font-family="SimHei" font-size="10" fill="#6B7280">10</text>
+<rect x="35" y="898" width="1630" height="45" rx="6" fill="#F8FAFC" stroke="#9AA7B4"/><text x="45" y="918" font-family="SimHei" font-size="10" fill="#374151">依据：FR-PUB-002、API-PUB-002；发布在单事务生成不可变版本与明细快照；TASK_APPROVED ≠ PUB_PUBLISHED。</text></svg>

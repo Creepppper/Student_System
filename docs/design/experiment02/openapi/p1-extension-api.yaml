@@ -1,0 +1,2043 @@
+openapi: 3.0.3
+info:
+  title: 学生管理系统 P1 扩展 API（设计草稿）
+  version: 0.1-draft
+  description: 设计草稿；P1 独立，不进入 P0。
+servers:
+- url: http://localhost:8080
+  description: 本地开发（不是部署地址）
+paths:
+  /business/reviews:
+    post:
+      tags:
+      - P1 成绩复核
+      summary: 学生提交复核申请
+      description: API-P1-REVIEW-001；状态：规划（未实现）。
+      operationId: op_api_p1_review_001
+      parameters: []
+      responses:
+        '200':
+          description: 成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '400':
+          description: 参数/业务校验失败
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '401':
+          description: 未登录/Token 失效
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '403':
+          description: 无权限/数据范围拒绝
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '404':
+          description: 资源不存在
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '409':
+          description: 状态/版本/重复冲突
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+      x-api-id: API-P1-REVIEW-001
+      x-status: NEW_P1
+      x-fr: FR-REVIEW-001
+      x-br: BR-REVIEW-001～003
+      x-ac: AC-FR-REVIEW-001
+      x-permission: business:review:add
+      x-roles:
+      - STUDENT
+      x-scope: SCOPE_SELF
+      x-tables: stu_review_application
+      x-controller: ReviewController#apply
+      x-service: ReviewService#apply
+      x-frontend: src/api/business/review.js
+      x-idempotency: Idempotency-Key 必须
+      x-version: N/A
+      x-transaction: 单事务：本人已发布+活跃唯一+时限
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReviewApplyRequest'
+      x-data-schema: '#/components/schemas/Review'
+  /business/reviews/my:
+    get:
+      tags:
+      - P1 成绩复核
+      summary: 我的复核申请
+      description: API-P1-REVIEW-002；状态：规划（未实现）。
+      operationId: op_api_p1_review_002
+      parameters:
+      - name: pageNum
+        in: query
+        required: false
+        schema:
+          type: integer
+        description: 页码
+      - name: pageSize
+        in: query
+        required: false
+        schema:
+          type: integer
+        description: 每页条数
+      responses:
+        '200':
+          description: 成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TableDataInfo'
+        '400':
+          description: 参数/业务校验失败
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '401':
+          description: 未登录/Token 失效
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '403':
+          description: 无权限/数据范围拒绝
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '404':
+          description: 资源不存在
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '409':
+          description: 状态/版本/重复冲突
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+      x-api-id: API-P1-REVIEW-002
+      x-status: NEW_P1
+      x-fr: FR-REVIEW-005
+      x-br: BR-REVIEW-009、BR-QUERY-001
+      x-ac: AC-FR-REVIEW-005
+      x-permission: business:review:my
+      x-roles:
+      - STUDENT
+      x-scope: SCOPE_SELF
+      x-tables: stu_review_application
+      x-controller: ReviewController#my
+      x-service: ReviewService#my
+      x-frontend: src/api/business/review.js
+      x-idempotency: N/A
+      x-version: N/A
+      x-transaction: N/A
+  /business/reviews/{id}/handle:
+    post:
+      tags:
+      - P1 成绩复核
+      summary: 班主任受理/驳回
+      description: API-P1-REVIEW-003；状态：规划（未实现）。
+      operationId: op_api_p1_review_003
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: 成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '400':
+          description: 参数/业务校验失败
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '401':
+          description: 未登录/Token 失效
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '403':
+          description: 无权限/数据范围拒绝
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '404':
+          description: 资源不存在
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '409':
+          description: 状态/版本/重复冲突
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+      x-api-id: API-P1-REVIEW-003
+      x-status: NEW_P1
+      x-fr: FR-REVIEW-002
+      x-br: BR-REVIEW-004/005
+      x-ac: AC-FR-REVIEW-002
+      x-permission: business:review:handle
+      x-roles:
+      - HEAD_TEACHER
+      x-scope: SCOPE_CLASS
+      x-tables: stu_review_application、action
+      x-controller: ReviewController#handle
+      x-service: ReviewService#handle
+      x-frontend: src/api/business/review.js
+      x-idempotency: Idempotency-Key 必须
+      x-version: required
+      x-transaction: 单事务：本班/状态/原因/审计
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReviewHandleRequest'
+      x-data-schema: '#/components/schemas/Review'
+  /business/reviews/{id}/confirm:
+    post:
+      tags:
+      - P1 成绩复核
+      summary: 教务确认复核结论
+      description: API-P1-REVIEW-004；状态：规划（未实现）。
+      operationId: op_api_p1_review_004
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: 成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '400':
+          description: 参数/业务校验失败
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '401':
+          description: 未登录/Token 失效
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '403':
+          description: 无权限/数据范围拒绝
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '404':
+          description: 资源不存在
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '409':
+          description: 状态/版本/重复冲突
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+      x-api-id: API-P1-REVIEW-004
+      x-status: NEW_P1
+      x-fr: FR-REVIEW-004
+      x-br: BR-REVIEW-006/007、BR-PUB-009
+      x-ac: AC-FR-REVIEW-004
+      x-permission: business:review:confirm
+      x-roles:
+      - ACADEMIC
+      x-scope: SCOPE_ALL
+      x-tables: application、action、P0 更正
+      x-controller: ReviewController#confirm
+      x-service: ReviewService#confirm
+      x-frontend: src/api/business/review.js
+      x-idempotency: Idempotency-Key 必须
+      x-version: required
+      x-transaction: 单事务：结论+必要时调用 P0 更正
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReviewConfirmRequest'
+      x-data-schema: '#/components/schemas/Review'
+  /business/imports/template:
+    get:
+      tags:
+      - P1 导入导出
+      summary: 下载成绩导入模板
+      description: API-P1-IMPORT-001；状态：规划（未实现）。
+      operationId: op_api_p1_import_001
+      parameters:
+      - name: taskId
+        in: query
+        required: false
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: 成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '400':
+          description: 参数/业务校验失败
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '401':
+          description: 未登录/Token 失效
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '403':
+          description: 无权限/数据范围拒绝
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '404':
+          description: 资源不存在
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '409':
+          description: 状态/版本/重复冲突
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+      x-api-id: API-P1-IMPORT-001
+      x-status: NEW_P1
+      x-fr: FR-IMPORT-001
+      x-br: BR-IMP-001
+      x-ac: AC-FR-IMPORT-001
+      x-permission: business:import:template
+      x-roles:
+      - HEAD_TEACHER
+      x-scope: SCOPE_CLASS
+      x-tables: stu_score_task
+      x-controller: ImportController#template
+      x-service: ImportService#template
+      x-frontend: src/api/business/import.js
+      x-idempotency: N/A
+      x-version: N/A
+      x-transaction: N/A
+      x-data-schema: '#/components/schemas/BinaryFile'
+  /business/imports/precheck:
+    post:
+      tags:
+      - P1 导入导出
+      summary: 导入预检
+      description: API-P1-IMPORT-002；状态：规划（未实现）。
+      operationId: op_api_p1_import_002
+      parameters: []
+      responses:
+        '200':
+          description: 成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '400':
+          description: 参数/业务校验失败
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '401':
+          description: 未登录/Token 失效
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '403':
+          description: 无权限/数据范围拒绝
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '404':
+          description: 资源不存在
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '409':
+          description: 状态/版本/重复冲突
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+      x-api-id: API-P1-IMPORT-002
+      x-status: NEW_P1
+      x-fr: FR-IMPORT-002
+      x-br: BR-IMP-002/003
+      x-ac: AC-FR-IMPORT-002
+      x-permission: business:import:precheck
+      x-roles:
+      - HEAD_TEACHER
+      x-scope: SCOPE_CLASS
+      x-tables: stu_import_batch
+      x-controller: ImportController#precheck
+      x-service: ImportService#precheck
+      x-frontend: src/api/business/import.js
+      x-idempotency: N/A
+      x-version: N/A
+      x-transaction: 只读预检；不写成绩
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ImportRequest'
+      x-data-schema: '#/components/schemas/ImportPreview'
+  /business/imports/commit:
+    post:
+      tags:
+      - P1 导入导出
+      summary: 提交导入
+      description: API-P1-IMPORT-003；状态：规划（未实现）。
+      operationId: op_api_p1_import_003
+      parameters: []
+      responses:
+        '200':
+          description: 成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '400':
+          description: 参数/业务校验失败
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '401':
+          description: 未登录/Token 失效
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '403':
+          description: 无权限/数据范围拒绝
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '404':
+          description: 资源不存在
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '409':
+          description: 状态/版本/重复冲突
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+      x-api-id: API-P1-IMPORT-003
+      x-status: NEW_P1
+      x-fr: FR-IMPORT-003
+      x-br: BR-IMP-004/005/006
+      x-ac: AC-FR-IMPORT-003
+      x-permission: business:import:commit
+      x-roles:
+      - HEAD_TEACHER
+      x-scope: SCOPE_CLASS
+      x-tables: stu_score、stu_import_batch、audit
+      x-controller: ImportController#commit
+      x-service: ImportService#commit
+      x-frontend: src/api/business/import.js
+      x-idempotency: Idempotency-Key 必须
+      x-version: required
+      x-transaction: 单事务：预检通过+版本+全成功/全失败
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ImportRequest'
+      x-data-schema: '#/components/schemas/ImportResult'
+  /business/exports/scores:
+    post:
+      tags:
+      - P1 导入导出
+      summary: 导出成绩
+      description: API-P1-EXPORT-001；状态：规划（未实现）。
+      operationId: op_api_p1_export_001
+      parameters: []
+      responses:
+        '200':
+          description: 成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '400':
+          description: 参数/业务校验失败
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '401':
+          description: 未登录/Token 失效
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '403':
+          description: 无权限/数据范围拒绝
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '404':
+          description: 资源不存在
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '409':
+          description: 状态/版本/重复冲突
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+      x-api-id: API-P1-EXPORT-001
+      x-status: NEW_P1
+      x-fr: FR-IMPORT-004
+      x-br: BR-IMP-007/008
+      x-ac: AC-FR-IMPORT-004
+      x-permission: business:export:scores
+      x-roles:
+      - ACADEMIC
+      - HEAD_TEACHER
+      x-scope: SCOPE_ALL/CLASS
+      x-tables: version、detail、audit
+      x-controller: ExportController#scores
+      x-service: ExportService#scores
+      x-frontend: src/api/business/import.js
+      x-idempotency: Idempotency-Key 可选
+      x-version: N/A
+      x-transaction: 读事务+审计；不写成绩
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ExportRequest'
+      x-data-schema: '#/components/schemas/BinaryFile'
+  /business/my-score-trends:
+    get:
+      tags:
+      - P1 趋势
+      summary: 我的成绩趋势
+      description: API-P1-TREND-001；状态：规划（未实现）。
+      operationId: op_api_p1_trend_001
+      parameters:
+      - name: subjectId
+        in: query
+        required: false
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: 成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '400':
+          description: 参数/业务校验失败
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '401':
+          description: 未登录/Token 失效
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '403':
+          description: 无权限/数据范围拒绝
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '404':
+          description: 资源不存在
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '409':
+          description: 状态/版本/重复冲突
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+      x-api-id: API-P1-TREND-001
+      x-status: NEW_P1
+      x-fr: FR-TREND-001
+      x-br: BR-STAT-007、BR-CALC-009
+      x-ac: AC-FR-TREND-001
+      x-permission: business:trend:my
+      x-roles:
+      - STUDENT
+      x-scope: SCOPE_SELF
+      x-tables: version、detail
+      x-controller: TrendController#my
+      x-service: TrendService#my
+      x-frontend: src/api/business/trend.js
+      x-idempotency: N/A
+      x-version: N/A
+      x-transaction: N/A
+      x-data-schema: '#/components/schemas/PersonTrend'
+  /business/stats/class-trends:
+    get:
+      tags:
+      - P1 趋势
+      summary: 班级学科趋势
+      description: API-P1-TREND-002；状态：规划（未实现）。
+      operationId: op_api_p1_trend_002
+      parameters:
+      - name: classId
+        in: query
+        required: false
+        schema:
+          type: integer
+      - name: subjectId
+        in: query
+        required: false
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: 成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '400':
+          description: 参数/业务校验失败
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '401':
+          description: 未登录/Token 失效
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '403':
+          description: 无权限/数据范围拒绝
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '404':
+          description: 资源不存在
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '409':
+          description: 状态/版本/重复冲突
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+      x-api-id: API-P1-TREND-002
+      x-status: NEW_P1
+      x-fr: FR-TREND-002
+      x-br: BR-STAT-007、BR-CALC-009
+      x-ac: AC-FR-TREND-002
+      x-permission: business:trend:class
+      x-roles:
+      - ACADEMIC
+      - HEAD_TEACHER
+      x-scope: SCOPE_ALL/CLASS
+      x-tables: version、detail
+      x-controller: TrendController#classTrend
+      x-service: TrendService#classTrend
+      x-frontend: src/api/business/trend.js
+      x-idempotency: N/A
+      x-version: N/A
+      x-transaction: N/A
+      x-data-schema: '#/components/schemas/ClassTrend'
+  /business/stats/class-compare:
+    get:
+      tags:
+      - P1 对比
+      summary: 授权班级对比
+      description: API-P1-COMPARE-001；状态：规划（未实现）。
+      operationId: op_api_p1_compare_001
+      parameters:
+      - name: examId
+        in: query
+        required: false
+        schema:
+          type: integer
+      - name: subjectId
+        in: query
+        required: false
+        schema:
+          type: integer
+      - name: classIds
+        in: query
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: 成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '400':
+          description: 参数/业务校验失败
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '401':
+          description: 未登录/Token 失效
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '403':
+          description: 无权限/数据范围拒绝
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '404':
+          description: 资源不存在
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+        '409':
+          description: 状态/版本/重复冲突
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+      x-api-id: API-P1-COMPARE-001
+      x-status: NEW_P1
+      x-fr: FR-COMPARE-001
+      x-br: BR-STAT-010、BR-CALC-009
+      x-ac: AC-FR-COMPARE-001
+      x-permission: business:compare:class
+      x-roles:
+      - ACADEMIC
+      - HEAD_TEACHER
+      x-scope: SCOPE_ALL/CLASS
+      x-tables: version、detail
+      x-controller: CompareController#compare
+      x-service: CompareService#compare
+      x-frontend: src/api/business/trend.js
+      x-idempotency: N/A
+      x-version: N/A
+      x-transaction: N/A
+      x-data-schema: '#/components/schemas/ClassCompare'
+components:
+  schemas:
+    AjaxResult:
+      type: object
+      required:
+      - code
+      - msg
+      properties:
+        code:
+          type: integer
+          example: 200
+        msg:
+          type: string
+          example: 操作成功
+        data:
+          type: object
+          nullable: true
+          additionalProperties: true
+    TableDataInfo:
+      type: object
+      required:
+      - total
+      - rows
+      - code
+      - msg
+      properties:
+        total:
+          type: integer
+          format: int64
+        rows:
+          type: array
+          items:
+            type: object
+            additionalProperties: true
+        code:
+          type: integer
+        msg:
+          type: string
+    ErrorData:
+      type: object
+      properties:
+        errorCode:
+          type: string
+          example: SCORE_VERSION_CONFLICT
+        details:
+          type: object
+          additionalProperties: true
+        traceId:
+          type: string
+    PageQuery:
+      type: object
+      description: 分页与排序
+      properties:
+        pageNum:
+          type: integer
+          minimum: 1
+          default: 1
+        pageSize:
+          type: integer
+          minimum: 1
+          maximum: 100
+          default: 10
+        orderByColumn:
+          type: string
+          description: 白名单字段
+        isAsc:
+          type: string
+          enum:
+          - asc
+          - desc
+    YearUpsert:
+      type: object
+      description: 学年新增/修改
+      properties:
+        yearCode:
+          type: string
+          maxLength: 16
+        yearName:
+          type: string
+          maxLength: 32
+        startDate:
+          type: string
+          format: date
+        endDate:
+          type: string
+          format: date
+        status:
+          type: string
+          enum:
+          - ACTIVE
+          - INACTIVE
+        version:
+          type: integer
+          minimum: 0
+      required:
+      - yearCode
+      - yearName
+      - startDate
+      - endDate
+    YearCurrentRequest:
+      type: object
+      description: 设为当前学年
+      properties:
+        version:
+          type: integer
+          minimum: 0
+      required:
+      - version
+    Year:
+      type: object
+      description: 学年
+      properties:
+        id:
+          type: integer
+        yearCode:
+          type: string
+        yearName:
+          type: string
+        startDate:
+          type: string
+          format: date
+        endDate:
+          type: string
+          format: date
+        isCurrent:
+          type: boolean
+        status:
+          type: string
+        version:
+          type: integer
+    TermUpsert:
+      type: object
+      description: 学期新增/修改
+      properties:
+        yearId:
+          type: integer
+        termNo:
+          type: integer
+          minimum: 1
+        termName:
+          type: string
+          maxLength: 32
+        startDate:
+          type: string
+          format: date
+        endDate:
+          type: string
+          format: date
+        status:
+          type: string
+          enum:
+          - ACTIVE
+          - INACTIVE
+        version:
+          type: integer
+      required:
+      - yearId
+      - termNo
+      - termName
+      - startDate
+      - endDate
+    Term:
+      type: object
+      description: 学期
+      properties:
+        id:
+          type: integer
+        yearId:
+          type: integer
+        termNo:
+          type: integer
+        termName:
+          type: string
+        startDate:
+          type: string
+          format: date
+        endDate:
+          type: string
+          format: date
+        status:
+          type: string
+        version:
+          type: integer
+    GradeUpsert:
+      type: object
+      description: 年级新增/修改
+      properties:
+        gradeCode:
+          type: string
+          maxLength: 16
+        gradeName:
+          type: string
+          maxLength: 32
+        sortOrder:
+          type: integer
+        status:
+          type: string
+          enum:
+          - ACTIVE
+          - INACTIVE
+        version:
+          type: integer
+      required:
+      - gradeCode
+      - gradeName
+    Grade:
+      type: object
+      description: 年级
+      properties:
+        id:
+          type: integer
+        gradeCode:
+          type: string
+        gradeName:
+          type: string
+        sortOrder:
+          type: integer
+        status:
+          type: string
+        version:
+          type: integer
+    ClassUpsert:
+      type: object
+      description: 班级新增/修改
+      properties:
+        yearId:
+          type: integer
+        gradeId:
+          type: integer
+        classCode:
+          type: string
+          maxLength: 32
+        className:
+          type: string
+          maxLength: 64
+        status:
+          type: string
+          enum:
+          - ACTIVE
+          - INACTIVE
+        version:
+          type: integer
+      required:
+      - yearId
+      - gradeId
+      - classCode
+      - className
+    Class:
+      type: object
+      description: 班级
+      properties:
+        id:
+          type: integer
+        yearId:
+          type: integer
+        gradeId:
+          type: integer
+        classCode:
+          type: string
+        className:
+          type: string
+        rosterVersion:
+          type: integer
+        status:
+          type: string
+        version:
+          type: integer
+    AssignmentCreate:
+      type: object
+      description: 班主任指派
+      properties:
+        headTeacherId:
+          type: integer
+        effectiveFrom:
+          type: string
+          format: date
+        reason:
+          type: string
+          maxLength: 255
+        version:
+          type: integer
+      required:
+      - headTeacherId
+      - effectiveFrom
+    TeacherAssignmentCreate:
+      type: object
+      description: 按班主任指派
+      properties:
+        classId:
+          type: integer
+        effectiveFrom:
+          type: string
+          format: date
+        reason:
+          type: string
+          maxLength: 255
+      required:
+      - classId
+      - effectiveFrom
+    EndAssignmentRequest:
+      type: object
+      description: 结束任职
+      properties:
+        effectiveTo:
+          type: string
+          format: date
+        reason:
+          type: string
+          maxLength: 255
+        version:
+          type: integer
+      required:
+      - effectiveTo
+      - version
+    Assignment:
+      type: object
+      description: 班主任任职
+      properties:
+        id:
+          type: integer
+        headTeacherId:
+          type: integer
+        classId:
+          type: integer
+        effectiveFrom:
+          type: string
+          format: date
+        effectiveTo:
+          type: string
+          format: date
+          nullable: true
+        isCurrent:
+          type: boolean
+        status:
+          type: string
+        version:
+          type: integer
+    StudentUpsert:
+      type: object
+      description: 学生档案新增/修改
+      properties:
+        studentNo:
+          type: string
+          maxLength: 32
+        studentName:
+          type: string
+          maxLength: 64
+        gender:
+          type: string
+          enum:
+          - M
+          - F
+          - U
+        enrollmentDate:
+          type: string
+          format: date
+          nullable: true
+        status:
+          type: string
+          enum:
+          - ACTIVE
+          - INACTIVE
+          - GRADUATED
+        version:
+          type: integer
+      required:
+      - studentNo
+      - studentName
+    Student:
+      type: object
+      description: 学生档案
+      properties:
+        id:
+          type: integer
+        studentNo:
+          type: string
+        studentName:
+          type: string
+        gender:
+          type: string
+        enrollmentDate:
+          type: string
+          format: date
+          nullable: true
+        status:
+          type: string
+        version:
+          type: integer
+    StatusRequest:
+      type: object
+      description: 状态变更
+      properties:
+        status:
+          type: string
+        reason:
+          type: string
+          maxLength: 255
+        version:
+          type: integer
+      required:
+      - status
+      - version
+    ClassChangeRequest:
+      type: object
+      description: 转班/归属变更
+      properties:
+        classId:
+          type: integer
+        effectiveFrom:
+          type: string
+          format: date
+        reason:
+          type: string
+          maxLength: 255
+        version:
+          type: integer
+      required:
+      - classId
+      - effectiveFrom
+      - version
+    StudentClass:
+      type: object
+      description: 学生班级归属
+      properties:
+        id:
+          type: integer
+        studentId:
+          type: integer
+        classId:
+          type: integer
+        effectiveFrom:
+          type: string
+          format: date
+        effectiveTo:
+          type: string
+          format: date
+          nullable: true
+        isCurrent:
+          type: boolean
+        reason:
+          type: string
+          nullable: true
+        version:
+          type: integer
+    BindingCreate:
+      type: object
+      description: 账号档案绑定
+      properties:
+        userId:
+          type: integer
+          format: int64
+          description: sys_user.user_id BIGINT
+        profileType:
+          type: string
+          enum:
+          - STUDENT
+          - HEAD_TEACHER
+        studentId:
+          type: integer
+          nullable: true
+        headTeacherId:
+          type: integer
+          nullable: true
+      required:
+      - userId
+      - profileType
+    Binding:
+      type: object
+      description: 账号档案绑定
+      properties:
+        id:
+          type: integer
+        userId:
+          type: integer
+          format: int64
+        profileType:
+          type: string
+        studentId:
+          type: integer
+          nullable: true
+        headTeacherId:
+          type: integer
+          nullable: true
+        status:
+          type: string
+          enum:
+          - ACTIVE
+          - REVOKED
+        effectiveFrom:
+          type: string
+          format: date-time
+        effectiveTo:
+          type: string
+          format: date-time
+          nullable: true
+        version:
+          type: integer
+    RevokeRequest:
+      type: object
+      description: 撤销绑定
+      properties:
+        reason:
+          type: string
+          maxLength: 255
+        version:
+          type: integer
+      required:
+      - version
+    Identity:
+      type: object
+      description: 当前业务身份
+      properties:
+        userId:
+          type: integer
+          format: int64
+        userName:
+          type: string
+        roles:
+          type: array
+          items:
+            type: string
+        scope:
+          type: string
+          enum:
+          - SCOPE_SYSTEM
+          - SCOPE_ALL
+          - SCOPE_CLASS
+          - SCOPE_SELF
+        studentId:
+          type: integer
+          nullable: true
+        headTeacherId:
+          type: integer
+          nullable: true
+        bound:
+          type: boolean
+        permissions:
+          type: array
+          items:
+            type: string
+    HeadTeacherUpsert:
+      type: object
+      description: 班主任档案
+      properties:
+        teacherNo:
+          type: string
+          maxLength: 32
+        teacherName:
+          type: string
+          maxLength: 64
+        gender:
+          type: string
+          enum:
+          - M
+          - F
+          - U
+        status:
+          type: string
+          enum:
+          - ACTIVE
+          - INACTIVE
+        version:
+          type: integer
+      required:
+      - teacherNo
+      - teacherName
+    HeadTeacher:
+      type: object
+      description: 班主任
+      properties:
+        id:
+          type: integer
+        teacherNo:
+          type: string
+        teacherName:
+          type: string
+        gender:
+          type: string
+        status:
+          type: string
+        version:
+          type: integer
+    SubjectUpsert:
+      type: object
+      description: 科目
+      properties:
+        subjectCode:
+          type: string
+          maxLength: 16
+        subjectName:
+          type: string
+          maxLength: 32
+        sortOrder:
+          type: integer
+        status:
+          type: string
+          enum:
+          - ACTIVE
+          - INACTIVE
+        version:
+          type: integer
+      required:
+      - subjectCode
+      - subjectName
+    Subject:
+      type: object
+      description: 科目
+      properties:
+        id:
+          type: integer
+        subjectCode:
+          type: string
+        subjectName:
+          type: string
+        sortOrder:
+          type: integer
+        status:
+          type: string
+        version:
+          type: integer
+    ExamUpsert:
+      type: object
+      description: 考试
+      properties:
+        yearId:
+          type: integer
+        termId:
+          type: integer
+        examCode:
+          type: string
+          maxLength: 32
+        examName:
+          type: string
+          maxLength: 128
+        examType:
+          type: string
+          maxLength: 32
+        examDate:
+          type: string
+          format: date
+          nullable: true
+        version:
+          type: integer
+      required:
+      - yearId
+      - termId
+      - examCode
+      - examName
+    ExamStatusRequest:
+      type: object
+      description: 考试状态转换
+      properties:
+        targetStatus:
+          type: string
+          enum:
+          - EXAM_OPEN
+          - EXAM_CLOSED
+          - EXAM_ARCHIVED
+        version:
+          type: integer
+      required:
+      - targetStatus
+      - version
+    Exam:
+      type: object
+      description: 考试
+      properties:
+        id:
+          type: integer
+        yearId:
+          type: integer
+        termId:
+          type: integer
+        examCode:
+          type: string
+        examName:
+          type: string
+        status:
+          type: string
+          enum:
+          - EXAM_DRAFT
+          - EXAM_OPEN
+          - EXAM_CLOSED
+          - EXAM_ARCHIVED
+        version:
+          type: integer
+    ExamClassSet:
+      type: object
+      description: 考试班级范围
+      properties:
+        classIds:
+          type: array
+          items:
+            type: integer
+        version:
+          type: integer
+      required:
+      - classIds
+      - version
+    ExamSubjectItem:
+      type: object
+      description: 考试科目项
+      properties:
+        subjectId:
+          type: integer
+        fullMark:
+          type: number
+          multipleOf: 0.5
+        passLine:
+          type: number
+          multipleOf: 0.5
+        excellentLine:
+          type: number
+          multipleOf: 0.5
+      required:
+      - subjectId
+      - fullMark
+      - passLine
+      - excellentLine
+    ExamSubjectSet:
+      type: object
+      description: 考试科目集合
+      properties:
+        subjects:
+          type: array
+          items:
+            $ref: '#/components/schemas/ExamSubjectItem'
+        version:
+          type: integer
+      required:
+      - subjects
+      - version
+    ExamDetail:
+      type: object
+      description: 考试详情
+      properties:
+        exam:
+          $ref: '#/components/schemas/Exam'
+        classes:
+          type: array
+          items:
+            $ref: '#/components/schemas/Class'
+        subjects:
+          type: array
+          items:
+            $ref: '#/components/schemas/ExamSubjectItem'
+    GenerateTasksRequest:
+      type: object
+      description: 生成成绩任务
+      properties:
+        classIds:
+          type: array
+          items:
+            type: integer
+        subjectIds:
+          type: array
+          items:
+            type: integer
+        idempotencyKey:
+          type: string
+    GenerateTasksResult:
+      type: object
+      description: 任务生成结果
+      properties:
+        created:
+          type: integer
+        skipped:
+          type: integer
+        tasks:
+          type: array
+          items:
+            $ref: '#/components/schemas/ScoreTask'
+    ScoreTask:
+      type: object
+      description: 成绩任务
+      properties:
+        id:
+          type: integer
+        examId:
+          type: integer
+        classId:
+          type: integer
+        subjectId:
+          type: integer
+        status:
+          type: string
+          enum:
+          - TASK_DRAFT
+          - TASK_SUBMITTED
+          - TASK_APPROVED
+          - TASK_RETURNED
+        firstOwnerTeacherId:
+          type: integer
+        rosterVersion:
+          type: integer
+        version:
+          type: integer
+    ScoreItem:
+      type: object
+      description: 成绩项
+      properties:
+        studentId:
+          type: integer
+        scoreStatus:
+          type: string
+          enum:
+          - SCORE_NORMAL
+          - SCORE_ABSENT
+          - SCORE_NOT_ENTERED
+        scoreValue:
+          type: number
+          multipleOf: 0.5
+          nullable: true
+        version:
+          type: integer
+      required:
+      - studentId
+      - scoreStatus
+    ScoreBatchRequest:
+      type: object
+      description: 批量保存成绩
+      properties:
+        version:
+          type: integer
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/ScoreItem'
+        idempotencyKey:
+          type: string
+      required:
+      - version
+      - items
+    ScoreEntry:
+      type: object
+      description: 成绩记录
+      properties:
+        id:
+          type: integer
+        taskId:
+          type: integer
+        studentId:
+          type: integer
+        scoreStatus:
+          type: string
+        scoreValue:
+          type: number
+          nullable: true
+        version:
+          type: integer
+    ScoreSaveResult:
+      type: object
+      description: 保存结果
+      properties:
+        saved:
+          type: integer
+        notEntered:
+          type: integer
+        absent:
+          type: integer
+        normal:
+          type: integer
+        version:
+          type: integer
+    VersionRequest:
+      type: object
+      description: 版本请求
+      properties:
+        version:
+          type: integer
+        idempotencyKey:
+          type: string
+      required:
+      - version
+    TaskProgress:
+      type: object
+      description: 任务进度
+      properties:
+        task:
+          $ref: '#/components/schemas/ScoreTask'
+        total:
+          type: integer
+        normal:
+          type: integer
+        absent:
+          type: integer
+        notEntered:
+          type: integer
+    ReviewRequest:
+      type: object
+      description: 审核任务
+      properties:
+        action:
+          type: string
+          enum:
+          - APPROVE
+          - RETURN
+        reason:
+          type: string
+          maxLength: 500
+        version:
+          type: integer
+        idempotencyKey:
+          type: string
+      required:
+      - action
+      - version
+    PublishRequest:
+      type: object
+      description: 发布请求
+      properties:
+        examId:
+          type: integer
+        classId:
+          type: integer
+        version:
+          type: integer
+        idempotencyKey:
+          type: string
+      required:
+      - examId
+      - classId
+      - version
+    WithdrawRequest:
+      type: object
+      description: 撤回请求
+      properties:
+        reason:
+          type: string
+          maxLength: 500
+        version:
+          type: integer
+        idempotencyKey:
+          type: string
+      required:
+      - reason
+      - version
+    RepublishRequest:
+      type: object
+      description: 重新发布
+      properties:
+        version:
+          type: integer
+        idempotencyKey:
+          type: string
+      required:
+      - version
+    CorrectionRequest:
+      type: object
+      description: 受控更正
+      properties:
+        reason:
+          type: string
+          maxLength: 500
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/ScoreItem'
+        version:
+          type: integer
+        idempotencyKey:
+          type: string
+      required:
+      - reason
+      - items
+      - version
+    Publication:
+      type: object
+      description: 班级发布
+      properties:
+        id:
+          type: integer
+        examId:
+          type: integer
+        classId:
+          type: integer
+        status:
+          type: string
+          enum:
+          - PUB_UNPUBLISHED
+          - PUB_PUBLISHED
+          - PUB_WITHDRAWN
+        currentVersionId:
+          type: integer
+          nullable: true
+        version:
+          type: integer
+    PublicationVersion:
+      type: object
+      description: 发布版本
+      properties:
+        id:
+          type: integer
+        publicationId:
+          type: integer
+        versionNo:
+          type: integer
+        snapshotAt:
+          type: string
+          format: date-time
+        changeReason:
+          type: string
+          nullable: true
+        snapshotHash:
+          type: string
+          nullable: true
+    MyScoreDetail:
+      type: object
+      description: 本人成绩
+      properties:
+        examId:
+          type: integer
+        examName:
+          type: string
+        versionNo:
+          type: integer
+        totalScore:
+          type: number
+          nullable: true
+        rank:
+          type: integer
+          nullable: true
+        classSize:
+          type: integer
+          nullable: true
+        subjects:
+          type: array
+          items:
+            type: object
+            additionalProperties: true
+    ClassStat:
+      type: object
+      description: 班级统计
+      properties:
+        classId:
+          type: integer
+        examId:
+          type: integer
+        subjects:
+          type: array
+          items:
+            type: object
+            additionalProperties: true
+        students:
+          type: array
+          items:
+            type: object
+            additionalProperties: true
+    SchoolStat:
+      type: object
+      description: 全校统计
+      properties:
+        examId:
+          type: integer
+        classes:
+          type: array
+          items:
+            type: object
+            additionalProperties: true
+    AuditRecord:
+      type: object
+      description: 业务审计
+      properties:
+        id:
+          type: integer
+        eventType:
+          type: string
+        objectType:
+          type: string
+        objectId:
+          type: integer
+        objectVersion:
+          type: integer
+          nullable: true
+        reason:
+          type: string
+          nullable: true
+        operatorUserId:
+          type: integer
+          format: int64
+        operatorRole:
+          type: string
+        occurredAt:
+          type: string
+          format: date-time
+        source:
+          type: string
+    BinaryFile:
+      type: object
+      description: 二进制文件
+      properties:
+        fileName:
+          type: string
+        contentType:
+          type: string
+        size:
+          type: integer
+    ReviewApplyRequest:
+      type: object
+      description: P1 复核申请
+      properties:
+        examId:
+          type: integer
+        subjectId:
+          type: integer
+        reason:
+          type: string
+          maxLength: 500
+        idempotencyKey:
+          type: string
+      required:
+      - examId
+      - subjectId
+      - reason
+    ReviewHandleRequest:
+      type: object
+      description: P1 受理/驳回
+      properties:
+        action:
+          type: string
+        comment:
+          type: string
+          maxLength: 500
+        version:
+          type: integer
+      required:
+      - action
+      - comment
+      - version
+    ReviewConfirmRequest:
+      type: object
+      description: P1 教务确认
+      properties:
+        action:
+          type: string
+        comment:
+          type: string
+          maxLength: 500
+        version:
+          type: integer
+      required:
+      - action
+      - version
+    ImportRequest:
+      type: object
+      description: P1 导入请求
+      properties:
+        taskId:
+          type: integer
+        fileName:
+          type: string
+        fileContent:
+          type: string
+          format: byte
+        idempotencyKey:
+          type: string
+      required:
+      - taskId
+      - fileName
+    ExportRequest:
+      type: object
+      description: P1 导出请求
+      properties:
+        examId:
+          type: integer
+        classId:
+          type: integer
+        subjectId:
+          type: integer
+          nullable: true
+        idempotencyKey:
+          type: string
+    Review:
+      type: object
+      description: P1 复核申请
+      properties:
+        id:
+          type: integer
+        studentId:
+          type: integer
+        examId:
+          type: integer
+        subjectId:
+          type: integer
+        status:
+          type: string
+        resultComment:
+          type: string
+          nullable: true
+        deadlineAt:
+          type: string
+          format: date-time
+    ImportPreview:
+      type: object
+      description: P1 导入预检
+      properties:
+        total:
+          type: integer
+        valid:
+          type: integer
+        invalid:
+          type: integer
+        errors:
+          type: array
+          items:
+            type: object
+            additionalProperties: true
+    ImportResult:
+      type: object
+      description: P1 导入结果
+      properties:
+        batchId:
+          type: integer
+        total:
+          type: integer
+        success:
+          type: integer
+        failed:
+          type: integer
+    PersonTrend:
+      type: object
+      description: P1 个人趋势
+      properties:
+        subjects:
+          type: array
+          items:
+            type: object
+            additionalProperties: true
+    ClassTrend:
+      type: object
+      description: P1 班级趋势
+      properties:
+        classId:
+          type: integer
+        subjects:
+          type: array
+          items:
+            type: object
+            additionalProperties: true
+    ClassCompare:
+      type: object
+      description: P1 班级对比
+      properties:
+        examId:
+          type: integer
+        classes:
+          type: array
+          items:
+            type: object
+            additionalProperties: true
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+security:
+- bearerAuth: []

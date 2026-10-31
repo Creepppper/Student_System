@@ -1,0 +1,16 @@
+name                                 type              encoding         emb sub uni object ID
+------------------------------------ ----------------- ---------------- --- --- --- ---------
+BAAAAA+SourceHanSerifCN-Regular      Type 1            Builtin          yes yes yes   2122  0
+CAAAAA+SimHei                        TrueType          WinAnsi          yes yes yes   2092  0
+DAAAAA+SimSun                        TrueType          WinAnsi          yes yes yes   2102  0
+EAAAAA+TimesNewRomanPSMT             TrueType          WinAnsi          yes yes yes   2112  0
+FAAAAA+LiberationSerif               TrueType          WinAnsi          yes yes yes   2077  0
+GAAAAA+SourceHanSansCN-Bold          Type 1            Builtin          yes yes yes   2137  0
+HAAAAA+SourceHanSerifCN-Bold         Type 1            Builtin          yes yes yes   2132  0
+IAAAAA+LiberationSans-Bold           TrueType          WinAnsi          yes yes yes   2087  0
+JAAAAA+TimesNewRomanPS-BoldMT        TrueType          WinAnsi          yes yes yes   2117  0
+KAAAAA+NotoSansCJKsc-Thin            Type 3            Custom           yes yes yes   2140  0
+LAAAAA+SourceHanSerifCN-Regular      Type 1            Builtin          yes yes yes   2127  0
+MAAAAA+SimSun                        TrueType          WinAnsi          yes yes yes   2107  0
+NAAAAA+SimHei                        TrueType          WinAnsi          yes yes yes   2097  0
+OAAAAA+LiberationSerif-Bold          TrueType          WinAnsi          yes yes yes   2082  0

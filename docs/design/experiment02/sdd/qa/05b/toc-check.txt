@@ -1,0 +1,27 @@
+TOC page reference check
+1. 导言	TOC=5	actual=5
+2. 系统分析	TOC=8	actual=8
+3. 界面设计	TOC=11	actual=11
+4. 体系结构设计	TOC=16	actual=16
+4.1 总体架构	TOC=16	actual=16
+4.2 Maven 模块	TOC=18	actual=18
+4.3 分层与调用	TOC=20	actual=20
+4.4 开发与部署拓扑	TOC=20	actual=20
+5. 数据模型设计	TOC=22	actual=22
+5.1 现有若依数据库	TOC=22	actual=22
+5.2 计划 P0/P1 表	TOC=22	actual=22
+5.2.1 关键表结构（摘要）	TOC=23	actual=23
+5.3 核心关系示意	TOC=24	actual=24
+5.4 账号绑定	TOC=26	actual=26
+5.5 成绩三态与发布版本	TOC=26	actual=26
+5.6 约束与审计	TOC=27	actual=27
+6. 模块与接口设计	TOC=28	actual=28
+6.1 模块职责	TOC=28	actual=28
+6.1.1 核心模块功能说明	TOC=29	actual=29
+6.2 接口概览	TOC=30	actual=30
+6.3 关键接口	TOC=31	actual=31
+6.4 代表接口详细设计	TOC=31	actual=31
+6.5 计划时序	TOC=34	actual=34
+6.6 权限与事务摘要	TOC=40	actual=40
+7. 设计追踪与待确认	TOC=41	actual=41
+7.4 明确未做	TOC=42	actual=42

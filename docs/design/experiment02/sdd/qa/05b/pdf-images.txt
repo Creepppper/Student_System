@@ -1,0 +1,30 @@
+page   num  type   width height color comp bpc  enc interp  object ID x-ppi y-ppi size ratio
+--------------------------------------------------------------------------------------------
+  12     0 image    1828  1028  rgb     3   8  jpeg   no       699  0   300   300 94.0K 1.7%
+  12     1 smask    1828  1028  gray    1   8  image  no       699  0   300   300 1844B 0.1%
+  12     2 image    1828  1028  rgb     3   8  jpeg   no       707  0   300   300  144K 2.6%
+  12     3 smask    1828  1028  gray    1   8  image  no       707  0   300   300 1844B 0.1%
+  13     4 image    1828  1028  rgb     3   8  jpeg   no       719  0   300   300  119K 2.2%
+  13     5 smask    1828  1028  gray    1   8  image  no       719  0   300   300 1844B 0.1%
+  13     6 image    1828  1028  rgb     3   8  jpeg   no       726  0   300   300  159K 2.9%
+  13     7 smask    1828  1028  gray    1   8  image  no       726  0   300   300 1844B 0.1%
+  14     8 image    1828  1028  rgb     3   8  jpeg   no       739  0   300   300  102K 1.9%
+  14     9 smask    1828  1028  gray    1   8  image  no       739  0   300   300 1844B 0.1%
+  14    10 image    1828  1028  rgb     3   8  jpeg   no       745  0   300   300  120K 2.2%
+  14    11 smask    1828  1028  gray    1   8  image  no       745  0   300   300 1844B 0.1%
+  15    12 image    1828  1028  rgb     3   8  jpeg   no       757  0   300   300  142K 2.6%
+  15    13 smask    1828  1028  gray    1   8  image  no       757  0   300   300 1844B 0.1%
+  15    14 image    1828  1028  rgb     3   8  jpeg   no       764  0   300   300  146K 2.6%
+  15    15 smask    1828  1028  gray    1   8  image  no       764  0   300   300 1844B 0.1%
+  17    16 image    2189  1509  rgb     3   8  jpeg   no       792  0   256   256  280K 2.9%
+  17    17 smask    2189  1509  gray    1   8  image  no       792  0   256   256 3227B 0.1%
+  19    18 image    1787   951  rgb     3   8  jpeg   no       818  0   189   189  168K 3.4%
+  21    19 image     967   967  rgb     3   8  jpeg   no       860  0   158   158  118K 4.3%
+  21    20 smask     967   967  gray    1   8  image  no       860  0   158   158  933B 0.1%
+  25    21 image    2001  1375  rgb     3   8  jpeg   no      1162  0   233   233  215K 2.7%
+  25    22 smask    2001  1375  gray    1   8  image  no      1162  0   233   233 5532B 0.2%
+  35    23 image    1800   864  rgb     3   8  image  no      1880  0   191   191 81.3K 1.8%
+  36    24 image    1800   864  rgb     3   8  image  no      1891  0   191   191 70.1K 1.5%
+  37    25 image    1800   864  rgb     3   8  image  no      1901  0   191   191 81.3K 1.8%
+  38    26 image    1800   780  rgb     3   8  image  no      1912  0   191   191  116K 2.8%
+  39    27 image    1800   864  rgb     3   8  image  no      1923  0   191   191 83.5K 1.8%

@@ -1,0 +1,9 @@
+zip_test None
+size_bytes 5960303
+media_files 17
+tables 12 tblHeader 12
+drawings 17 toc_field True
+headings_H1 9 H2 36 H3 5
+sectPr 10 landscape_orient 4
+header_parts 27
+footer_parts 27

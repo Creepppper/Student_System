@@ -42,3 +42,12 @@ export function delReview(id) {
     method: 'delete'
   })
 }
+
+// 处理查卷申请（action: ACCEPT 受理 / REJECT 驳回 / COMPLETE 完成）
+export function handleReview(id, data) {
+  return request({
+    url: '/system/review/' + id + '/handle',
+    method: 'put',
+    data: data
+  })
+}

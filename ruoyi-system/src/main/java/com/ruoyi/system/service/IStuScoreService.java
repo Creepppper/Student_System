@@ -2,6 +2,8 @@ package com.ruoyi.system.service;
 
 import java.util.List;
 import com.ruoyi.system.domain.StuScore;
+import com.ruoyi.system.domain.StuScoreRank;
+import com.ruoyi.system.domain.StuTranscriptItem;
 
 /**
  * 学生成绩Service接口
@@ -58,4 +60,25 @@ public interface IStuScoreService
      * @return 结果
      */
     public int deleteStuScoreById(Long id);
+
+    /**
+     * 查询某次考试的排名
+     *
+     * @param examId 考试ID
+     * @param scope 排名范围：GRADE 年级排名，CLASS 班级排名
+     * @param subjectCode 排名科目代码（chinese 等），为空表示总分
+     * @param grade 年级（必选）：只在该年级内排名
+     * @param className 班级（班级排名时必选）：只在该班级内排名
+     * @return 排名结果
+     */
+    public List<StuScoreRank> selectScoreRanking(Long examId, String scope, String subjectCode, String grade,
+            String className);
+
+    /**
+     * 查询学生成绩单：历次考试的六科成绩，以及各次考试的年级名次和班级名次
+     *
+     * @param studentId 学生ID
+     * @return 成绩单条目，按考试日期升序
+     */
+    public List<StuTranscriptItem> selectTranscript(Long studentId);
 }

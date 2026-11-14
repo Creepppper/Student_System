@@ -42,3 +42,20 @@ export function delScore(id) {
     method: 'delete'
   })
 }
+
+// 查询考试排名（scope: GRADE 年级 / CLASS 班级；subject: TOTAL 或六科代码）
+export function getScoreRanking(query) {
+  return request({
+    url: '/system/score/ranking',
+    method: 'get',
+    params: query
+  })
+}
+
+// 查询学生成绩单
+export function getScoreTranscript(studentId) {
+  return request({
+    url: '/system/score/transcript/' + studentId,
+    method: 'get'
+  })
+}

@@ -17,6 +17,7 @@ import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.common.enums.BusinessType;
 import com.ruoyi.system.domain.StuReview;
+import com.ruoyi.system.domain.StuReviewHandleBody;
 import com.ruoyi.system.service.IStuReviewService;
 import com.ruoyi.common.utils.poi.ExcelUtil;
 import com.ruoyi.common.core.page.TableDataInfo;
@@ -90,6 +91,18 @@ public class StuReviewController extends BaseController
     {
         return toAjax(stuReviewService.updateStuReview(stuReview));
     }
+
+    /**
+     * 处理查卷申请（受理 / 驳回 / 完成）
+     */
+    @PreAuthorize("@ss.hasPermi('system:review:handle')")
+    @Log(title = "查卷申请处理", businessType = BusinessType.UPDATE)
+    @PutMapping("/{id}/handle")
+    public AjaxResult handle(@PathVariable("id") Long id, @RequestBody StuReviewHandleBody body)
+    {
+        return toAjax(stuReviewService.handleStuReview(id, body.getAction(), body.getReply()));
+    }
+
 
     /**
      * 删除查卷申请

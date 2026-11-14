@@ -4,16 +4,16 @@
 
 ## 技术栈与已选版本
 
-| 层次 | 技术 | 版本或来源 |
-| --- | --- | --- |
-| 后端 | RuoYi-Vue / Spring Boot | RuoYi 3.9.2，Spring Boot 3.5.16，`springboot3` 分支 |
-| Java | OpenJDK / Maven | 源码目标 Java 17；本机待以 JDK 25.0.4.1 实测；Maven 3.9.11 |
-| 前端 | Vue / Vite / Element Plus / Pinia | Vue 3.5.26、Vite 6.4.1、Element Plus 2.13.1、Pinia 3.0.4 |
-| 数据库 | MariaDB | 本机 11.8.8，应用使用 MySQL Connector/J |
-| 缓存 | Valkey | 本机 9.0.6，Spring Data Redis + Lettuce，使用 Redis 协议 |
-| 开发工具 | VS Code | Java Extension Pack、Spring Boot、Maven、Vue - Official |
+| 层次     | 技术                              | 版本或来源                                                 |
+| -------- | --------------------------------- | ---------------------------------------------------------- |
+| 后端     | RuoYi-Vue / Spring Boot           | RuoYi 3.9.2，Spring Boot 3.5.16，`springboot3` 分支      |
+| Java     | OpenJDK / Maven                   | 源码目标 Java 17；本机待以 JDK 25.0.4.1 实测；Maven 3.9.11 |
+| 前端     | Vue / Vite / Element Plus / Pinia | Vue 3.5.26、Vite 6.4.1、Element Plus 2.13.1、Pinia 3.0.4   |
+| 数据库   | MariaDB                           | 本机 11.8.8，应用使用 MySQL Connector/J                    |
+| 缓存     | Valkey                            | 本机 9.0.6，Spring Data Redis + Lettuce，使用 Redis 协议   |
+| 开发工具 | VS Code                           | Java Extension Pack、Spring Boot、Maven、Vue - Official    |
 
-后端上游为 <https://github.com/yangzongzhuan/RuoYi-Vue>，导入提交为 `a51a838b71b446ea27256900efe7ed2faa2a02fd`。前端上游为 <https://github.com/yangzongzhuan/RuoYi-Vue3>，导入提交为 `838965c5a18d2c61b73ec30c6e288057aaa08b63`。许可证分别保留在根目录 `LICENSE` 和 `frontend/LICENSE`。完整来源记录见 `docs/reference/upstream.md`。
+后端上游为 [https://github.com/yangzongzhuan/RuoYi-Vue](https://github.com/yangzongzhuan/RuoYi-Vue)，导入提交为 `a51a838b71b446ea27256900efe7ed2faa2a02fd`。前端上游为 [https://github.com/yangzongzhuan/RuoYi-Vue3](https://github.com/yangzongzhuan/RuoYi-Vue3)，导入提交为 `838965c5a18d2c61b73ec30c6e288057aaa08b63`。许可证分别保留在根目录 `LICENSE` 和 `frontend/LICENSE`。完整来源记录见 `docs/reference/upstream.md`。
 
 ## 目录结构
 

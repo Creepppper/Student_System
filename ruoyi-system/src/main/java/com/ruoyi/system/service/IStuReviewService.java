@@ -2,15 +2,26 @@ package com.ruoyi.system.service;
 
 import java.util.List;
 import com.ruoyi.system.domain.StuReview;
+import com.ruoyi.system.domain.StuReviewAction;
 
 /**
  * 查卷申请Service接口
- * 
+ *
  * @author ruoyi
  * @date 2026-10-31
  */
-public interface IStuReviewService 
+public interface IStuReviewService
 {
+    /**
+     * 班主任处理查卷申请（受理、驳回、完成），按状态流转规则校验
+     *
+     * @param id 查卷申请主键
+     * @param action 处理动作
+     * @param reply 处理意见，驳回和完成时必填
+     * @return 结果
+     */
+    public int handleStuReview(Long id, StuReviewAction action, String reply);
+
     /**
      * 查询查卷申请
      * 

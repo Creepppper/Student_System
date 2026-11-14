@@ -76,6 +76,15 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         where id = #{id}
     </update>
 
+    <!-- 状态流转：只有当前状态仍为 fromStatus 时才更新，并发时后提交者得到 0 行 -->
+    <update id="updateStatusIfCurrent">
+        update stu_review
+        set status = #{toStatus},
+            reply = #{reply},
+            update_time = now()
+        where id = #{id} and status = #{fromStatus}
+    </update>
+
     <delete id="deleteStuReviewById" parameterType="Long">
         delete from stu_review where id = #{id}
     </delete>

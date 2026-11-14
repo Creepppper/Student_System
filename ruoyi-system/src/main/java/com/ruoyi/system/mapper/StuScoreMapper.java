@@ -2,6 +2,7 @@ package com.ruoyi.system.mapper;
 
 import java.util.List;
 import com.ruoyi.system.domain.StuScore;
+import com.ruoyi.system.domain.StuScoreDetail;
 
 /**
  * 学生成绩Mapper接口
@@ -58,4 +59,20 @@ public interface StuScoreMapper
      * @return 结果
      */
     public int deleteStuScoreByIds(Long[] ids);
+
+    /**
+     * 查询某次考试的全部成绩明细（含学生基本信息和考试信息）
+     *
+     * @param examId 考试ID
+     * @return 成绩明细
+     */
+    public List<StuScoreDetail> selectScoreDetailByExam(Long examId);
+
+    /**
+     * 查询某个学生的全部成绩明细，按考试日期升序
+     *
+     * @param studentId 学生ID
+     * @return 成绩明细
+     */
+    public List<StuScoreDetail> selectScoreDetailByStudent(Long studentId);
 }

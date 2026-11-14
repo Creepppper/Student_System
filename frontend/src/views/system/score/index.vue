@@ -65,13 +65,20 @@
           @keyup.enter="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="缺考科目代码" prop="absentSubjects">
-        <el-input
+      <el-form-item label="缺考科目" prop="absentSubjects">
+        <el-select
           v-model="queryParams.absentSubjects"
-          placeholder="请输入缺考科目代码"
+          placeholder="请选择缺考科目"
           clearable
-          @keyup.enter="handleQuery"
-        />
+          @change="handleQuery"
+        >
+          <el-option
+            v-for="subject in subjectFields"
+            :key="subject.key"
+            :label="subject.label"
+            :value="subject.key"
+          />
+        </el-select>
       </el-form-item>
       <el-form-item>
         <el-button type="primary" icon="Search" @click="handleQuery">搜索</el-button>
@@ -132,7 +139,11 @@
       <el-table-column label="物理成绩" align="center" prop="physics" />
       <el-table-column label="化学成绩" align="center" prop="chemistry" />
       <el-table-column label="生物成绩" align="center" prop="biology" />
-      <el-table-column label="缺考科目代码，多个用英文逗号分隔" align="center" prop="absentSubjects" />
+      <el-table-column label="缺考科目" align="center" prop="absentSubjects">
+        <template #default="scope">
+          {{ formatAbsentSubjects(scope.row.absentSubjects) }}
+        </template>
+      </el-table-column>
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template #default="scope">
           <el-button link type="primary" icon="Edit" @click="handleUpdate(scope.row)" v-hasPermi="['system:score:edit']">修改</el-button>
@@ -154,48 +165,58 @@
       <el-form ref="scoreRef" :model="form" :rules="rules" label-width="100px">
         <el-row>
           <el-col :span="24">
-            <el-form-item label="学生ID" prop="studentId">
-              <el-input v-model="form.studentId" placeholder="请输入学生ID" />
+            <el-form-item label="学生" prop="studentId">
+              <el-select v-model="form.studentId" placeholder="请选择学生" filterable clearable style="width: 100%">
+                <el-option
+                  v-for="item in studentOptions"
+                  :key="item.id"
+                  :label="`${item.studentNo} ${item.studentName}（${item.grade}${item.className}）`"
+                  :value="item.id"
+                />
+              </el-select>
             </el-form-item>
           </el-col>
           <el-col :span="24">
-            <el-form-item label="考试ID" prop="examId">
-              <el-input v-model="form.examId" placeholder="请输入考试ID" />
+            <el-form-item label="考试" prop="examId">
+              <el-select v-model="form.examId" placeholder="请选择考试" filterable clearable style="width: 100%">
+                <el-option
+                  v-for="item in examOptions"
+                  :key="item.id"
+                  :label="`${item.examName}（${proxy.parseTime(item.examTime, '{y}-{m}-{d}')}）`"
+                  :value="item.id"
+                />
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col v-for="subject in subjectFields" :key="subject.key" :span="24">
+            <el-form-item :label="`${subject.label}成绩`" :prop="subject.key">
+              <el-input-number
+                v-model="form[subject.key]"
+                :min="0"
+                :max="subject.fullScore"
+                :precision="2"
+                controls-position="right"
+                :placeholder="`未录入留空（满分${subject.fullScore}）`"
+                style="width: 100%"
+              />
             </el-form-item>
           </el-col>
           <el-col :span="24">
-            <el-form-item label="语文成绩" prop="chinese">
-              <el-input v-model="form.chinese" placeholder="请输入语文成绩" />
-            </el-form-item>
-          </el-col>
-          <el-col :span="24">
-            <el-form-item label="数学成绩" prop="math">
-              <el-input v-model="form.math" placeholder="请输入数学成绩" />
-            </el-form-item>
-          </el-col>
-          <el-col :span="24">
-            <el-form-item label="英语成绩" prop="english">
-              <el-input v-model="form.english" placeholder="请输入英语成绩" />
-            </el-form-item>
-          </el-col>
-          <el-col :span="24">
-            <el-form-item label="物理成绩" prop="physics">
-              <el-input v-model="form.physics" placeholder="请输入物理成绩" />
-            </el-form-item>
-          </el-col>
-          <el-col :span="24">
-            <el-form-item label="化学成绩" prop="chemistry">
-              <el-input v-model="form.chemistry" placeholder="请输入化学成绩" />
-            </el-form-item>
-          </el-col>
-          <el-col :span="24">
-            <el-form-item label="生物成绩" prop="biology">
-              <el-input v-model="form.biology" placeholder="请输入生物成绩" />
-            </el-form-item>
-          </el-col>
-          <el-col :span="24">
-            <el-form-item label="缺考科目代码" prop="absentSubjects">
-              <el-input v-model="form.absentSubjects" placeholder="请输入缺考科目代码" />
+            <el-form-item label="缺考科目" prop="absentSubjects">
+              <el-select
+                v-model="form.absentSubjects"
+                multiple
+                collapse-tags
+                placeholder="无缺考可不选；缺考科目成绩记为0"
+                style="width: 100%"
+              >
+                <el-option
+                  v-for="subject in subjectFields"
+                  :key="subject.key"
+                  :label="subject.label"
+                  :value="subject.key"
+                />
+              </el-select>
             </el-form-item>
           </el-col>
         </el-row>
@@ -212,8 +233,24 @@
 
 <script setup name="Score">
 import { listScore, getScore, delScore, addScore, updateScore } from "@/api/system/score"
+import { listStudent } from "@/api/system/student"
+import { listExam } from "@/api/system/exam"
 
 const { proxy } = getCurrentInstance()
+
+/** 六科字段：key 与后端 StuScoreSubject 的代码一致，fullScore 与 database/README.md 一致 */
+const SUBJECT_FIELDS = [
+  { key: "chinese", label: "语文", fullScore: 150 },
+  { key: "math", label: "数学", fullScore: 150 },
+  { key: "english", label: "英语", fullScore: 150 },
+  { key: "physics", label: "物理", fullScore: 100 },
+  { key: "chemistry", label: "化学", fullScore: 100 },
+  { key: "biology", label: "生物", fullScore: 100 }
+]
+const subjectFields = SUBJECT_FIELDS
+
+const studentOptions = ref([])
+const examOptions = ref([])
 
 const scoreList = ref([])
 const open = ref(false)
@@ -242,13 +279,13 @@ const data = reactive({
   },
   rules: {
     studentId: [
-      { required: true, message: "学生ID不能为空", trigger: "blur" }
+      { required: true, message: "请选择学生", trigger: "change" }
     ],
     examId: [
-      { required: true, message: "考试ID不能为空", trigger: "blur" }
+      { required: true, message: "请选择考试", trigger: "change" }
     ],
     absentSubjects: [
-      { required: true, message: "缺考科目代码不能为空", trigger: "blur" }
+      { validator: validateAbsentSubjects, trigger: "change" }
     ]
   }
 })
@@ -283,9 +320,44 @@ function reset() {
     physics: null,
     chemistry: null,
     biology: null,
-    absentSubjects: null
+    absentSubjects: []
   }
   proxy.resetForm("scoreRef")
+}
+
+/** 把缺考科目代码（如 "chinese,physics"）转换为中文显示（如 "语文、物理"） */
+function formatAbsentSubjects(codes) {
+  if (!codes) {
+    return "无"
+  }
+  return codes
+    .split(",")
+    .map(code => SUBJECT_FIELDS.find(item => item.key === code)?.label || code)
+    .join("、")
+}
+
+/** 缺考科目的成绩必须为空或 0（后端会再次校验并把缺考成绩记为 0） */
+function validateAbsentSubjects(rule, value, callback) {
+  const conflict = (value || []).find(key => {
+    const score = form.value[key]
+    return score !== null && score !== undefined && score !== "" && Number(score) !== 0
+  })
+  if (conflict) {
+    const label = SUBJECT_FIELDS.find(item => item.key === conflict).label
+    callback(new Error(`${label}为缺考科目，成绩必须为0或留空`))
+  } else {
+    callback()
+  }
+}
+
+/** 加载学生、考试下拉选项 */
+function loadOptions() {
+  listStudent({ pageNum: 1, pageSize: 1000 }).then(response => {
+    studentOptions.value = response.rows
+  })
+  listExam({ pageNum: 1, pageSize: 1000 }).then(response => {
+    examOptions.value = response.rows
+  })
 }
 
 /** 搜索按钮操作 */
@@ -319,7 +391,10 @@ function handleUpdate(row) {
   reset()
   const _id = row.id || ids.value
   getScore(_id).then(response => {
-    form.value = response.data
+    form.value = {
+      ...response.data,
+      absentSubjects: response.data.absentSubjects ? response.data.absentSubjects.split(",") : []
+    }
     open.value = true
     title.value = "修改学生成绩"
   })
@@ -329,14 +404,19 @@ function handleUpdate(row) {
 function submitForm() {
   proxy.$refs["scoreRef"].validate(valid => {
     if (valid) {
+      // 缺考科目在界面中是数组，提交时转换为后端要求的逗号分隔字符串
+      const payload = {
+        ...form.value,
+        absentSubjects: (form.value.absentSubjects || []).join(",")
+      }
       if (form.value.id != null) {
-        updateScore(form.value).then(() => {
+        updateScore(payload).then(() => {
           proxy.$modal.msgSuccess("修改成功")
           open.value = false
           getList()
         })
       } else {
-        addScore(form.value).then(() => {
+        addScore(payload).then(() => {
           proxy.$modal.msgSuccess("新增成功")
           open.value = false
           getList()
@@ -365,4 +445,5 @@ function handleExport() {
 }
 
 getList()
+loadOptions()
 </script>

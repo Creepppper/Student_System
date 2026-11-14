@@ -67,19 +67,18 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
          </trim>
     </insert>
 
+    <!-- 修改为整行覆盖：表单总是提交完整记录，允许把已录入的分数或缺考代码清空 -->
     <update id="updateStuScore" parameterType="StuScore">
         update stu_score
-        <trim prefix="SET" suffixOverrides=",">
-            <if test="studentId != null">student_id = #{studentId},</if>
-            <if test="examId != null">exam_id = #{examId},</if>
-            <if test="chinese != null">chinese = #{chinese},</if>
-            <if test="math != null">math = #{math},</if>
-            <if test="english != null">english = #{english},</if>
-            <if test="physics != null">physics = #{physics},</if>
-            <if test="chemistry != null">chemistry = #{chemistry},</if>
-            <if test="biology != null">biology = #{biology},</if>
-            <if test="absentSubjects != null and absentSubjects != ''">absent_subjects = #{absentSubjects},</if>
-        </trim>
+        set student_id = #{studentId},
+            exam_id = #{examId},
+            chinese = #{chinese},
+            math = #{math},
+            english = #{english},
+            physics = #{physics},
+            chemistry = #{chemistry},
+            biology = #{biology},
+            absent_subjects = #{absentSubjects}
         where id = #{id}
     </update>
 
@@ -93,4 +92,44 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             #{id}
         </foreach>
     </delete>
+
+    <!-- 成绩明细：联表学生、考试，供排名和成绩单使用（不落库的计算结果） -->
+    <resultMap type="StuScoreDetail" id="StuScoreDetailResult">
+        <result property="scoreId"    column="score_id"    />
+        <result property="examId"    column="exam_id"    />
+        <result property="examName"    column="exam_name"    />
+        <result property="examTime"    column="exam_time"    />
+        <result property="studentId"    column="student_id"    />
+        <result property="studentNo"    column="student_no"    />
+        <result property="studentName"    column="student_name"    />
+        <result property="grade"    column="grade"    />
+        <result property="className"    column="class_name"    />
+        <result property="chinese"    column="chinese"    />
+        <result property="math"    column="math"    />
+        <result property="english"    column="english"    />
+        <result property="physics"    column="physics"    />
+        <result property="chemistry"    column="chemistry"    />
+        <result property="biology"    column="biology"    />
+        <result property="absentSubjects"    column="absent_subjects"    />
+    </resultMap>
+
+    <sql id="selectScoreDetailVo">
+        select sc.id as score_id, sc.exam_id, e.exam_name, e.exam_time,
+               sc.student_id, st.student_no, st.student_name, st.grade, st.class_name,
+               sc.chinese, sc.math, sc.english, sc.physics, sc.chemistry, sc.biology, sc.absent_subjects
+        from stu_score sc
+        join stu_student st on st.id = sc.student_id
+        join stu_exam e on e.id = sc.exam_id
+    </sql>
+
+    <select id="selectScoreDetailByExam" resultMap="StuScoreDetailResult">
+        <include refid="selectScoreDetailVo"/>
+        where sc.exam_id = #{examId}
+    </select>
+
+    <select id="selectScoreDetailByStudent" resultMap="StuScoreDetailResult">
+        <include refid="selectScoreDetailVo"/>
+        where sc.student_id = #{studentId}
+        order by e.exam_time asc, sc.id asc
+    </select>
 </mapper>

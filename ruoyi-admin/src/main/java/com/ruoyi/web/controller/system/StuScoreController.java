@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.ruoyi.common.annotation.Log;
@@ -44,6 +45,30 @@ public class StuScoreController extends BaseController
         startPage();
         List<StuScore> list = stuScoreService.selectStuScoreList(stuScore);
         return getDataTable(list);
+    }
+
+    /**
+     * 查询考试排名（年级排名或班级排名，按总分或单科）
+     */
+    @PreAuthorize("@ss.hasPermi('system:score:stat')")
+    @GetMapping("/ranking")
+    public AjaxResult ranking(@RequestParam Long examId,
+            @RequestParam String scope,
+            @RequestParam(required = false) String subject,
+            @RequestParam(required = false) String grade,
+            @RequestParam(required = false) String className)
+    {
+        return success(stuScoreService.selectScoreRanking(examId, scope, subject, grade, className));
+    }
+
+    /**
+     * 查询学生成绩单（历次考试，含年级名次和班级名次）
+     */
+    @PreAuthorize("@ss.hasPermi('system:score:stat')")
+    @GetMapping("/transcript/{studentId}")
+    public AjaxResult transcript(@PathVariable("studentId") Long studentId)
+    {
+        return success(stuScoreService.selectTranscript(studentId));
     }
 
     /**

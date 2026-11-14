@@ -1,16 +1,25 @@
 package com.ruoyi.system.mapper;
 
 import java.util.List;
+import org.apache.ibatis.annotations.Param;
 import com.ruoyi.system.domain.StuReview;
 
 /**
  * 查卷申请Mapper接口
- * 
+ *
  * @author ruoyi
  * @date 2026-10-31
  */
-public interface StuReviewMapper 
+public interface StuReviewMapper
 {
+    /**
+     * 按条件更新状态：仅当当前状态仍为 fromStatus 时才会更新，用于防止并发覆盖
+     *
+     * @return 影响行数，0 表示状态已被其他操作修改
+     */
+    public int updateStatusIfCurrent(@Param("id") Long id, @Param("fromStatus") String fromStatus,
+            @Param("toStatus") String toStatus, @Param("reply") String reply);
+
     /**
      * 查询查卷申请
      * 

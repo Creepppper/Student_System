@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.StuExamMapper">
+    
+    <resultMap type="StuExam" id="StuExamResult">
+        <result property="id"    column="id"    />
+        <result property="examName"    column="exam_name"    />
+        <result property="examTime"    column="exam_time"    />
+    </resultMap>
+
+    <sql id="selectStuExamVo">
+        select id, exam_name, exam_time from stu_exam
+    </sql>
+
+    <select id="selectStuExamList" parameterType="StuExam" resultMap="StuExamResult">
+        <include refid="selectStuExamVo"/>
+        <where>  
+            <if test="examName != null  and examName != ''"> and exam_name like concat('%', #{examName}, '%')</if>
+            <if test="examTime != null "> and exam_time = #{examTime}</if>
+        </where>
+    </select>
+    
+    <select id="selectStuExamById" parameterType="Long" resultMap="StuExamResult">
+        <include refid="selectStuExamVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertStuExam" parameterType="StuExam" useGeneratedKeys="true" keyProperty="id">
+        insert into stu_exam
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="examName != null and examName != ''">exam_name,</if>
+            <if test="examTime != null">exam_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="examName != null and examName != ''">#{examName},</if>
+            <if test="examTime != null">#{examTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateStuExam" parameterType="StuExam">
+        update stu_exam
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="examName != null and examName != ''">exam_name = #{examName},</if>
+            <if test="examTime != null">exam_time = #{examTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteStuExamById" parameterType="Long">
+        delete from stu_exam where id = #{id}
+    </delete>
+
+    <delete id="deleteStuExamByIds" parameterType="String">
+        delete from stu_exam where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

@@ -124,3 +124,5 @@ doc/若依环境使用手册.docx
 # Keep reproducible dependency locks
 
 !frontend/package-lock.json
+
+assets/

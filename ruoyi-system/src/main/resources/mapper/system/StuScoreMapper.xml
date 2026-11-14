@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.StuScoreMapper">
+    
+    <resultMap type="StuScore" id="StuScoreResult">
+        <result property="id"    column="id"    />
+        <result property="studentId"    column="student_id"    />
+        <result property="examId"    column="exam_id"    />
+        <result property="chinese"    column="chinese"    />
+        <result property="math"    column="math"    />
+        <result property="english"    column="english"    />
+        <result property="physics"    column="physics"    />
+        <result property="chemistry"    column="chemistry"    />
+        <result property="biology"    column="biology"    />
+        <result property="absentSubjects"    column="absent_subjects"    />
+    </resultMap>
+
+    <sql id="selectStuScoreVo">
+        select id, student_id, exam_id, chinese, math, english, physics, chemistry, biology, absent_subjects from stu_score
+    </sql>
+
+    <select id="selectStuScoreList" parameterType="StuScore" resultMap="StuScoreResult">
+        <include refid="selectStuScoreVo"/>
+        <where>  
+            <if test="studentId != null "> and student_id = #{studentId}</if>
+            <if test="examId != null "> and exam_id = #{examId}</if>
+            <if test="chinese != null "> and chinese = #{chinese}</if>
+            <if test="math != null "> and math = #{math}</if>
+            <if test="english != null "> and english = #{english}</if>
+            <if test="physics != null "> and physics = #{physics}</if>
+            <if test="chemistry != null "> and chemistry = #{chemistry}</if>
+            <if test="biology != null "> and biology = #{biology}</if>
+            <if test="absentSubjects != null  and absentSubjects != ''"> and absent_subjects = #{absentSubjects}</if>
+        </where>
+    </select>
+    
+    <select id="selectStuScoreById" parameterType="Long" resultMap="StuScoreResult">
+        <include refid="selectStuScoreVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertStuScore" parameterType="StuScore" useGeneratedKeys="true" keyProperty="id">
+        insert into stu_score
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="studentId != null">student_id,</if>
+            <if test="examId != null">exam_id,</if>
+            <if test="chinese != null">chinese,</if>
+            <if test="math != null">math,</if>
+            <if test="english != null">english,</if>
+            <if test="physics != null">physics,</if>
+            <if test="chemistry != null">chemistry,</if>
+            <if test="biology != null">biology,</if>
+            <if test="absentSubjects != null and absentSubjects != ''">absent_subjects,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="studentId != null">#{studentId},</if>
+            <if test="examId != null">#{examId},</if>
+            <if test="chinese != null">#{chinese},</if>
+            <if test="math != null">#{math},</if>
+            <if test="english != null">#{english},</if>
+            <if test="physics != null">#{physics},</if>
+            <if test="chemistry != null">#{chemistry},</if>
+            <if test="biology != null">#{biology},</if>
+            <if test="absentSubjects != null and absentSubjects != ''">#{absentSubjects},</if>
+         </trim>
+    </insert>
+
+    <update id="updateStuScore" parameterType="StuScore">
+        update stu_score
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="studentId != null">student_id = #{studentId},</if>
+            <if test="examId != null">exam_id = #{examId},</if>
+            <if test="chinese != null">chinese = #{chinese},</if>
+            <if test="math != null">math = #{math},</if>
+            <if test="english != null">english = #{english},</if>
+            <if test="physics != null">physics = #{physics},</if>
+            <if test="chemistry != null">chemistry = #{chemistry},</if>
+            <if test="biology != null">biology = #{biology},</if>
+            <if test="absentSubjects != null and absentSubjects != ''">absent_subjects = #{absentSubjects},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteStuScoreById" parameterType="Long">
+        delete from stu_score where id = #{id}
+    </delete>
+
+    <delete id="deleteStuScoreByIds" parameterType="String">
+        delete from stu_score where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

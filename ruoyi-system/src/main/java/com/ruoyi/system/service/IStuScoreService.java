@@ -2,6 +2,7 @@ package com.ruoyi.system.service;
 
 import java.util.List;
 import com.ruoyi.system.domain.StuScore;
+import com.ruoyi.system.domain.StuClassStat;
 import com.ruoyi.system.domain.StuScoreRank;
 import com.ruoyi.system.domain.StuTranscriptItem;
 
@@ -81,4 +82,19 @@ public interface IStuScoreService
      * @return 成绩单条目，按考试日期升序
      */
     public List<StuTranscriptItem> selectTranscript(Long studentId);
+
+    /**
+     * 查询某次考试的班级平均分（只统计六科齐全的学生；班主任只看负责班级）
+     *
+     * @param examId 考试ID
+     * @return 班级统计，按年级、班级排序
+     */
+    public List<StuClassStat> selectClassStat(Long examId);
+
+    /**
+     * 当前学生账号自己的成绩单（学生端“我的成绩”使用，不接受外部传入的学生ID）
+     *
+     * @return 成绩单条目，按考试日期升序
+     */
+    public List<StuTranscriptItem> selectMyTranscript();
 }

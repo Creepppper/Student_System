@@ -14,6 +14,9 @@
 | [007_review_status_dict_and_handle_menu.sql](007_review_status_dict_and_handle_menu.sql) | 阶段二：新增查卷状态字典 `stu_review_status` 和“查卷申请处理”按钮权限 `system:review:handle`；依赖 005，可重复执行 |
 | [008_score_stat_menu.sql](008_score_stat_menu.sql) | 阶段三：新增“成绩统计”菜单（权限 `system:score:stat`），排名与成绩单为查询计算，不改表；可重复执行 |
 | [009_demo_students_scores.sql](009_demo_students_scores.sql) | 演示数据：56 名虚构学生（高一至高三各 3 个班）和两场演示考试的随机成绩；由 `demo/generate_demo_data.py` 生成，可重复执行，仅用于演示和测试 |
+| [010_roles_student_teacher.sql](010_roles_student_teacher.sql) | 阶段四、五：新增“班主任”“学生”角色，新增学生端菜单（我的成绩、我的查卷、提交查卷），并按角色授权；可重复执行 |
+| [011_class_teacher.sql](011_class_teacher.sql) | 阶段六：新增 `stu_class_teacher` 表（班主任负责班级）和“班主任班级”菜单；可重复执行 |
+| [012_student_import_menu.sql](012_student_import_menu.sql) | 阶段七：学生 Excel 导入的按钮权限 `system:student:import`；可重复执行 |
 | [006_hide_unrelated_menus.sql](006_hide_unrelated_menus.sql) | 隐藏与项目无关的若依菜单；只改 `visible`，不删表和数据 |
 | [init_database.sh](init_database.sh) | 既有的若依基础库初始化脚本，负责创建 `student_system` 并导入 `sql/ry_20260417.sql`、`sql/quartz.sql` |
 | [../sql/ry_20260417.sql](../sql/ry_20260417.sql) | 若依基础表与初始数据，不要修改 |

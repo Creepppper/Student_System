@@ -3,8 +3,13 @@ package com.ruoyi.system.service.impl;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import com.ruoyi.common.exception.ServiceException;
 import com.ruoyi.system.mapper.StuExamMapper;
+import com.ruoyi.system.mapper.StuReviewMapper;
+import com.ruoyi.system.mapper.StuScoreMapper;
 import com.ruoyi.system.domain.StuExam;
+import com.ruoyi.system.domain.StuReview;
+import com.ruoyi.system.domain.StuScore;
 import com.ruoyi.system.service.IStuExamService;
 
 /**
@@ -18,6 +23,12 @@ public class StuExamServiceImpl implements IStuExamService
 {
     @Autowired
     private StuExamMapper stuExamMapper;
+
+    @Autowired
+    private StuScoreMapper stuScoreMapper;
+
+    @Autowired
+    private StuReviewMapper stuReviewMapper;
 
     /**
      * 查询考试信息
@@ -76,6 +87,10 @@ public class StuExamServiceImpl implements IStuExamService
     @Override
     public int deleteStuExamByIds(Long[] ids)
     {
+        for (Long id : ids)
+        {
+            assertDeletable(id);
+        }
         return stuExamMapper.deleteStuExamByIds(ids);
     }
 
@@ -88,6 +103,28 @@ public class StuExamServiceImpl implements IStuExamService
     @Override
     public int deleteStuExamById(Long id)
     {
+        assertDeletable(id);
         return stuExamMapper.deleteStuExamById(id);
+    }
+
+    /**
+     * 已有成绩或查卷记录的考试不能删除，避免留下无效引用
+     */
+    private void assertDeletable(Long examId)
+    {
+        StuExam exam = stuExamMapper.selectStuExamById(examId);
+        String name = exam == null ? String.valueOf(examId) : exam.getExamName();
+        StuScore scoreQuery = new StuScore();
+        scoreQuery.setExamId(examId);
+        if (!stuScoreMapper.selectStuScoreList(scoreQuery).isEmpty())
+        {
+            throw new ServiceException("考试「" + name + "」已有成绩记录，不能删除");
+        }
+        StuReview reviewQuery = new StuReview();
+        reviewQuery.setExamId(examId);
+        if (!stuReviewMapper.selectStuReviewList(reviewQuery).isEmpty())
+        {
+            throw new ServiceException("考试「" + name + "」已有查卷记录，不能删除");
+        }
     }
 }

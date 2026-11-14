@@ -48,6 +48,26 @@ public class StuScoreController extends BaseController
     }
 
     /**
+     * 班级平均分统计（只统计六科齐全的学生）
+     */
+    @PreAuthorize("@ss.hasPermi('system:score:stat')")
+    @GetMapping("/classStat")
+    public AjaxResult classStat(@RequestParam Long examId)
+    {
+        return success(stuScoreService.selectClassStat(examId));
+    }
+
+    /**
+     * 学生端：我的成绩单（只返回当前登录学生本人的成绩）
+     */
+    @PreAuthorize("@ss.hasPermi('student:score:my')")
+    @GetMapping("/my")
+    public AjaxResult myTranscript()
+    {
+        return success(stuScoreService.selectMyTranscript());
+    }
+
+    /**
      * 查询考试排名（年级排名或班级排名，按总分或单科）
      */
     @PreAuthorize("@ss.hasPermi('system:score:stat')")

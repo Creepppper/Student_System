@@ -79,6 +79,15 @@
       </el-col>
       <el-col :span="1.5">
         <el-button
+          type="info"
+          plain
+          icon="Upload"
+          @click="handleImport"
+          v-hasPermi="['system:student:import']"
+        >导入</el-button>
+      </el-col>
+      <el-col :span="1.5">
+        <el-button
           type="warning"
           plain
           icon="Download"
@@ -138,8 +147,16 @@
             </el-form-item>
           </el-col>
           <el-col :span="24">
-            <el-form-item label="关联若依用户ID" prop="userId">
-              <el-input v-model="form.userId" placeholder="请输入关联若依用户ID" />
+            <el-form-item label="绑定账号" prop="userId">
+              <el-select v-model="form.userId" placeholder="请选择学生账号（可留空）" filterable clearable style="width: 100%">
+                <el-option
+                  v-for="item in userOptions"
+                  :key="item.userId"
+                  :label="`${item.userName}（${item.nickName}）`"
+                  :value="item.userId"
+                />
+              </el-select>
+              <div class="form-tip">账号需拥有“学生”角色；一个账号只能绑定一个学生；清空即解除绑定。</div>
             </el-form-item>
           </el-col>
         </el-row>
@@ -151,13 +168,25 @@
         </div>
       </template>
     </el-dialog>
+    <excel-import-dialog ref="importStudentRef" title="学生导入" action="/system/student/importData" template-action="/system/student/importTemplate" template-file-name="student_template" update-support-label="学号已存在时是否更新该学生信息" @success="getList" />
   </div>
 </template>
 
 <script setup name="Student">
 import { listStudent, getStudent, delStudent, addStudent, updateStudent } from "@/api/system/student"
+import { listUser } from "@/api/system/user"
+import ExcelImportDialog from "@/components/ExcelImportDialog"
 
 const { proxy } = getCurrentInstance()
+
+/** 可绑定的系统账号（后端会校验角色和唯一性） */
+const userOptions = ref([])
+
+function loadUserOptions() {
+  listUser({ pageNum: 1, pageSize: 1000 }).then(response => {
+    userOptions.value = response.rows
+  })
+}
 
 const studentList = ref([])
 const open = ref(false)
@@ -297,6 +326,11 @@ function handleDelete(row) {
 }
 
 /** 导出按钮操作 */
+/** 导入按钮操作 */
+function handleImport() {
+  proxy.$refs["importStudentRef"].open()
+}
+
 function handleExport() {
   proxy.download('system/student/export', {
     ...queryParams.value
@@ -304,4 +338,13 @@ function handleExport() {
 }
 
 getList()
+loadUserOptions()
 </script>
+
+<style scoped>
+.form-tip {
+  color: #909399;
+  font-size: 12px;
+  line-height: 1.5;
+}
+</style>

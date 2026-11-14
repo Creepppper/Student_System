@@ -8,6 +8,9 @@ import com.ruoyi.common.utils.DateUtils;
 import com.ruoyi.system.domain.StuReview;
 import com.ruoyi.system.domain.StuReviewAction;
 import com.ruoyi.system.domain.StuReviewStatus;
+import com.ruoyi.system.domain.StuScope;
+import com.ruoyi.system.domain.StuStudent;
+import com.ruoyi.system.service.IStuScopeService;
 import com.ruoyi.system.domain.StuScore;
 import com.ruoyi.system.domain.StuScoreSubject;
 import com.ruoyi.system.mapper.StuExamMapper;
@@ -45,6 +48,9 @@ public class StuReviewServiceImpl implements IStuReviewService
     @Autowired
     private StuScoreMapper stuScoreMapper;
 
+    @Autowired
+    private IStuScopeService stuScopeService;
+
     /**
      * 查询查卷申请
      *
@@ -54,7 +60,8 @@ public class StuReviewServiceImpl implements IStuReviewService
     @Override
     public StuReview selectStuReviewById(Long id)
     {
-        return stuReviewMapper.selectStuReviewById(id);
+        StuReview review = stuReviewMapper.selectStuReviewById(id);
+        return review != null && isReviewAccessible(review) ? review : null;
     }
 
     /**
@@ -66,6 +73,7 @@ public class StuReviewServiceImpl implements IStuReviewService
     @Override
     public List<StuReview> selectStuReviewList(StuReview stuReview)
     {
+        stuScopeService.currentScope().applyTo(stuReview.getParams());
         return stuReviewMapper.selectStuReviewList(stuReview);
     }
 
@@ -104,6 +112,7 @@ public class StuReviewServiceImpl implements IStuReviewService
             throw new ServiceException("当前状态为「" + StuReviewStatus.fromCode(existing.getStatus()).getLabel()
                     + "」，只有待处理的申请才能修改");
         }
+        assertReviewWritable(existing);
         validateReference(stuReview);
         stuReview.setStatus(existing.getStatus());
         stuReview.setReply(existing.getReply());
@@ -138,6 +147,7 @@ public class StuReviewServiceImpl implements IStuReviewService
         {
             throw new ServiceException("所选考试不存在");
         }
+        StuStudent student = stuStudentMapper.selectStuStudentById(review.getStudentId());
         String rawSubject = review.getSubject() == null ? null : review.getSubject().trim();
         StuScoreSubject subject = StuScoreSubject.fromCode(rawSubject);
         if (subject == null)
@@ -152,6 +162,10 @@ public class StuReviewServiceImpl implements IStuReviewService
         if (stuScoreMapper.selectStuScoreList(query).isEmpty())
         {
             throw new ServiceException("该学生在此考试中没有成绩记录，不能申请查卷");
+        }
+        if (!stuScopeService.currentScope().allowsStudent(student))
+        {
+            throw new ServiceException("没有权限为该学生提交查卷");
         }
     }
 
@@ -180,6 +194,7 @@ public class StuReviewServiceImpl implements IStuReviewService
         {
             throw new ServiceException("查卷申请不存在");
         }
+        assertReviewWritable(review);
         StuReviewStatus current = StuReviewStatus.fromCode(review.getStatus());
         if (!action.canApplyTo(current))
         {
@@ -220,6 +235,10 @@ public class StuReviewServiceImpl implements IStuReviewService
     @Override
     public int deleteStuReviewByIds(Long[] ids)
     {
+        for (Long id : ids)
+        {
+            assertReviewWritable(stuReviewMapper.selectStuReviewById(id));
+        }
         return stuReviewMapper.deleteStuReviewByIds(ids);
     }
 
@@ -232,6 +251,79 @@ public class StuReviewServiceImpl implements IStuReviewService
     @Override
     public int deleteStuReviewById(Long id)
     {
+        assertReviewWritable(stuReviewMapper.selectStuReviewById(id));
         return stuReviewMapper.deleteStuReviewById(id);
+    }
+
+    /**
+     * 学生端：查看本人的查卷申请
+     */
+    @Override
+    public List<StuReview> selectMyReviews()
+    {
+        StuScope scope = requireStudentScope();
+        StuReview query = new StuReview();
+        scope.applyTo(query.getParams());
+        return stuReviewMapper.selectStuReviewList(query);
+    }
+
+    /**
+     * 学生端：提交查卷申请。学生ID由登录账号决定，不接受外部传入。
+     */
+    @Override
+    public int applyReview(StuReview stuReview)
+    {
+        StuScope scope = requireStudentScope();
+        stuReview.setStudentId(scope.getStudentId());
+        stuReview.setReply(null);
+        validateReference(stuReview);
+
+        StuReview query = new StuReview();
+        query.setStudentId(stuReview.getStudentId());
+        query.setExamId(stuReview.getExamId());
+        query.setSubject(stuReview.getSubject());
+        for (StuReview exists : stuReviewMapper.selectStuReviewList(query))
+        {
+            if (StuReviewStatus.PENDING.getCode().equals(exists.getStatus())
+                    || StuReviewStatus.ACCEPTED.getCode().equals(exists.getStatus()))
+            {
+                throw new ServiceException("该科目已有待处理或已受理的查卷申请，请勿重复提交");
+            }
+        }
+        return insertStuReview(stuReview);
+    }
+
+    private StuScope requireStudentScope()
+    {
+        StuScope scope = stuScopeService.currentScope();
+        if (scope.getMode() != StuScope.Mode.STUDENT)
+        {
+            throw new ServiceException("当前账号不是学生账号");
+        }
+        if (scope.getStudentId() == null)
+        {
+            throw new ServiceException("当前账号未绑定学生，请联系管理员");
+        }
+        return scope;
+    }
+
+    private boolean isReviewAccessible(StuReview review)
+    {
+        return stuScopeService.currentScope().allowsStudent(stuStudentMapper.selectStuStudentById(review.getStudentId()));
+    }
+
+    /**
+     * 写操作前检查：记录必须存在且所属学生在当前范围内
+     */
+    private void assertReviewWritable(StuReview review)
+    {
+        if (review == null)
+        {
+            throw new ServiceException("查卷申请不存在");
+        }
+        if (!isReviewAccessible(review))
+        {
+            throw new ServiceException("没有权限操作该查卷申请");
+        }
     }
 }

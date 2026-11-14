@@ -61,6 +61,44 @@
         </el-table>
       </el-tab-pane>
 
+      <el-tab-pane label="班级统计" name="classStat">
+        <el-form :model="statQuery" :inline="true" label-width="auto">
+          <el-form-item label="考试" prop="examId">
+            <el-select v-model="statQuery.examId" placeholder="请选择考试" filterable style="width: 260px" @change="loadClassStat">
+              <el-option
+                v-for="item in examOptions"
+                :key="item.id"
+                :label="`${item.examName}（${proxy.parseTime(item.examTime, '{y}-{m}-{d}')}）`"
+                :value="item.id"
+              />
+            </el-select>
+          </el-form-item>
+          <el-form-item label="年级" prop="grade">
+            <el-select v-model="statQuery.grade" placeholder="全部年级" clearable style="width: 140px">
+              <el-option v-for="grade in classGradeOptions" :key="grade" :label="grade" :value="grade" />
+            </el-select>
+          </el-form-item>
+        </el-form>
+
+        <div ref="classChartRef" class="class-chart" v-show="classStatRows.length > 0"></div>
+        <el-empty v-if="!classStatLoading && classStatRows.length === 0" description="请选择考试查看班级平均分" />
+
+        <el-table v-loading="classStatLoading" :data="classStatRows" class="mt8">
+          <el-table-column label="班级" align="center">
+            <template #default="scope">{{ scope.row.grade }}{{ scope.row.className }}</template>
+          </el-table-column>
+          <el-table-column label="统计人数" align="center" prop="count" />
+          <el-table-column label="平均总分" align="center" prop="avgTotal" />
+          <el-table-column label="语文" align="center" prop="avgChinese" />
+          <el-table-column label="数学" align="center" prop="avgMath" />
+          <el-table-column label="英语" align="center" prop="avgEnglish" />
+          <el-table-column label="物理" align="center" prop="avgPhysics" />
+          <el-table-column label="化学" align="center" prop="avgChemistry" />
+          <el-table-column label="生物" align="center" prop="avgBiology" />
+        </el-table>
+        <p class="stat-note">说明：只统计六科均已录入的学生，缺考科目按 0 分计入平均。</p>
+      </el-tab-pane>
+
       <el-tab-pane label="学生成绩单" name="transcript">
         <el-form :model="transcriptQuery" :inline="true" label-width="auto">
           <el-form-item label="学生" prop="studentId">
@@ -123,7 +161,8 @@
 <script setup name="ScoreStat">
 import { listStudent } from "@/api/system/student"
 import { listExam } from "@/api/system/exam"
-import { getScoreRanking, getScoreTranscript } from "@/api/system/score"
+import { getScoreRanking, getScoreTranscript, getClassStat } from "@/api/system/score"
+import * as echarts from "echarts"
 
 const { proxy } = getCurrentInstance()
 
@@ -138,6 +177,15 @@ const SUBJECT_FIELDS = [
 ]
 
 const activeTab = ref("ranking")
+
+/** 班级统计：六科各用一个固定的分类色（dataviz 参考调色板，槽位顺序不可打乱） */
+const SUBJECT_COLORS_LIGHT = ["#2a78d6", "#eb6834", "#1baf7a", "#eda100", "#e87ba4", "#008300"]
+const SUBJECT_COLORS_DARK = ["#3987e5", "#d95926", "#199e70", "#c98500", "#d55181", "#0ca30c"]
+const statQuery = reactive({ examId: undefined, grade: undefined })
+const classStatRows = ref([])
+const classStatLoading = ref(false)
+const classChartRef = ref(null)
+let classChart = null
 const studentOptions = ref([])
 const examOptions = ref([])
 
@@ -194,6 +242,64 @@ function loadRanking() {
   })
 }
 
+/** 班级统计中的年级选项（取自已加载的班级数据） */
+const classGradeOptions = computed(() => [...new Set(classStatRows.value.map(item => item.grade))])
+
+/** 加载班级平均分并绘制分组柱状图 */
+function loadClassStat() {
+  if (!statQuery.examId) {
+    classStatRows.value = []
+    return
+  }
+  classStatLoading.value = true
+  getClassStat(statQuery.examId).then(response => {
+    classStatRows.value = response.data
+    nextTick(drawClassChart)
+  }).finally(() => {
+    classStatLoading.value = false
+  })
+}
+
+/** 绘制：横轴为班级，每个班级六根柱子（分组柱状图），顶部图例说明颜色 */
+function drawClassChart() {
+  if (!classChartRef.value) {
+    return
+  }
+  if (!classChart) {
+    classChart = echarts.init(classChartRef.value)
+    window.addEventListener("resize", () => classChart && classChart.resize())
+  }
+  const rows = statQuery.grade
+    ? classStatRows.value.filter(item => item.grade === statQuery.grade)
+    : classStatRows.value
+  const dark = document.documentElement.classList.contains("dark")
+  const colors = dark ? SUBJECT_COLORS_DARK : SUBJECT_COLORS_LIGHT
+  const subjects = [
+    { name: "语文", key: "avgChinese" },
+    { name: "数学", key: "avgMath" },
+    { name: "英语", key: "avgEnglish" },
+    { name: "物理", key: "avgPhysics" },
+    { name: "化学", key: "avgChemistry" },
+    { name: "生物", key: "avgBiology" }
+  ]
+  classChart.setOption({
+    color: colors,
+    tooltip: { trigger: "axis", axisPointer: { type: "shadow" } },
+    legend: { top: 0, data: subjects.map(item => item.name) },
+    grid: { left: 48, right: 16, top: 48, bottom: 40 },
+    xAxis: { type: "category", data: rows.map(item => `${item.grade}${item.className}`), axisTick: { show: false } },
+    yAxis: { type: "value", name: "平均分", splitLine: { lineStyle: { opacity: 0.4 } } },
+    series: subjects.map(item => ({
+      name: item.name,
+      type: "bar",
+      barMaxWidth: 18,
+      barGap: "20%",
+      itemStyle: { borderRadius: [4, 4, 0, 0] },
+      data: rows.map(row => Number(row[item.key]))
+    }))
+  }, true)
+}
+
 /** 查询学生成绩单 */
 function loadTranscript() {
   if (!transcriptQuery.studentId) {
@@ -208,6 +314,15 @@ function loadTranscript() {
   })
 }
 
+watch(() => statQuery.grade, () => nextTick(drawClassChart))
+
+onBeforeUnmount(() => {
+  if (classChart) {
+    classChart.dispose()
+    classChart = null
+  }
+})
+
 /** 加载学生、考试下拉选项 */
 function loadOptions() {
   listStudent({ pageNum: 1, pageSize: 1000 }).then(response => {
@@ -220,3 +335,15 @@ function loadOptions() {
 
 loadOptions()
 </script>
+
+<style scoped>
+.class-chart {
+  width: 100%;
+  height: 380px;
+}
+.stat-note {
+  margin-top: 12px;
+  color: #909399;
+  font-size: 13px;
+}
+</style>

@@ -3,6 +3,7 @@ package com.ruoyi.web.controller.system;
 import java.util.List;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -100,5 +101,29 @@ public class StuStudentController extends BaseController
     public AjaxResult remove(@PathVariable Long[] ids)
     {
         return toAjax(stuStudentService.deleteStuStudentByIds(ids));
+    }
+
+    /**
+     * 批量导入学生（Excel）
+     */
+    @PreAuthorize("@ss.hasPermi('system:student:import')")
+    @Log(title = "学生信息", businessType = BusinessType.IMPORT)
+    @PostMapping("/importData")
+    public AjaxResult importData(MultipartFile file, boolean updateSupport) throws Exception
+    {
+        ExcelUtil<StuStudent> util = new ExcelUtil<StuStudent>(StuStudent.class);
+        List<StuStudent> list = util.importExcel(file.getInputStream());
+        return success(stuStudentService.importStudents(list, updateSupport));
+    }
+
+    /**
+     * 下载学生导入模板
+     */
+    @PreAuthorize("@ss.hasPermi('system:student:import')")
+    @PostMapping("/importTemplate")
+    public void importTemplate(HttpServletResponse response)
+    {
+        ExcelUtil<StuStudent> util = new ExcelUtil<StuStudent>(StuStudent.class);
+        util.importTemplateExcel(response, "学生数据");
     }
 }

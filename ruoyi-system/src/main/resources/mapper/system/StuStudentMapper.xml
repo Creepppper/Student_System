@@ -25,9 +25,18 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="grade != null  and grade != ''"> and grade = #{grade}</if>
             <if test="className != null  and className != ''"> and class_name like concat('%', #{className}, '%')</if>
             <if test="userId != null "> and user_id = #{userId}</if>
+            <!-- 数据范围：班主任只看负责班级，学生只看绑定到本账号的记录 -->
+            <if test="params.scopeMode == 'TEACHER'"> and exists (select 1 from stu_class_teacher t where t.user_id = #{params.scopeUserId} and t.grade = stu_student.grade and t.class_name = stu_student.class_name)</if>
+            <if test="params.scopeMode == 'STUDENT'"> and stu_student.user_id = #{params.scopeUserId}</if>
+            <if test="params.scopeMode == 'NONE'"> and 1 = 0</if>
         </where>
     </select>
     
+    <select id="selectStuStudentByUserId" parameterType="Long" resultMap="StuStudentResult">
+        <include refid="selectStuStudentVo"/>
+        where user_id = #{userId}
+    </select>
+
     <select id="selectStuStudentById" parameterType="Long" resultMap="StuStudentResult">
         <include refid="selectStuStudentVo"/>
         where id = #{id}
@@ -58,7 +67,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="studentName != null and studentName != ''">student_name = #{studentName},</if>
             <if test="grade != null and grade != ''">grade = #{grade},</if>
             <if test="className != null and className != ''">class_name = #{className},</if>
-            <if test="userId != null">user_id = #{userId},</if>
+            <!-- 始终写入：表单提交的 userId 为空时表示解除绑定 -->
+            user_id = #{userId},
         </trim>
         where id = #{id}
     </update>

@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.lenient;
 import static org.mockito.Mockito.when;
 import java.math.BigDecimal;
 import java.util.List;
@@ -38,6 +39,15 @@ class StuScoreRankingTest
 
     @Mock
     private StuExamMapper stuExamMapper;
+
+    @Mock
+    private com.ruoyi.system.service.IStuScopeService stuScopeService;
+
+    @org.junit.jupiter.api.BeforeEach
+    void allowAllScope()
+    {
+        lenient().when(stuScopeService.currentScope()).thenReturn(com.ruoyi.system.domain.StuScope.all(1L));
+    }
 
     @InjectMocks
     private StuScoreServiceImpl service;
@@ -277,5 +287,44 @@ class StuScoreRankingTest
     {
         when(stuScoreMapper.selectScoreDetailByStudent(anyLong())).thenReturn(List.of());
         assertTrue(service.selectTranscript(9L).isEmpty());
+    }
+
+    // ---------- 班级平均分 ----------
+
+    @Test
+    void classStatAveragesOnlyCompleteRecordsPerClass()
+    {
+        when(stuScoreMapper.selectScoreDetailByExam(1L)).thenReturn(List.of(
+                full(1, "A", "高一", "1班", 100),                    // 总分 600
+                full(2, "B", "高一", "1班", 80),                     // 总分 480
+                row(3, "C", "高一", "1班", 150, null, 150, 100, 100, 100), // 不完整，排除
+                full(4, "D", "高一", "2班", 90)));                   // 总分 540
+
+        List<com.ruoyi.system.domain.StuClassStat> stats = service.selectClassStat(1L);
+        assertEquals(2, stats.size());
+
+        com.ruoyi.system.domain.StuClassStat first = stats.get(0);
+        assertEquals("1班", first.getClassName());
+        assertEquals(2, first.getCount());
+        assertEquals(0, new BigDecimal("540").compareTo(first.getAvgTotal()));
+        assertEquals(0, new BigDecimal("90.00").compareTo(first.getAvgChinese()));
+
+        assertEquals("2班", stats.get(1).getClassName());
+        assertEquals(1, stats.get(1).getCount());
+    }
+
+    @Test
+    void classStatForTeacherOnlyCountsOwnClasses()
+    {
+        org.mockito.Mockito.when(stuScopeService.currentScope()).thenReturn(
+                com.ruoyi.system.domain.StuScope.teacher(7L,
+                        java.util.Set.of(com.ruoyi.system.domain.StuScope.classKey("高一", "2班"))));
+        when(stuScoreMapper.selectScoreDetailByExam(1L)).thenReturn(List.of(
+                full(1, "A", "高一", "1班", 100),
+                full(2, "B", "高一", "2班", 80)));
+
+        List<com.ruoyi.system.domain.StuClassStat> stats = service.selectClassStat(1L);
+        assertEquals(1, stats.size());
+        assertEquals("2班", stats.get(0).getClassName());
     }
 }

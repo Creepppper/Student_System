@@ -59,3 +59,20 @@ export function getScoreTranscript(studentId) {
     method: 'get'
   })
 }
+
+// 学生端：我的成绩单
+export function getMyScore() {
+  return request({
+    url: '/system/score/my',
+    method: 'get'
+  })
+}
+
+// 班级平均分统计
+export function getClassStat(examId) {
+  return request({
+    url: '/system/score/classStat',
+    method: 'get',
+    params: { examId }
+  })
+}

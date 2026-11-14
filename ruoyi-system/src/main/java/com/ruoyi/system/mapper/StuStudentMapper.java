@@ -58,4 +58,12 @@ public interface StuStudentMapper
      * @return 结果
      */
     public int deleteStuStudentByIds(Long[] ids);
+
+    /**
+     * 按绑定的若依用户ID查询学生（一个账号最多绑定一个学生）
+     *
+     * @param userId 若依用户ID
+     * @return 学生，未绑定时为 null
+     */
+    public StuStudent selectStuStudentByUserId(Long userId);
 }

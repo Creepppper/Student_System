@@ -1,6 +1,8 @@
 package com.ruoyi.system.service.impl;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.util.Comparator;
 import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.LinkedHashMap;
@@ -15,6 +17,7 @@ import org.springframework.stereotype.Service;
 import com.ruoyi.common.exception.ServiceException;
 import com.ruoyi.system.domain.StuExam;
 import com.ruoyi.system.domain.StuScore;
+import com.ruoyi.system.domain.StuClassStat;
 import com.ruoyi.system.domain.StuScoreDetail;
 import com.ruoyi.system.domain.StuScoreRank;
 import com.ruoyi.system.domain.StuScoreSubject;
@@ -23,7 +26,9 @@ import com.ruoyi.system.domain.StuStudent;
 import com.ruoyi.system.mapper.StuExamMapper;
 import com.ruoyi.system.mapper.StuScoreMapper;
 import com.ruoyi.system.mapper.StuStudentMapper;
+import com.ruoyi.system.domain.StuScope;
 import com.ruoyi.system.service.IStuScoreService;
+import com.ruoyi.system.service.IStuScopeService;
 
 /**
  * 学生成绩Service业务层处理
@@ -48,6 +53,9 @@ public class StuScoreServiceImpl implements IStuScoreService
     @Autowired
     private StuExamMapper stuExamMapper;
 
+    @Autowired
+    private IStuScopeService stuScopeService;
+
     /**
      * 查询学生成绩
      *
@@ -57,7 +65,8 @@ public class StuScoreServiceImpl implements IStuScoreService
     @Override
     public StuScore selectStuScoreById(Long id)
     {
-        return stuScoreMapper.selectStuScoreById(id);
+        StuScore score = stuScoreMapper.selectStuScoreById(id);
+        return isScoreAccessible(score, stuScopeService.currentScope()) ? score : null;
     }
 
     /**
@@ -69,6 +78,7 @@ public class StuScoreServiceImpl implements IStuScoreService
     @Override
     public List<StuScore> selectStuScoreList(StuScore stuScore)
     {
+        stuScopeService.currentScope().applyTo(stuScore.getParams());
         return stuScoreMapper.selectStuScoreList(stuScore);
     }
 
@@ -98,6 +108,8 @@ public class StuScoreServiceImpl implements IStuScoreService
         {
             throw new ServiceException("成绩ID不能为空");
         }
+        // 不仅校验新的学生，也校验原记录所属学生，防止越权改写其他班级的成绩
+        assertScoreWritable(stuScoreMapper.selectStuScoreById(stuScore.getId()));
         validateStuScore(stuScore, stuScore.getId());
         return stuScoreMapper.updateStuScore(stuScore);
     }
@@ -111,6 +123,10 @@ public class StuScoreServiceImpl implements IStuScoreService
     @Override
     public int deleteStuScoreByIds(Long[] ids)
     {
+        for (Long id : ids)
+        {
+            assertScoreWritable(stuScoreMapper.selectStuScoreById(id));
+        }
         return stuScoreMapper.deleteStuScoreByIds(ids);
     }
 
@@ -123,6 +139,7 @@ public class StuScoreServiceImpl implements IStuScoreService
     @Override
     public int deleteStuScoreById(Long id)
     {
+        assertScoreWritable(stuScoreMapper.selectStuScoreById(id));
         return stuScoreMapper.deleteStuScoreById(id);
     }
 
@@ -136,6 +153,11 @@ public class StuScoreServiceImpl implements IStuScoreService
         if (examId == null)
         {
             throw new ServiceException("请选择考试");
+        }
+        StuScope dataScope = stuScopeService.currentScope();
+        if (dataScope.getMode() == StuScope.Mode.STUDENT || dataScope.getMode() == StuScope.Mode.NONE)
+        {
+            throw new ServiceException("没有权限查看排名");
         }
         if (grade == null || grade.isBlank())
         {
@@ -166,7 +188,7 @@ public class StuScoreServiceImpl implements IStuScoreService
         List<StuScoreDetail> rows = new ArrayList<>();
         for (StuScoreDetail detail : loadExamDetails(examId))
         {
-            if (!selectedGrade.equals(detail.getGrade()))
+            if (!selectedGrade.equals(detail.getGrade()) || !dataScope.allowsClass(detail.getGrade(), detail.getClassName()))
             {
                 continue;
             }
@@ -198,6 +220,10 @@ public class StuScoreServiceImpl implements IStuScoreService
         if (studentId == null)
         {
             throw new ServiceException("请选择学生");
+        }
+        if (!stuScopeService.currentScope().allowsStudent(stuStudentMapper.selectStuStudentById(studentId)))
+        {
+            throw new ServiceException("没有权限查看该学生的成绩单");
         }
         List<StuScoreDetail> mine = stuScoreMapper.selectScoreDetailByStudent(studentId);
         Map<Long, Map<Long, Integer>> gradeRanks = new LinkedHashMap<>();
@@ -285,6 +311,10 @@ public class StuScoreServiceImpl implements IStuScoreService
         if (student == null)
         {
             throw new ServiceException("所选学生不存在");
+        }
+        if (!stuScopeService.currentScope().allowsStudent(student))
+        {
+            throw new ServiceException("没有权限录入该学生的成绩");
         }
         StuExam exam = stuExamMapper.selectStuExamById(stuScore.getExamId());
         if (exam == null)
@@ -386,6 +416,107 @@ public class StuScoreServiceImpl implements IStuScoreService
             case CHEMISTRY: stuScore.setChemistry(value); break;
             case BIOLOGY: stuScore.setBiology(value); break;
             default: throw new IllegalArgumentException("未知科目：" + subject);
+        }
+    }
+
+    /**
+     * 班级平均分：每个班级分别统计，平均值保留两位小数，缺考计0分
+     */
+    @Override
+    public List<StuClassStat> selectClassStat(Long examId)
+    {
+        if (examId == null)
+        {
+            throw new ServiceException("请选择考试");
+        }
+        StuScope dataScope = stuScopeService.currentScope();
+        if (dataScope.getMode() == StuScope.Mode.STUDENT || dataScope.getMode() == StuScope.Mode.NONE)
+        {
+            throw new ServiceException("没有权限查看班级统计");
+        }
+        Map<String, List<StuScoreDetail>> groups = new LinkedHashMap<>();
+        for (StuScoreDetail detail : loadExamDetails(examId))
+        {
+            if (!detail.isComplete() || !dataScope.allowsClass(detail.getGrade(), detail.getClassName()))
+            {
+                continue;
+            }
+            groups.computeIfAbsent(StuScoreRanker.classKey(detail), k -> new ArrayList<>()).add(detail);
+        }
+        List<StuClassStat> result = new ArrayList<>();
+        for (List<StuScoreDetail> rows : groups.values())
+        {
+            StuClassStat stat = new StuClassStat();
+            StuScoreDetail first = rows.get(0);
+            stat.setGrade(first.getGrade());
+            stat.setClassName(first.getClassName());
+            stat.setCount(rows.size());
+            stat.setAvgTotal(average(rows, null));
+            stat.setAvgChinese(average(rows, StuScoreSubject.CHINESE));
+            stat.setAvgMath(average(rows, StuScoreSubject.MATH));
+            stat.setAvgEnglish(average(rows, StuScoreSubject.ENGLISH));
+            stat.setAvgPhysics(average(rows, StuScoreSubject.PHYSICS));
+            stat.setAvgChemistry(average(rows, StuScoreSubject.CHEMISTRY));
+            stat.setAvgBiology(average(rows, StuScoreSubject.BIOLOGY));
+            result.add(stat);
+        }
+        result.sort(Comparator.comparing(StuClassStat::getGrade).thenComparing(StuClassStat::getClassName));
+        return result;
+    }
+
+    /** 平均值（subject 为 null 时是总分），保留两位小数 */
+    private BigDecimal average(List<StuScoreDetail> rows, StuScoreSubject subject)
+    {
+        BigDecimal sum = BigDecimal.ZERO;
+        for (StuScoreDetail row : rows)
+        {
+            sum = sum.add(subject == null ? row.getTotal() : StuScoreRanker.score(row, subject));
+        }
+        return sum.divide(BigDecimal.valueOf(rows.size()), 2, RoundingMode.HALF_UP);
+    }
+
+    /**
+     * 当前学生账号自己的成绩单
+     */
+    @Override
+    public List<StuTranscriptItem> selectMyTranscript()
+    {
+        StuScope scope = stuScopeService.currentScope();
+        if (scope.getMode() != StuScope.Mode.STUDENT)
+        {
+            throw new ServiceException("当前账号不是学生账号");
+        }
+        if (scope.getStudentId() == null)
+        {
+            throw new ServiceException("当前账号未绑定学生，请联系管理员");
+        }
+        return selectTranscript(scope.getStudentId());
+    }
+
+    /**
+     * 成绩记录是否在当前范围内（以所属学生为准）
+     */
+    private boolean isScoreAccessible(StuScore score, StuScope scope)
+    {
+        if (score == null)
+        {
+            return false;
+        }
+        return scope.allowsStudent(stuStudentMapper.selectStuStudentById(score.getStudentId()));
+    }
+
+    /**
+     * 写操作前检查：记录必须存在且所属学生在当前范围内
+     */
+    private void assertScoreWritable(StuScore score)
+    {
+        if (score == null)
+        {
+            throw new ServiceException("成绩记录不存在");
+        }
+        if (!isScoreAccessible(score, stuScopeService.currentScope()))
+        {
+            throw new ServiceException("没有权限操作该成绩");
         }
     }
 }

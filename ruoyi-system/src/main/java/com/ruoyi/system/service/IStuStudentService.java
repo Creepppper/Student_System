@@ -58,4 +58,21 @@ public interface IStuStudentService
      * @return 结果
      */
     public int deleteStuStudentById(Long id);
+
+    /**
+     * 批量导入学生（仅管理员）。学号已存在时：updateSupport 为 true 则更新，否则跳过。
+     * 导入不设置账号绑定，绑定账号请在学生信息中单独设置。
+     *
+     * @param students 从 Excel 读取的学生列表
+     * @param updateSupport 学号已存在时是否更新
+     * @return 导入结果说明（成功、更新、跳过、失败的数量及原因）
+     */
+    public String importStudents(List<StuStudent> students, boolean updateSupport);
+
+    /**
+     * 检查系统账号是否已绑定学生；已绑定时抛出异常，用于删除系统用户前的引用保护
+     *
+     * @param userIds 系统用户ID
+     */
+    public void checkUserNotBound(Long[] userIds);
 }

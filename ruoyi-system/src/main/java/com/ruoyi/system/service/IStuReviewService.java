@@ -69,4 +69,19 @@ public interface IStuReviewService
      * @return 结果
      */
     public int deleteStuReviewById(Long id);
+
+    /**
+     * 学生端：查看本人的查卷申请
+     *
+     * @return 查卷申请列表
+     */
+    public List<StuReview> selectMyReviews();
+
+    /**
+     * 学生端：提交查卷申请（学生ID由登录账号决定）
+     *
+     * @param stuReview 查卷申请（需包含考试ID、科目、理由）
+     * @return 结果
+     */
+    public int applyReview(StuReview stuReview);
 }

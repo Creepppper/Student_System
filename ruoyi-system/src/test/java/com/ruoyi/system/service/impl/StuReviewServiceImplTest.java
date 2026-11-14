@@ -46,12 +46,17 @@ class StuReviewServiceImplTest
     @Mock
     private StuScoreMapper stuScoreMapper;
 
+    @Mock
+    private com.ruoyi.system.service.IStuScopeService stuScopeService;
+
     @InjectMocks
     private StuReviewServiceImpl service;
 
     @BeforeEach
     void setUp()
     {
+        // 默认以管理员身份执行，数据范围不做限制
+        lenient().when(stuScopeService.currentScope()).thenReturn(com.ruoyi.system.domain.StuScope.all(1L));
         // 默认：学生 1、考试 1 存在，且学生 1 在考试 1 中有成绩
         lenient().when(stuStudentMapper.selectStuStudentById(1L)).thenReturn(new StuStudent());
         lenient().when(stuExamMapper.selectStuExamById(1L)).thenReturn(new StuExam());

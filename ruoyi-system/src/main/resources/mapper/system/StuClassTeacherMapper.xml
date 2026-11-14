@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.StuClassTeacherMapper">
+
+    <resultMap type="StuClassTeacher" id="StuClassTeacherResult">
+        <result property="id"    column="id"    />
+        <result property="userId"    column="user_id"    />
+        <result property="userName"    column="user_name"    />
+        <result property="nickName"    column="nick_name"    />
+        <result property="grade"    column="grade"    />
+        <result property="className"    column="class_name"    />
+        <result property="createTime"    column="create_time"    />
+    </resultMap>
+
+    <sql id="selectStuClassTeacherVo">
+        select t.id, t.user_id, u.user_name, u.nick_name, t.grade, t.class_name, t.create_time
+        from stu_class_teacher t
+        left join sys_user u on u.user_id = t.user_id
+    </sql>
+
+    <select id="selectStuClassTeacherList" parameterType="StuClassTeacher" resultMap="StuClassTeacherResult">
+        <include refid="selectStuClassTeacherVo"/>
+        <where>
+            <if test="userId != null"> and t.user_id = #{userId}</if>
+            <if test="grade != null and grade != ''"> and t.grade = #{grade}</if>
+            <if test="className != null and className != ''"> and t.class_name = #{className}</if>
+        </where>
+        order by t.grade, t.class_name, t.id
+    </select>
+
+    <select id="selectStuClassTeacherByUserId" parameterType="Long" resultMap="StuClassTeacherResult">
+        <include refid="selectStuClassTeacherVo"/>
+        where t.user_id = #{userId}
+    </select>
+
+    <select id="selectStuClassTeacherByUserGradeClass" parameterType="StuClassTeacher" resultMap="StuClassTeacherResult">
+        <include refid="selectStuClassTeacherVo"/>
+        where t.user_id = #{userId} and t.grade = #{grade} and t.class_name = #{className}
+        limit 1
+    </select>
+
+    <select id="selectStuClassTeacherById" parameterType="Long" resultMap="StuClassTeacherResult">
+        <include refid="selectStuClassTeacherVo"/>
+        where t.id = #{id}
+    </select>
+
+    <insert id="insertStuClassTeacher" parameterType="StuClassTeacher" useGeneratedKeys="true" keyProperty="id">
+        insert into stu_class_teacher (user_id, grade, class_name, create_time)
+        values (#{userId}, #{grade}, #{className}, now())
+    </insert>
+
+    <delete id="deleteStuClassTeacherByIds" parameterType="Long">
+        delete from stu_class_teacher where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

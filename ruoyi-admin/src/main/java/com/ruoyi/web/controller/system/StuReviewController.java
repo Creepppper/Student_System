@@ -93,6 +93,28 @@ public class StuReviewController extends BaseController
     }
 
     /**
+     * 学生端：我的查卷申请
+     */
+    @PreAuthorize("@ss.hasPermi('student:review:my')")
+    @GetMapping("/my")
+    public TableDataInfo myList()
+    {
+        startPage();
+        return getDataTable(stuReviewService.selectMyReviews());
+    }
+
+    /**
+     * 学生端：提交查卷申请
+     */
+    @PreAuthorize("@ss.hasPermi('student:review:apply')")
+    @Log(title = "查卷申请", businessType = BusinessType.INSERT)
+    @PostMapping("/apply")
+    public AjaxResult apply(@RequestBody StuReview stuReview)
+    {
+        return toAjax(stuReviewService.applyReview(stuReview));
+    }
+
+    /**
      * 处理查卷申请（受理 / 驳回 / 完成）
      */
     @PreAuthorize("@ss.hasPermi('system:review:handle')")

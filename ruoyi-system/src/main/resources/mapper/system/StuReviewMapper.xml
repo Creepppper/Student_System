@@ -29,6 +29,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="reason != null  and reason != ''"> and reason = #{reason}</if>
             <if test="status != null  and status != ''"> and status = #{status}</if>
             <if test="reply != null  and reply != ''"> and reply = #{reply}</if>
+            <!-- 数据范围：班主任只看负责班级，学生只看本人 -->
+            <if test="params.scopeMode == 'TEACHER'"> and exists (select 1 from stu_student st join stu_class_teacher t on t.grade = st.grade and t.class_name = st.class_name where st.id = stu_review.student_id and t.user_id = #{params.scopeUserId})</if>
+            <if test="params.scopeMode == 'STUDENT'"> and exists (select 1 from stu_student st where st.id = stu_review.student_id and st.user_id = #{params.scopeUserId})</if>
+            <if test="params.scopeMode == 'NONE'"> and 1 = 0</if>
         </where>
     </select>
     

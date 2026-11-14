@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.lenient;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
@@ -39,12 +40,23 @@ class StuScoreServiceImplTest
     @Mock
     private StuExamMapper stuExamMapper;
 
+    @Mock
+    private com.ruoyi.system.service.IStuScopeService stuScopeService;
+
     @InjectMocks
     private StuScoreServiceImpl service;
 
     @BeforeEach
     void setUp()
     {
+        // 默认以管理员身份执行，数据范围不做限制
+        lenient().when(stuScopeService.currentScope()).thenReturn(com.ruoyi.system.domain.StuScope.all(1L));
+        // 修改、删除前会读取原记录，默认返回一条属于学生 1 的成绩
+        StuScore original = new StuScore();
+        original.setId(10L);
+        original.setStudentId(1L);
+        original.setExamId(2L);
+        lenient().when(stuScoreMapper.selectStuScoreById(anyLong())).thenReturn(original);
         // 默认学生、考试存在，且该学生在该考试中尚无成绩
         // lenient：部分用例会在查询前失败，不使用这些默认桩
         lenient().when(stuStudentMapper.selectStuStudentById(1L)).thenReturn(new StuStudent());

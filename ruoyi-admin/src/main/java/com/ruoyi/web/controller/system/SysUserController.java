@@ -28,6 +28,7 @@ import com.ruoyi.common.utils.SecurityUtils;
 import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.common.utils.poi.ExcelUtil;
 import com.ruoyi.system.service.ISysDeptService;
+import com.ruoyi.system.service.IStuStudentService;
 import com.ruoyi.system.service.ISysPostService;
 import com.ruoyi.system.service.ISysRoleService;
 import com.ruoyi.system.service.ISysUserService;
@@ -43,6 +44,9 @@ public class SysUserController extends BaseController
 {
     @Autowired
     private ISysUserService userService;
+
+    @Autowired
+    private IStuStudentService stuStudentService;
 
     @Autowired
     private ISysRoleService roleService;
@@ -183,6 +187,8 @@ public class SysUserController extends BaseController
         {
             return error("当前用户不能删除");
         }
+        // 已绑定学生的账号不能删除，避免学生数据失去登录账号
+        stuStudentService.checkUserNotBound(userIds);
         return toAjax(userService.deleteUserByIds(userIds));
     }
 

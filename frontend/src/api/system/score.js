@@ -68,6 +68,10 @@ export function getMyScore() {
   })
 }
 
+export function getMyPrediction() {
+  return request({ url: '/system/score/myPrediction', method: 'get' })
+}
+
 // 班级平均分统计
 export function getClassStat(examId) {
   return request({

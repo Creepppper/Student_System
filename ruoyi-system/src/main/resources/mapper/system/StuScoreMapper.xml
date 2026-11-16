@@ -143,4 +143,18 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         where sc.student_id = #{studentId}
         order by e.exam_time asc, sc.id asc
     </select>
+
+    <select id="selectPredictionByGrade" resultType="com.ruoyi.system.domain.StuPrediction">
+        select st.id as studentId, st.student_no as studentNo, st.student_name as studentName,
+               st.grade, st.class_name as className, count(*) as examCount,
+               round(avg(coalesce(sc.chinese, 0)), 2) as chinese,
+               round(avg(coalesce(sc.math, 0)), 2) as math,
+               round(avg(coalesce(sc.english, 0)), 2) as english,
+               round(avg(coalesce(sc.physics, 0)), 2) as physics,
+               round(avg(coalesce(sc.chemistry, 0)), 2) as chemistry,
+               round(avg(coalesce(sc.biology, 0)), 2) as biology
+        from stu_score sc join stu_student st on st.id = sc.student_id
+        where st.grade = #{grade}
+        group by st.id, st.student_no, st.student_name, st.grade, st.class_name
+    </select>
 </mapper>

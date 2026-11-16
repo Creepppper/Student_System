@@ -3,6 +3,7 @@ package com.ruoyi.system.mapper;
 import java.util.List;
 import com.ruoyi.system.domain.StuScore;
 import com.ruoyi.system.domain.StuScoreDetail;
+import com.ruoyi.system.domain.StuPrediction;
 
 /**
  * 学生成绩Mapper接口
@@ -75,4 +76,7 @@ public interface StuScoreMapper
      * @return 成绩明细
      */
     public List<StuScoreDetail> selectScoreDetailByStudent(Long studentId);
+
+    /** 年级内有成绩的学生，按每人历次考试计算各科平均分。 */
+    public List<StuPrediction> selectPredictionByGrade(String grade);
 }

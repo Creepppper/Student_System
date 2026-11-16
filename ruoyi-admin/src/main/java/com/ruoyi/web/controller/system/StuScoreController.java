@@ -19,6 +19,7 @@ import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.common.enums.BusinessType;
 import com.ruoyi.system.domain.StuScore;
 import com.ruoyi.system.service.IStuScoreService;
+import com.ruoyi.system.service.impl.StuPredictionService;
 import com.ruoyi.common.utils.poi.ExcelUtil;
 import com.ruoyi.common.core.page.TableDataInfo;
 
@@ -34,6 +35,16 @@ public class StuScoreController extends BaseController
 {
     @Autowired
     private IStuScoreService stuScoreService;
+
+    @Autowired
+    private StuPredictionService predictionService;
+
+    @PreAuthorize("@ss.hasPermi('student:prediction:my')")
+    @GetMapping("/myPrediction")
+    public AjaxResult myPrediction()
+    {
+        return success(predictionService.myPrediction());
+    }
 
     /**
      * 查询学生成绩列表

@@ -341,6 +341,8 @@ WHERE id = ? AND status = '0';
 
 ## 9. 数据库支持与后端职责
 
+学生端高考预估菜单在 `010_roles_student_teacher.sql` 和 `017_student_profile_menu.sql` 后执行 `022_student_prediction_menu.sql`。脚本只新增菜单和学生角色授权，不改表结构，兼容 MariaDB/MySQL；回滚方式见脚本注释。组员更新后需执行该脚本并重新登录以刷新菜单权限。
+
 已有库在建表及成绩数据导入后执行 `021_fill_missing_scores.sql`，将六科成绩的空值更新为 0，适用于包含 `stu_score` 六科字段的现有数据库。执行前备份 `stu_score`；如需回滚，应按备份恢复原为空的字段，不能把所有 0 分改回空值，因为原有的真实 0 分无法区分。该脚本不修改表结构或缺考标记。
 
 | 需求 | 数据库支持 | 需要后端实现 |

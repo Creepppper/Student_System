@@ -48,6 +48,16 @@ class StuStudentImportTest
     }
 
     @Test
+    void rejectsInvalidGradeAndClassDuringImport()
+    {
+        when(stuScopeService.currentScope()).thenReturn(StuScope.all(1L));
+        String message = service.importStudents(List.of(row("1", "甲", "高四", "1班"), row("2", "乙", "高一", "13班")), false);
+        assertTrue(message.contains("年级不存在"));
+        assertTrue(message.contains("班级不存在"));
+        verify(stuStudentMapper, never()).insertStuStudent(any());
+    }
+
+    @Test
     void nonAdminCannotImport()
     {
         when(stuScopeService.currentScope()).thenReturn(StuScope.teacher(7L, java.util.Set.of()));

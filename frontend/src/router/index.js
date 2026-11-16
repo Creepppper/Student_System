@@ -60,13 +60,14 @@ export const constantRoutes = [
   {
     path: '',
     component: Layout,
+    hidden: true,
     redirect: '/index',
     children: [
       {
         path: '/index',
-        component: () => import('@/views/index'),
+        component: () => import('@/views/error/404'),
         name: 'Index',
-        meta: { title: '首页', icon: 'dashboard', affix: true }
+        meta: { title: '入口' }
       }
     ]
   },

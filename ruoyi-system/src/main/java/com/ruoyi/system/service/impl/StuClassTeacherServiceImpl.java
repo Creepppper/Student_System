@@ -8,6 +8,7 @@ import com.ruoyi.common.core.domain.entity.SysUser;
 import com.ruoyi.common.exception.ServiceException;
 import com.ruoyi.system.domain.StuClassTeacher;
 import com.ruoyi.system.domain.StuStudent;
+import com.ruoyi.system.domain.SchoolClassNames;
 import com.ruoyi.system.mapper.StuClassTeacherMapper;
 import com.ruoyi.system.mapper.StuStudentMapper;
 import com.ruoyi.system.mapper.SysRoleMapper;
@@ -51,6 +52,7 @@ public class StuClassTeacherServiceImpl implements IStuClassTeacherService
         {
             throw new ServiceException("请选择年级和班级");
         }
+        SchoolClassNames.validate(stuClassTeacher.getGrade(), stuClassTeacher.getClassName());
         SysUser user = sysUserMapper.selectUserById(stuClassTeacher.getUserId());
         if (user == null)
         {

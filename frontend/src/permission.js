@@ -9,6 +9,7 @@ import useUserStore from '@/store/modules/user'
 import useLockStore from '@/store/modules/lock'
 import useSettingsStore from '@/store/modules/settings'
 import usePermissionStore from '@/store/modules/permission'
+import { defaultEntry } from '@/utils/navigation'
 
 NProgress.configure({ showSpinner: false })
 
@@ -52,12 +53,17 @@ router.beforeEach(async (to, from) => {
           }
         })
         // 重新导航到目标路由，确保动态路由已注册
-        return { ...to, replace: true }
+        return to.path === '/index'
+          ? { path: defaultEntry(useUserStore().roles), replace: true }
+          : { ...to, replace: true }
       } catch (err) {
         await useUserStore().logOut()
         ElMessage.error(err)
         return { path: '/' }
       }
+    }
+    if (to.path === '/index') {
+      return { path: defaultEntry(useUserStore().roles), replace: true }
     }
     return true
   } else {

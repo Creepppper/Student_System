@@ -17,6 +17,10 @@
 | [010_roles_student_teacher.sql](010_roles_student_teacher.sql) | 阶段四、五：新增“班主任”“学生”角色，新增学生端菜单（我的成绩、我的查卷、提交查卷），并按角色授权；可重复执行 |
 | [011_class_teacher.sql](011_class_teacher.sql) | 阶段六：新增 `stu_class_teacher` 表（班主任负责班级）和“班主任班级”菜单；可重复执行 |
 | [012_student_import_menu.sql](012_student_import_menu.sql) | 阶段七：学生 Excel 导入的按钮权限 `system:student:import`；可重复执行 |
+| [013_remove_default_common_role.sql](013_remove_default_common_role.sql) | 在 010 之后执行：无账号关联时软删除若依默认普通角色；保留授权数据，可按脚本注释回滚 |
+| [014_student_route_name.sql](014_student_route_name.sql) | 在 010 之后执行：修复学生信息与学生端目录的路由名称冲突；回滚方式见脚本 |
+| [015_standard_grade_class.sql](015_standard_grade_class.sql) | 在 001、011 后检查旧数据，再由数据库管理员添加年级班级约束；执行顺序、兼容范围及回滚见脚本 |
+| [016_business_menu_icons.sql](016_business_menu_icons.sql) | 在业务菜单脚本后执行：为未设置图标的业务菜单指定图标；回滚方式见脚本 |
 | [006_hide_unrelated_menus.sql](006_hide_unrelated_menus.sql) | 隐藏与项目无关的若依菜单；只改 `visible`，不删表和数据 |
 | [init_database.sh](init_database.sh) | 既有的若依基础库初始化脚本，负责创建 `student_system` 并导入 `sql/ry_20260417.sql`、`sql/quartz.sql` |
 | [../sql/ry_20260417.sql](../sql/ry_20260417.sql) | 若依基础表与初始数据，不要修改 |

@@ -18,20 +18,14 @@
         />
       </el-form-item>
       <el-form-item label="年级" prop="grade">
-        <el-input
-          v-model="queryParams.grade"
-          placeholder="请输入年级"
-          clearable
-          @keyup.enter="handleQuery"
-        />
+        <el-select v-model="queryParams.grade" placeholder="请选择年级" clearable style="width: 180px">
+          <el-option v-for="grade in grades" :key="grade" :label="grade" :value="grade" />
+        </el-select>
       </el-form-item>
       <el-form-item label="班级名称" prop="className">
-        <el-input
-          v-model="queryParams.className"
-          placeholder="请输入班级名称"
-          clearable
-          @keyup.enter="handleQuery"
-        />
+        <el-select v-model="queryParams.className" placeholder="请选择班级" clearable style="width: 180px">
+          <el-option v-for="className in classes" :key="className" :label="className" :value="className" />
+        </el-select>
       </el-form-item>
       <el-form-item label="关联若依用户ID" prop="userId">
         <el-input
@@ -138,12 +132,16 @@
           </el-col>
           <el-col :span="24">
             <el-form-item label="年级" prop="grade">
-              <el-input v-model="form.grade" placeholder="请输入年级" />
+              <el-select v-model="form.grade" placeholder="请选择年级" filterable style="width: 100%" no-match-text="年级不存在">
+                <el-option v-for="grade in grades" :key="grade" :label="grade" :value="grade" />
+              </el-select>
             </el-form-item>
           </el-col>
           <el-col :span="24">
             <el-form-item label="班级名称" prop="className">
-              <el-input v-model="form.className" placeholder="请输入班级名称" />
+              <el-select v-model="form.className" placeholder="请选择班级" filterable style="width: 100%" no-match-text="班级不存在">
+                <el-option v-for="className in classes" :key="className" :label="className" :value="className" />
+              </el-select>
             </el-form-item>
           </el-col>
           <el-col :span="24">
@@ -178,6 +176,8 @@ import { listUser } from "@/api/system/user"
 import ExcelImportDialog from "@/components/ExcelImportDialog"
 
 const { proxy } = getCurrentInstance()
+const grades = ['高一', '高二', '高三']
+const classes = Array.from({ length: 12 }, (_, index) => `${index + 1}班`)
 
 /** 可绑定的系统账号（后端会校验角色和唯一性） */
 const userOptions = ref([])
@@ -217,10 +217,10 @@ const data = reactive({
       { required: true, message: "学生姓名不能为空", trigger: "blur" }
     ],
     grade: [
-      { required: true, message: "年级不能为空", trigger: "blur" }
+      { required: true, message: "请选择年级", trigger: "change" }
     ],
     className: [
-      { required: true, message: "班级名称不能为空", trigger: "blur" }
+      { required: true, message: "请选择班级", trigger: "change" }
     ],
   }
 })

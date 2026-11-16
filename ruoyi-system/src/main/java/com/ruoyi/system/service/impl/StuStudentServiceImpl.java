@@ -9,6 +9,7 @@ import com.ruoyi.common.exception.ServiceException;
 import com.ruoyi.system.domain.StuReview;
 import com.ruoyi.system.domain.StuScore;
 import com.ruoyi.system.domain.StuStudent;
+import com.ruoyi.system.domain.SchoolClassNames;
 import com.ruoyi.system.mapper.StuReviewMapper;
 import com.ruoyi.system.mapper.StuScoreMapper;
 import com.ruoyi.system.mapper.StuStudentMapper;
@@ -87,6 +88,7 @@ public class StuStudentServiceImpl implements IStuStudentService
         {
             throw new ServiceException("没有权限新增学生");
         }
+        SchoolClassNames.validate(stuStudent.getGrade(), stuStudent.getClassName());
         validateUserBinding(stuStudent);
         return stuStudentMapper.insertStuStudent(stuStudent);
     }
@@ -101,6 +103,7 @@ public class StuStudentServiceImpl implements IStuStudentService
     public int updateStuStudent(StuStudent stuStudent)
     {
         assertAccessible(stuStudent.getId());
+        SchoolClassNames.validate(stuStudent.getGrade(), stuStudent.getClassName());
         validateUserBinding(stuStudent);
         return stuStudentMapper.updateStuStudent(stuStudent);
     }
@@ -171,8 +174,15 @@ public class StuStudentServiceImpl implements IStuStudentService
             }
             student.setStudentNo(no);
             student.setStudentName(student.getStudentName().trim());
-            student.setGrade(student.getGrade().trim());
-            student.setClassName(student.getClassName().trim());
+            try
+            {
+                SchoolClassNames.validate(student.getGrade(), student.getClassName());
+            }
+            catch (ServiceException ex)
+            {
+                errors.add(label + "：" + ex.getMessage());
+                continue;
+            }
             // 导入不绑定账号：Excel 中的账号ID不可信，统一清空
             student.setUserId(null);
 

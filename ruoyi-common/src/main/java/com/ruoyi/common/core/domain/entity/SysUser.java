@@ -87,6 +87,19 @@ public class SysUser extends BaseEntity
     /** 角色对象 */
     private List<SysRole> roles;
 
+    /** 列表展示的角色名称 */
+    private String roleNames;
+
+    public String getRoleNames()
+    {
+        return roleNames;
+    }
+
+    public void setRoleNames(String roleNames)
+    {
+        this.roleNames = roleNames;
+    }
+
     /** 角色组 */
     private Long[] roleIds;
 

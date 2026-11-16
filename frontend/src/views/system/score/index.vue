@@ -187,7 +187,7 @@
                 :max="subject.fullScore"
                 :precision="2"
                 controls-position="right"
-                :placeholder="`未录入留空（满分${subject.fullScore}）`"
+                :placeholder="`留空记为0分（满分${subject.fullScore}）`"
                 style="width: 100%"
               />
             </el-form-item>

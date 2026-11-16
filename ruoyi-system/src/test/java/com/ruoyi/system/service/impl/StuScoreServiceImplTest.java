@@ -94,7 +94,7 @@ class StuScoreServiceImplTest
     }
 
     @Test
-    void emptyAbsentSubjectsAndNullScoresAreAllowed()
+    void emptyScoresDefaultToZeroOnInsert()
     {
         StuScore score = new StuScore();
         score.setStudentId(1L);
@@ -102,8 +102,25 @@ class StuScoreServiceImplTest
         score.setAbsentSubjects(null);
         service.insertStuScore(score);
         assertEquals("", score.getAbsentSubjects());
-        assertNull(score.getChinese());
+        assertEquals(BigDecimal.ZERO, score.getChinese());
+        assertEquals(BigDecimal.ZERO, score.getMath());
+        assertEquals(BigDecimal.ZERO, score.getEnglish());
+        assertEquals(BigDecimal.ZERO, score.getPhysics());
+        assertEquals(BigDecimal.ZERO, score.getChemistry());
+        assertEquals(BigDecimal.ZERO, score.getBiology());
         verify(stuScoreMapper).insertStuScore(score);
+    }
+
+    @Test
+    void emptyScoresDefaultToZeroOnUpdate()
+    {
+        StuScore score = validScore();
+        score.setId(10L);
+        score.setBiology(null);
+        service.updateStuScore(score);
+        assertEquals(BigDecimal.ZERO, score.getBiology());
+        assertEquals(new BigDecimal("120"), score.getChinese());
+        verify(stuScoreMapper).updateStuScore(score);
     }
 
     @Test

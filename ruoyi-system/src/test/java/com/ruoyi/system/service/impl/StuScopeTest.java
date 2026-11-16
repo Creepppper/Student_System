@@ -6,6 +6,8 @@ import static com.ruoyi.system.service.impl.StuTestFixtures.student;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.when;
 import java.util.HashMap;
@@ -18,6 +20,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
 import com.ruoyi.system.domain.StuClassTeacher;
 import com.ruoyi.system.domain.StuScope;
 import com.ruoyi.system.domain.StuStudent;
@@ -42,7 +46,47 @@ class StuScopeTest
     @AfterEach
     void tearDown()
     {
+        PageHelper.clearPage();
         logout();
+    }
+
+    @Test
+    void teacherScopeDoesNotConsumeOrLimitPendingPagination()
+    {
+        login(7L, "teacher");
+        StuClassTeacher first = new StuClassTeacher();
+        first.setGrade("高一");
+        first.setClassName("1班");
+        StuClassTeacher second = new StuClassTeacher();
+        second.setGrade("高一");
+        second.setClassName("2班");
+        when(stuClassTeacherMapper.selectStuClassTeacherByUserId(7L)).thenAnswer(invocation -> {
+            assertNull(PageHelper.getLocalPage());
+            return List.of(first, second);
+        });
+        Page<?> page = PageHelper.startPage(2, 10);
+
+        StuScope scope = scopeService.currentScope();
+
+        assertTrue(scope.allowsClass("高一", "1班"));
+        assertTrue(scope.allowsClass("高一", "2班"));
+        assertSame(page, PageHelper.getLocalPage());
+        assertEquals(2, page.getPageNum());
+        assertEquals(10, page.getPageSize());
+    }
+
+    @Test
+    void studentScopePreservesPaginationEvenIfLookupFails()
+    {
+        login(9L, "student");
+        when(stuStudentMapper.selectStuStudentByUserId(9L)).thenAnswer(invocation -> {
+            assertNull(PageHelper.getLocalPage());
+            throw new IllegalStateException("lookup failed");
+        });
+        Page<?> page = PageHelper.startPage(2, 10);
+
+        assertThrows(IllegalStateException.class, () -> scopeService.currentScope());
+        assertSame(page, PageHelper.getLocalPage());
     }
 
     @Test

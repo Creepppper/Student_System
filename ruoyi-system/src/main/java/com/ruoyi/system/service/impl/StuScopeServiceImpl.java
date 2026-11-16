@@ -6,6 +6,8 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
 import com.ruoyi.common.core.domain.entity.SysRole;
 import com.ruoyi.common.core.domain.model.LoginUser;
 import com.ruoyi.common.utils.SecurityUtils;
@@ -40,6 +42,24 @@ public class StuScopeServiceImpl implements IStuScopeService
 
     @Override
     public StuScope currentScope()
+    {
+        // 权限查询不应消耗调用方为业务列表设置的分页，也不能限制班主任的班级范围。
+        Page<?> page = PageHelper.getLocalPage();
+        PageHelper.clearPage();
+        try
+        {
+            return resolveCurrentScope();
+        }
+        finally
+        {
+            if (page != null)
+            {
+                PageHelper.setLocalPage(page);
+            }
+        }
+    }
+
+    private StuScope resolveCurrentScope()
     {
         LoginUser loginUser = SecurityUtils.getLoginUser();
         Long userId = loginUser.getUserId();

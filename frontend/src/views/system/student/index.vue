@@ -86,7 +86,7 @@
 
     <el-table v-loading="loading" :data="studentList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="学生ID" align="center" prop="id" />
+      <el-table-column label="序号" align="center" type="index" width="72" :index="index => (queryParams.pageNum - 1) * queryParams.pageSize + index + 1" />
       <el-table-column label="学号" align="center" prop="studentNo" />
       <el-table-column label="学生姓名" align="center" prop="studentName" />
       <el-table-column label="年级" align="center" prop="grade" />

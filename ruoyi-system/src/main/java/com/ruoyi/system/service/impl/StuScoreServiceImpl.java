@@ -353,6 +353,7 @@ public class StuScoreServiceImpl implements IStuScoreService
             }
             if (value == null)
             {
+                setScore(stuScore, subject, BigDecimal.ZERO);
                 continue;
             }
             if (value.signum() < 0 || value.compareTo(subject.getFullScore()) > 0)

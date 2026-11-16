@@ -101,6 +101,19 @@ class StuClassTeacherServiceTest
     }
 
     @Test
+    void classAlreadyAssignedToAnotherTeacherIsRejected()
+    {
+        when(sysUserMapper.selectUserById(7L)).thenReturn(activeUser(7L));
+        when(sysRoleMapper.selectRolePermissionByUserId(7L)).thenReturn(List.of(role("teacher")));
+        when(stuStudentMapper.selectStuStudentList(any())).thenReturn(List.of(student(1L, "高一", "1班", null)));
+        when(classTeacherMapper.selectStuClassTeacherByGradeClass(any())).thenReturn(assignment(8L, "高一", "1班"));
+        ServiceException ex = assertThrows(ServiceException.class,
+                () -> service.insertStuClassTeacher(assignment(7L, "高一", "1班")));
+        assertEquals("该年级班级已有班主任，请先取消原分配", ex.getMessage());
+        verify(classTeacherMapper, org.mockito.Mockito.never()).insertStuClassTeacher(any());
+    }
+
+    @Test
     void validAssignmentIsInserted()
     {
         StuClassTeacher input = assignment(7L, "高一", "1班");

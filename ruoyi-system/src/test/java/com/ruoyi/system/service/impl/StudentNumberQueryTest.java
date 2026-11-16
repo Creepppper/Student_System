@@ -30,10 +30,13 @@ class StudentNumberQueryTest
     {
         StuScore score = new StuScore();
         score.setStudentNo("20261101");
+        score.setExamId(3L);
         score.getParams().put("scopeMode", "TEACHER");
         score.getParams().put("scopeUserId", 7L);
         BoundSql sql = query("StuScoreMapper", "selectStuScoreList", score);
         assertTrue(sql.getSql().contains("sn.student_no = ?"));
+        assertTrue(sql.getSql().contains("as student_no"));
+        assertTrue(sql.getSql().contains("exam_id = ?"));
         assertTrue(sql.getSql().contains("t.user_id = ?"));
         assertTrue(sql.getParameterMappings().stream().anyMatch(p -> p.getProperty().equals("studentNo")));
         score.setStudentNo("");

@@ -7,6 +7,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <resultMap type="StuScore" id="StuScoreResult">
         <result property="id"    column="id"    />
         <result property="studentId"    column="student_id"    />
+        <result property="studentNo"    column="student_no"    />
         <result property="examId"    column="exam_id"    />
         <result property="chinese"    column="chinese"    />
         <result property="math"    column="math"    />
@@ -22,7 +23,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </sql>
 
     <select id="selectStuScoreList" parameterType="StuScore" resultMap="StuScoreResult">
-        <include refid="selectStuScoreVo"/>
+        select stu_score.id, stu_score.student_id, stu_score.exam_id, stu_score.chinese, stu_score.math,
+               stu_score.english, stu_score.physics, stu_score.chemistry, stu_score.biology,
+               stu_score.absent_subjects,
+               (select st.student_no from stu_student st where st.id = stu_score.student_id) as student_no
+        from stu_score
         <where>  
             <if test="studentId != null "> and student_id = #{studentId}</if>
             <if test="studentNo != null and studentNo != ''"> and exists (select 1 from stu_student sn where sn.id = stu_score.student_id and sn.student_no = #{studentNo})</if>
@@ -39,6 +44,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="params.scopeMode == 'STUDENT'"> and exists (select 1 from stu_student st where st.id = stu_score.student_id and st.user_id = #{params.scopeUserId})</if>
             <if test="params.scopeMode == 'NONE'"> and 1 = 0</if>
         </where>
+        order by stu_score.student_id, stu_score.id
     </select>
     
     <select id="selectStuScoreById" parameterType="Long" resultMap="StuScoreResult">

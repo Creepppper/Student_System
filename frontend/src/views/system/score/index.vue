@@ -4,21 +4,10 @@
       <el-form-item label="学号" prop="studentNo">
         <el-input v-model.trim="queryParams.studentNo" placeholder="请输入学号" clearable @keyup.enter="handleQuery" />
       </el-form-item>
-      <el-form-item label="学生ID" prop="studentId">
-        <el-input
-          v-model="queryParams.studentId"
-          placeholder="请输入学生ID"
-          clearable
-          @keyup.enter="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="考试ID" prop="examId">
-        <el-input
-          v-model="queryParams.examId"
-          placeholder="请输入考试ID"
-          clearable
-          @keyup.enter="handleQuery"
-        />
+      <el-form-item label="考试名称" prop="examId">
+        <el-select v-model="queryParams.examId" filterable placeholder="请选择或输入考试名称" no-match-text="考试不存在" no-data-text="暂无考试" style="width: 240px" @change="handleQuery" @visible-change="refreshExamsOnOpen">
+          <el-option v-for="exam in examOptions" :key="exam.id" :label="`${exam.examName}（${proxy.parseTime(exam.examTime, '{y}-{m}-{d}')}）`" :value="exam.id" />
+        </el-select>
       </el-form-item>
       <el-form-item label="语文成绩" prop="chinese">
         <el-input
@@ -131,17 +120,16 @@
       <right-toolbar v-model:showSearch="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
 
-    <el-table v-loading="loading" :data="scoreList" @selection-change="handleSelectionChange">
+    <el-table v-loading="loading" :data="scoreList" :empty-text="queryParams.examId == null ? '请选择考试' : '暂无数据'" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="成绩ID" align="center" prop="id" />
-      <el-table-column label="学生ID" align="center" prop="studentId" />
-      <el-table-column label="考试ID" align="center" prop="examId" />
-      <el-table-column label="语文成绩" align="center" prop="chinese" />
-      <el-table-column label="数学成绩" align="center" prop="math" />
-      <el-table-column label="英语成绩" align="center" prop="english" />
-      <el-table-column label="物理成绩" align="center" prop="physics" />
-      <el-table-column label="化学成绩" align="center" prop="chemistry" />
-      <el-table-column label="生物成绩" align="center" prop="biology" />
+      <el-table-column label="序号" align="center" type="index" width="72" :index="index => (queryParams.pageNum - 1) * queryParams.pageSize + index + 1" />
+      <el-table-column label="学号" align="center" prop="studentNo" />
+      <el-table-column label="语文" align="center" prop="chinese" />
+      <el-table-column label="数学" align="center" prop="math" />
+      <el-table-column label="英语" align="center" prop="english" />
+      <el-table-column label="物理" align="center" prop="physics" />
+      <el-table-column label="化学" align="center" prop="chemistry" />
+      <el-table-column label="生物" align="center" prop="biology" />
       <el-table-column label="缺考科目" align="center" prop="absentSubjects">
         <template #default="scope">
           {{ formatAbsentSubjects(scope.row.absentSubjects) }}
@@ -168,12 +156,12 @@
       <el-form ref="scoreRef" :model="form" :rules="rules" label-width="100px">
         <el-row>
           <el-col :span="24">
-            <el-form-item label="学生" prop="studentId">
-              <el-select v-model="form.studentId" placeholder="请选择学生" filterable clearable style="width: 100%">
+            <el-form-item label="学号" prop="studentId">
+              <el-select v-model="form.studentId" placeholder="请输入或选择学号" filterable clearable no-match-text="学号不存在" style="width: 100%" @visible-change="refreshStudentsOnOpen">
                 <el-option
                   v-for="item in studentOptions"
                   :key="item.id"
-                  :label="`${item.studentNo} ${item.studentName}（${item.grade}${item.className}）`"
+                  :label="item.studentNo"
                   :value="item.id"
                 />
               </el-select>
@@ -271,7 +259,6 @@ const data = reactive({
     pageNum: 1,
     pageSize: 10,
     studentNo: undefined,
-    studentId: undefined,
     examId: undefined,
     chinese: undefined,
     math: undefined,
@@ -283,7 +270,7 @@ const data = reactive({
   },
   rules: {
     studentId: [
-      { required: true, message: "请选择学生", trigger: "change" }
+      { required: true, message: "请选择学号", trigger: "change" }
     ],
     examId: [
       { required: true, message: "请选择考试", trigger: "change" }
@@ -295,15 +282,26 @@ const data = reactive({
 })
 
 const { queryParams, form, rules } = toRefs(data)
+let scoreRequest = 0
+let examRequest = 0
+let examsInitialized = false
+let hasActivated = false
 
 /** 查询学生成绩列表 */
 function getList() {
+  const requestId = ++scoreRequest
+  if (queryParams.value.examId == null) {
+    scoreList.value = []
+    total.value = 0
+    loading.value = false
+    return
+  }
   loading.value = true
   listScore(queryParams.value).then(response => {
+    if (requestId !== scoreRequest) return
     scoreList.value = response.rows
     total.value = response.total
-    loading.value = false
-  })
+  }).finally(() => { if (requestId === scoreRequest) loading.value = false })
 }
 
 /** 取消按钮 */
@@ -356,11 +354,37 @@ function validateAbsentSubjects(rule, value, callback) {
 
 /** 加载学生、考试下拉选项 */
 function loadOptions() {
-  listStudent({ pageNum: 1, pageSize: 1000 }).then(response => {
+  listStudent({}).then(response => {
     studentOptions.value = response.rows
   })
-  listExam({ pageNum: 1, pageSize: 1000 }).then(response => {
+}
+
+function refreshStudentsOnOpen(visible) {
+  if (visible) loadOptions()
+}
+
+function refreshExamsOnOpen(visible) {
+  if (visible) refreshExams()
+}
+
+function refreshExams() {
+  const requestId = ++examRequest
+  return listExam({}).then(response => {
+    if (requestId !== examRequest) return
     examOptions.value = response.rows
+    const selectedExists = examOptions.value.some(item => item.id === queryParams.value.examId)
+    if (!examsInitialized) {
+      queryParams.value.examId = examOptions.value.find(item => item.examName === '2026春期中考试')?.id
+      examsInitialized = true
+    } else if (!selectedExists) {
+      queryParams.value.examId = undefined
+    }
+    getList()
+  }).catch(() => {
+    if (requestId === examRequest) {
+      queryParams.value.examId = undefined
+      getList()
+    }
   })
 }
 
@@ -372,7 +396,9 @@ function handleQuery() {
 
 /** 重置按钮操作 */
 function resetQuery() {
+  const examId = queryParams.value.examId
   proxy.resetForm("queryRef")
+  queryParams.value.examId = examId
   handleQuery()
 }
 
@@ -443,11 +469,19 @@ function handleDelete(row) {
 
 /** 导出按钮操作 */
 function handleExport() {
+  if (queryParams.value.examId == null) {
+    proxy.$modal.msgWarning('请先选择考试')
+    return
+  }
   proxy.download('system/score/export', {
     ...queryParams.value
   }, `score_${new Date().getTime()}.xlsx`)
 }
 
-getList()
 loadOptions()
+onMounted(refreshExams)
+onActivated(() => {
+  if (hasActivated) refreshExams()
+  hasActivated = true
+})
 </script>

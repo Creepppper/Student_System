@@ -22,6 +22,9 @@
 | [015_standard_grade_class.sql](015_standard_grade_class.sql) | 在 001、011 后检查旧数据，再由数据库管理员添加年级班级约束；执行顺序、兼容范围及回滚见脚本 |
 | [016_business_menu_icons.sql](016_business_menu_icons.sql) | 在业务菜单脚本后执行：为未设置图标的业务菜单指定图标；回滚方式见脚本 |
 | [017_student_profile_menu.sql](017_student_profile_menu.sql) | 在 010 后执行：新增学生基本信息菜单及学生角色授权；回滚方式见脚本 |
+| [018_score_management_menu.sql](018_score_management_menu.sql) | 在 004 后执行：将学生成绩菜单改名为成绩管理；回滚方式见脚本 |
+| [019_unique_class_teacher.sql](019_unique_class_teacher.sql) | 在 011 后执行：检查并解决重复分配后，新增年级班级唯一索引；执行和回滚见脚本 |
+| [020_enable_self_registration.sql](020_enable_self_registration.sql) | 在 010 后执行：启用自助注册；修改配置后重启后端刷新缓存，回滚见脚本 |
 | [006_hide_unrelated_menus.sql](006_hide_unrelated_menus.sql) | 隐藏与项目无关的若依菜单；只改 `visible`，不删表和数据 |
 | [init_database.sh](init_database.sh) | 既有的若依基础库初始化脚本，负责创建 `student_system` 并导入 `sql/ry_20260417.sql`、`sql/quartz.sql` |
 | [../sql/ry_20260417.sql](../sql/ry_20260417.sql) | 若依基础表与初始数据，不要修改 |

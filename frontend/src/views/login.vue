@@ -53,7 +53,7 @@
           <span v-else>登 录 中...</span>
         </el-button>
         <div style="float: right;" v-if="register">
-          <router-link class="link-type" :to="'/register'">立即注册</router-link>
+          <router-link class="link-type" :to="'/register'">创建账号</router-link>
         </div>
       </el-form-item>
     </el-form>
@@ -142,6 +142,7 @@ function handleLogin() {
 
 function getCode() {
   getCodeImg().then(res => {
+    register.value = res.registerEnabled === true
     captchaEnabled.value = res.captchaEnabled === undefined ? true : res.captchaEnabled
     if (captchaEnabled.value) {
       codeUrl.value = "data:image/gif;base64," + res.img

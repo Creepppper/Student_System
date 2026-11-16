@@ -3,6 +3,7 @@ package com.ruoyi.system.service.impl;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.dao.DuplicateKeyException;
 import com.ruoyi.common.core.domain.entity.SysRole;
 import com.ruoyi.common.core.domain.entity.SysUser;
 import com.ruoyi.common.exception.ServiceException;
@@ -79,7 +80,18 @@ public class StuClassTeacherServiceImpl implements IStuClassTeacherService
         {
             throw new ServiceException("该班主任已负责此班级");
         }
-        return stuClassTeacherMapper.insertStuClassTeacher(stuClassTeacher);
+        if (stuClassTeacherMapper.selectStuClassTeacherByGradeClass(stuClassTeacher) != null)
+        {
+            throw new ServiceException("该年级班级已有班主任，请先取消原分配");
+        }
+        try
+        {
+            return stuClassTeacherMapper.insertStuClassTeacher(stuClassTeacher);
+        }
+        catch (DuplicateKeyException ex)
+        {
+            throw new ServiceException("该年级班级已有班主任，请刷新后重试");
+        }
     }
 
     @Override

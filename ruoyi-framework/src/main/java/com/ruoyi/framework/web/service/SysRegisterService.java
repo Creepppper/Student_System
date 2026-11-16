@@ -6,6 +6,7 @@ import com.ruoyi.common.constant.CacheConstants;
 import com.ruoyi.common.constant.Constants;
 import com.ruoyi.common.constant.UserConstants;
 import com.ruoyi.common.core.domain.entity.SysUser;
+import com.ruoyi.common.core.domain.entity.SysRole;
 import com.ruoyi.common.core.domain.model.RegisterBody;
 import com.ruoyi.common.core.redis.RedisCache;
 import com.ruoyi.common.exception.user.CaptchaException;
@@ -18,6 +19,7 @@ import com.ruoyi.framework.manager.AsyncManager;
 import com.ruoyi.framework.manager.factory.AsyncFactory;
 import com.ruoyi.system.service.ISysConfigService;
 import com.ruoyi.system.service.ISysUserService;
+import com.ruoyi.system.mapper.SysRoleMapper;
 
 /**
  * 注册校验方法
@@ -29,6 +31,9 @@ public class SysRegisterService
 {
     @Autowired
     private ISysUserService userService;
+
+    @Autowired
+    private SysRoleMapper roleMapper;
 
     @Autowired
     private ISysConfigService configService;
@@ -74,12 +79,22 @@ public class SysRegisterService
         {
             msg = "保存用户'" + username + "'失败，注册账号已存在";
         }
+        else if (!"student".equals(registerBody.getRoleKey()) && !"teacher".equals(registerBody.getRoleKey()))
+        {
+            msg = "请选择学生或班主任角色";
+        }
         else
         {
+            SysRole role = roleMapper.checkRoleKeyUnique(registerBody.getRoleKey());
+            if (role == null || !"0".equals(role.getStatus()) || role.isAdmin())
+            {
+                return "所选角色不可用，请联系管理员";
+            }
             sysUser.setNickName(username);
             sysUser.setPwdUpdateDate(DateUtils.getNowDate());
             sysUser.setPassword(SecurityUtils.encryptPassword(password));
-            boolean regFlag = userService.registerUser(sysUser);
+            sysUser.setRoleIds(new Long[] { role.getRoleId() });
+            boolean regFlag = userService.insertUser(sysUser) > 0;
             if (!regFlag)
             {
                 msg = "注册失败,请联系系统管理人员";

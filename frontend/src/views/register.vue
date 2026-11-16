@@ -37,6 +37,13 @@
           <template #prefix><svg-icon icon-class="password" class="el-input__icon input-icon" /></template>
         </el-input>
       </el-form-item>
+      <el-form-item prop="roleKey">
+        <el-select v-model="registerForm.roleKey" placeholder="请选择账号角色" size="large" style="width: 100%">
+          <el-option label="学生" value="student" />
+          <el-option label="班主任" value="teacher" />
+        </el-select>
+      </el-form-item>
+      <p class="register-tip">注册后请联系管理员绑定学生信息或分配负责班级。</p>
       <el-form-item prop="code" v-if="captchaEnabled">
         <el-input
           size="large" 
@@ -91,6 +98,7 @@ const registerForm = ref({
   username: "",
   password: "",
   confirmPassword: "",
+  roleKey: "",
   code: "",
   uuid: ""
 })
@@ -112,6 +120,7 @@ const registerRules = {
     { required: true, trigger: "blur", message: "请再次输入您的密码" },
     { required: true, validator: equalToPassword, trigger: "blur" }
   ],
+  roleKey: [{ required: true, message: "请选择账号角色", trigger: "change" }],
   code: [{ required: true, trigger: "change", message: "请输入验证码" }]
 }
 
@@ -125,15 +134,14 @@ function handleRegister() {
       loading.value = true
       register(registerForm.value).then(res => {
         const username = registerForm.value.username
-        ElMessageBox.alert("<font color='red'>恭喜你，您的账号 " + username + " 注册成功！</font>", "系统提示", {
-          dangerouslyUseHTMLString: true,
+        ElMessageBox.alert("账号 " + username + " 注册成功，请登录。", "系统提示", {
           type: "success",
         }).then(() => {
           router.push("/login")
         }).catch(() => {})
       }).catch(() => {
         loading.value = false
-        if (captchaEnabled) {
+        if (captchaEnabled.value) {
           getCode()
         }
       })
@@ -215,5 +223,18 @@ getCode()
 .register-code-img {
   height: 40px;
   padding-left: 12px;
+}
+
+html.dark .register {
+  background-image: linear-gradient(rgba(0, 0, 0, 0.55), rgba(0, 0, 0, 0.55)), url("../assets/images/login-background.jpg");
+
+  .register-form {
+    background: var(--el-bg-color-overlay);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5);
+  }
+
+  .register-tip {
+    color: var(--el-text-color-secondary);
+  }
 }
 </style>

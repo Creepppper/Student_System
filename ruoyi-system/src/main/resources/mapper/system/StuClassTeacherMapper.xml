@@ -41,6 +41,17 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         limit 1
     </select>
 
+    <select id="selectStuClassTeacherByGradeClass" parameterType="StuClassTeacher" resultMap="StuClassTeacherResult">
+        <include refid="selectStuClassTeacherVo"/>
+        where t.grade = #{grade} and t.class_name = #{className}
+        limit 1
+    </select>
+
+    <delete id="deleteStuClassTeacherByUserIds">
+        delete from stu_class_teacher where user_id in
+        <foreach item="userId" collection="array" open="(" separator="," close=")">#{userId}</foreach>
+    </delete>
+
     <select id="selectStuClassTeacherById" parameterType="Long" resultMap="StuClassTeacherResult">
         <include refid="selectStuClassTeacherVo"/>
         where t.id = #{id}

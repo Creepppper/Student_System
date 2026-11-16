@@ -19,6 +19,12 @@ public interface StuClassTeacherMapper
     /** 查询某个账号是否已负责某班级 */
     public StuClassTeacher selectStuClassTeacherByUserGradeClass(StuClassTeacher query);
 
+    /** 查询指定年级班级已有的班主任分配。 */
+    public StuClassTeacher selectStuClassTeacherByGradeClass(StuClassTeacher query);
+
+    /** 删除账号时释放其班级分配。 */
+    public int deleteStuClassTeacherByUserIds(Long[] userIds);
+
     /** 新增 */
     public int insertStuClassTeacher(StuClassTeacher stuClassTeacher);
 

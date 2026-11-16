@@ -1,6 +1,7 @@
 package com.ruoyi.system.service.impl;
 
 import java.util.List;
+import java.util.Objects;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.ruoyi.common.core.domain.entity.SysRole;
@@ -8,6 +9,7 @@ import com.ruoyi.common.core.domain.entity.SysUser;
 import com.ruoyi.common.exception.ServiceException;
 import com.ruoyi.system.domain.StuReview;
 import com.ruoyi.system.domain.StuScore;
+import com.ruoyi.system.domain.StuScope;
 import com.ruoyi.system.domain.StuStudent;
 import com.ruoyi.system.domain.SchoolClassNames;
 import com.ruoyi.system.mapper.StuReviewMapper;
@@ -50,7 +52,7 @@ public class StuStudentServiceImpl implements IStuStudentService
     private IStuScopeService stuScopeService;
 
     /**
-     * 查询学生信息（超出数据范围时返回 null）
+     * 查询学生信息，记录不存在或无权查看时返回业务错误。
      *
      * @param id 学生信息主键
      * @return 学生信息
@@ -59,7 +61,15 @@ public class StuStudentServiceImpl implements IStuStudentService
     public StuStudent selectStuStudentById(Long id)
     {
         StuStudent student = stuStudentMapper.selectStuStudentById(id);
-        return stuScopeService.currentScope().allowsStudent(student) ? student : null;
+        if (student == null)
+        {
+            throw new ServiceException("学生不存在");
+        }
+        if (!stuScopeService.currentScope().allowsStudent(student))
+        {
+            throw new ServiceException("没有权限查看该学生信息");
+        }
+        return student;
     }
 
     /**
@@ -102,10 +112,29 @@ public class StuStudentServiceImpl implements IStuStudentService
     @Override
     public int updateStuStudent(StuStudent stuStudent)
     {
-        assertAccessible(stuStudent.getId());
+        StuStudent existing = stuStudentMapper.selectStuStudentById(stuStudent.getId());
+        if (existing == null)
+        {
+            throw new ServiceException("学生不存在");
+        }
+        StuScope scope = stuScopeService.currentScope();
+        if (!scope.allowsStudent(existing))
+        {
+            throw new ServiceException("没有权限操作该学生");
+        }
+        if (!scope.isAll() && (!Objects.equals(existing.getGrade(), stuStudent.getGrade())
+                || !Objects.equals(existing.getClassName(), stuStudent.getClassName())
+                || !Objects.equals(existing.getUserId(), stuStudent.getUserId())))
+        {
+            throw new ServiceException("只有管理员可以修改年级、班级或绑定账号");
+        }
         SchoolClassNames.validate(stuStudent.getGrade(), stuStudent.getClassName());
-        validateUserBinding(stuStudent);
-        return stuStudentMapper.updateStuStudent(stuStudent);
+        if (scope.isAll())
+        {
+            validateUserBinding(stuStudent);
+            return stuStudentMapper.updateStuStudent(stuStudent);
+        }
+        return stuStudentMapper.updateStuStudentBasicInfo(stuStudent);
     }
 
     /**

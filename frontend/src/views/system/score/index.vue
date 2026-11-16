@@ -354,7 +354,7 @@ function validateAbsentSubjects(rule, value, callback) {
 
 /** 加载学生、考试下拉选项 */
 function loadOptions() {
-  listStudent({}).then(response => {
+  listStudent({ pageNum: 1, pageSize: 1000 }).then(response => {
     studentOptions.value = response.rows
   })
 }
@@ -369,15 +369,14 @@ function refreshExamsOnOpen(visible) {
 
 function refreshExams() {
   const requestId = ++examRequest
-  return listExam({}).then(response => {
+  return listExam({ pageNum: 1, pageSize: 1000, orderByColumn: 'examTime', isAsc: 'desc' }).then(response => {
     if (requestId !== examRequest) return
     examOptions.value = response.rows
     const selectedExists = examOptions.value.some(item => item.id === queryParams.value.examId)
-    if (!examsInitialized) {
-      queryParams.value.examId = examOptions.value.find(item => item.examName === '2026春期中考试')?.id
+    if (!examsInitialized || !selectedExists) {
+      queryParams.value.examId = examOptions.value[0]?.id
+      queryParams.value.pageNum = 1
       examsInitialized = true
-    } else if (!selectedExists) {
-      queryParams.value.examId = undefined
     }
     getList()
   }).catch(() => {

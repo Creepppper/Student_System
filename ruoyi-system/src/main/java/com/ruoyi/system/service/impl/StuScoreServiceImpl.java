@@ -66,7 +66,15 @@ public class StuScoreServiceImpl implements IStuScoreService
     public StuScore selectStuScoreById(Long id)
     {
         StuScore score = stuScoreMapper.selectStuScoreById(id);
-        return isScoreAccessible(score, stuScopeService.currentScope()) ? score : null;
+        if (score == null)
+        {
+            throw new ServiceException("成绩不存在");
+        }
+        if (!isScoreAccessible(score, stuScopeService.currentScope()))
+        {
+            throw new ServiceException("没有权限查看该成绩");
+        }
+        return score;
     }
 
     /**
@@ -185,10 +193,18 @@ public class StuScoreServiceImpl implements IStuScoreService
         // 先按年级（班级排名时还包括班级）过滤再排名，保证不同年级、班级的学生不会放在同一个排名中
         final String selectedGrade = grade.trim();
         final String selectedClass = classScope ? className.trim() : null;
+        if (!dataScope.allowsGrade(selectedGrade))
+        {
+            throw new ServiceException("没有权限查看该年级排名");
+        }
+        if (classScope && !dataScope.allowsClass(selectedGrade, selectedClass))
+        {
+            throw new ServiceException("没有权限查看该班级排名");
+        }
         List<StuScoreDetail> rows = new ArrayList<>();
         for (StuScoreDetail detail : loadExamDetails(examId))
         {
-            if (!selectedGrade.equals(detail.getGrade()) || !dataScope.allowsClass(detail.getGrade(), detail.getClassName()))
+            if (!selectedGrade.equals(detail.getGrade()))
             {
                 continue;
             }

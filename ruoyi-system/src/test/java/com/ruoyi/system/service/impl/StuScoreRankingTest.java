@@ -11,6 +11,7 @@ import static org.mockito.Mockito.when;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -18,6 +19,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import com.ruoyi.common.exception.ServiceException;
 import com.ruoyi.system.domain.StuScoreDetail;
+import com.ruoyi.system.domain.StuScope;
 import com.ruoyi.system.domain.StuScoreRank;
 import com.ruoyi.system.domain.StuScoreSubject;
 import com.ruoyi.system.domain.StuTranscriptItem;
@@ -184,6 +186,33 @@ class StuScoreRankingTest
 
         List<StuScoreRank> cls = service.selectScoreRanking(1L, "CLASS", null, "高一", "2班");
         assertEquals(List.of("C:1", "B:2"), numbers(cls));
+    }
+
+    @Test
+    void teacherSeesFullRankingForAssignedGradesButOnlyOwnClassRanking()
+    {
+        when(stuScopeService.currentScope()).thenReturn(StuScope.teacher(7L, Set.of(
+                StuScope.classKey("高二", "2班"), StuScope.classKey("高三", "1班"))));
+        when(stuScoreMapper.selectScoreDetailByExam(1L)).thenReturn(List.of(
+                full(1, "A", "高二", "1班", 100),
+                full(2, "B", "高二", "2班", 90),
+                full(3, "C", "高三", "2班", 80),
+                full(4, "D", "高一", "1班", 110)));
+
+        assertEquals(List.of("A:1", "B:2"), numbers(service.selectScoreRanking(1L, "GRADE", "TOTAL", "高二", null)));
+        assertEquals(List.of("C:1"), numbers(service.selectScoreRanking(1L, "GRADE", "TOTAL", "高三", null)));
+        assertEquals(List.of("B:1"), numbers(service.selectScoreRanking(1L, "CLASS", "TOTAL", "高二", "2班")));
+        assertEquals("没有权限查看该班级排名", assertThrows(ServiceException.class,
+                () -> service.selectScoreRanking(1L, "CLASS", "TOTAL", "高二", "1班")).getMessage());
+        assertEquals("没有权限查看该年级排名", assertThrows(ServiceException.class,
+                () -> service.selectScoreRanking(1L, "GRADE", "TOTAL", "高一", null)).getMessage());
+    }
+
+    @Test
+    void teacherWithoutAssignedClassesCannotViewRankings()
+    {
+        when(stuScopeService.currentScope()).thenReturn(StuScope.teacher(7L, Set.of()));
+        assertThrows(ServiceException.class, () -> service.selectScoreRanking(1L, "GRADE", "TOTAL", "高二", null));
     }
 
     @Test

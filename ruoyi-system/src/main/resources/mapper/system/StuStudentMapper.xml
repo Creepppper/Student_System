@@ -73,6 +73,17 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         where id = #{id}
     </update>
 
+    <update id="updateStuStudentBasicInfo" parameterType="StuStudent">
+        update stu_student
+        <set>
+            id = id,
+            <if test="studentNo != null and studentNo != ''">student_no = #{studentNo},</if>
+            <if test="studentName != null and studentName != ''">student_name = #{studentName},</if>
+        </set>
+        where id = #{id} and grade = #{grade} and class_name = #{className}
+          and user_id &lt;=&gt; #{userId}
+    </update>
+
     <delete id="deleteStuStudentById" parameterType="Long">
         delete from stu_student where id = #{id}
     </delete>

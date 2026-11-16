@@ -43,6 +43,9 @@ public interface StuStudentMapper
      */
     public int updateStuStudent(StuStudent stuStudent);
 
+    /** 非管理员仅更新普通资料，并确认受保护字段没有发生变化。 */
+    public int updateStuStudentBasicInfo(StuStudent stuStudent);
+
     /**
      * 删除学生信息
      * 

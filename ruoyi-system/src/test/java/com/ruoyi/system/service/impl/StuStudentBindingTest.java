@@ -4,7 +4,6 @@ import static com.ruoyi.system.service.impl.StuTestFixtures.activeUser;
 import static com.ruoyi.system.service.impl.StuTestFixtures.role;
 import static com.ruoyi.system.service.impl.StuTestFixtures.student;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
@@ -163,7 +162,72 @@ class StuStudentBindingTest
                 Set.of(StuScope.classKey("高一", "1班"))));
         when(stuStudentMapper.selectStuStudentById(4L)).thenReturn(student(4L, "高一", "2班", null));
 
-        assertNull(studentService.selectStuStudentById(4L));
+        ServiceException ex = assertThrows(ServiceException.class, () -> studentService.selectStuStudentById(4L));
+        assertEquals("没有权限查看该学生信息", ex.getMessage());
+    }
+
+    @Test
+    void missingStudentDetailReturnsBusinessError()
+    {
+        ServiceException ex = assertThrows(ServiceException.class, () -> studentService.selectStuStudentById(999L));
+        assertEquals("学生不存在", ex.getMessage());
+    }
+
+    @Test
+    void teacherCanReadStudentInOwnClass()
+    {
+        when(stuScopeService.currentScope()).thenReturn(StuScope.teacher(7L, Set.of(StuScope.classKey("高一", "1班"))));
+        StuStudent existing = student(4L, "高一", "1班", null);
+        when(stuStudentMapper.selectStuStudentById(4L)).thenReturn(existing);
+        assertEquals(existing, studentService.selectStuStudentById(4L));
+    }
+
+    @Test
+    void teacherCannotChangeClassOrBinding()
+    {
+        when(stuScopeService.currentScope()).thenReturn(StuScope.teacher(7L,
+                Set.of(StuScope.classKey("高一", "1班"), StuScope.classKey("高一", "2班"))));
+        when(stuStudentMapper.selectStuStudentById(4L)).thenReturn(student(4L, "高一", "1班", 30L));
+        for (StuStudent input : List.of(student(4L, "高一", "2班", 30L),
+                student(4L, "高二", "1班", 30L), student(4L, "高一", "1班", null),
+                student(4L, "高一", "1班", 31L)))
+        {
+            assertThrows(ServiceException.class, () -> studentService.updateStuStudent(input));
+        }
+        verify(stuStudentMapper, never()).updateStuStudent(any());
+        verify(stuStudentMapper, never()).updateStuStudentBasicInfo(any());
+    }
+
+    @Test
+    void teacherCanEditBasicInfoWithinOwnClass()
+    {
+        when(stuScopeService.currentScope()).thenReturn(StuScope.teacher(7L,
+                Set.of(StuScope.classKey("高一", "1班"))));
+        when(stuStudentMapper.selectStuStudentById(4L)).thenReturn(student(4L, "高一", "1班", 30L));
+        StuStudent input = student(4L, "高一", "1班", 30L);
+        input.setStudentName("新姓名");
+        studentService.updateStuStudent(input);
+        verify(stuStudentMapper).updateStuStudentBasicInfo(input);
+        verify(stuStudentMapper, never()).updateStuStudent(any());
+    }
+
+    @Test
+    void teacherCannotEditAnotherClass()
+    {
+        when(stuScopeService.currentScope()).thenReturn(StuScope.teacher(7L,
+                Set.of(StuScope.classKey("高一", "1班"))));
+        when(stuStudentMapper.selectStuStudentById(4L)).thenReturn(student(4L, "高一", "2班", null));
+        assertThrows(ServiceException.class, () -> studentService.updateStuStudent(student(4L, "高一", "2班", null)));
+        verify(stuStudentMapper, never()).updateStuStudentBasicInfo(any());
+    }
+
+    @Test
+    void administratorCanChangeClassAndUnbindAccount()
+    {
+        when(stuStudentMapper.selectStuStudentById(4L)).thenReturn(student(4L, "高一", "1班", 30L));
+        StuStudent input = student(4L, "高二", "2班", null);
+        studentService.updateStuStudent(input);
+        verify(stuStudentMapper).updateStuStudent(input);
     }
 
     @Test

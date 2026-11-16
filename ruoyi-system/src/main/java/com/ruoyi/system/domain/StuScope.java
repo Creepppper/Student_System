@@ -109,6 +109,21 @@ public class StuScope
         }
     }
 
+    /** 管理员可查看所有年级；班主任可查看其负责班级所在的年级。 */
+    public boolean allowsGrade(String grade)
+    {
+        if (mode == Mode.ALL)
+        {
+            return true;
+        }
+        if (mode != Mode.TEACHER || grade == null)
+        {
+            return false;
+        }
+        String prefix = grade + "\u0001";
+        return classKeys.stream().anyMatch(key -> key.startsWith(prefix));
+    }
+
     /**
      * 判断某个学生记录是否在范围内
      */

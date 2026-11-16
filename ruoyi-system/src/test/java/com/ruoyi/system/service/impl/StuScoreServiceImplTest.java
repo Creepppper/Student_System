@@ -11,6 +11,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Set;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -20,6 +21,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import com.ruoyi.common.exception.ServiceException;
 import com.ruoyi.system.domain.StuExam;
 import com.ruoyi.system.domain.StuScore;
+import com.ruoyi.system.domain.StuScope;
 import com.ruoyi.system.domain.StuStudent;
 import com.ruoyi.system.mapper.StuExamMapper;
 import com.ruoyi.system.mapper.StuScoreMapper;
@@ -76,6 +78,24 @@ class StuScoreServiceImplTest
         score.setBiology(new BigDecimal("70"));
         score.setAbsentSubjects("");
         return score;
+    }
+
+    @Test
+    void scoreDetailDistinguishesMissingAndUnauthorizedRecords()
+    {
+        when(stuScoreMapper.selectStuScoreById(999L)).thenReturn(null);
+        assertEquals("成绩不存在", assertThrows(ServiceException.class, () -> service.selectStuScoreById(999L)).getMessage());
+        when(stuScopeService.currentScope()).thenReturn(StuScope.teacher(7L, Set.of(StuScope.classKey("高一", "1班"))));
+        when(stuStudentMapper.selectStuStudentById(1L)).thenReturn(StuTestFixtures.student(1L, "高一", "2班", null));
+        assertEquals("没有权限查看该成绩", assertThrows(ServiceException.class, () -> service.selectStuScoreById(10L)).getMessage());
+    }
+
+    @Test
+    void teacherCanReadScoreInOwnClass()
+    {
+        when(stuScopeService.currentScope()).thenReturn(StuScope.teacher(7L, Set.of(StuScope.classKey("高一", "1班"))));
+        when(stuStudentMapper.selectStuStudentById(1L)).thenReturn(StuTestFixtures.student(1L, "高一", "1班", null));
+        assertEquals(10L, service.selectStuScoreById(10L).getId());
     }
 
     private void assertRejected(StuScore score, String expectedMessage)

@@ -80,10 +80,10 @@
           </el-form-item>
         </el-form>
 
-        <div ref="classChartRef" class="class-chart" v-show="classStatRows.length > 0"></div>
-        <el-empty v-if="!classStatLoading && classStatRows.length === 0" description="请选择考试查看班级平均分" />
+        <div ref="classChartRef" class="class-chart" v-show="filteredClassStatRows.length > 0"></div>
+        <el-empty v-if="!classStatLoading && filteredClassStatRows.length === 0" :description="statQuery.examId ? '所选条件暂无班级统计数据' : '请选择考试查看班级平均分'" />
 
-        <el-table v-loading="classStatLoading" :data="classStatRows" class="mt8">
+        <el-table v-loading="classStatLoading" :data="filteredClassStatRows" class="mt8">
           <el-table-column label="班级" align="center">
             <template #default="scope">{{ scope.row.grade }}{{ scope.row.className }}</template>
           </el-table-column>
@@ -159,9 +159,10 @@
 </template>
 
 <script setup name="ScoreStat">
-import { listStudent } from "@/api/system/student"
+import { listStudent, listStudentClassOptions } from "@/api/system/student"
 import { listExam } from "@/api/system/exam"
 import { getScoreRanking, getScoreTranscript, getClassStat } from "@/api/system/score"
+import auth from "@/plugins/auth"
 import * as echarts from "echarts"
 
 const { proxy } = getCurrentInstance()
@@ -188,21 +189,25 @@ const classChartRef = ref(null)
 let classChart = null
 const studentOptions = ref([])
 const examOptions = ref([])
+const assignedClasses = ref([])
+const isAdmin = auth.hasRole("admin")
 
 const rankQuery = reactive({ examId: undefined, grade: undefined, className: undefined, scope: "GRADE", subject: "TOTAL" })
 const rankList = ref([])
 const rankLoading = ref(false)
+let rankingRequest = 0
 
 const transcriptQuery = reactive({ studentId: undefined })
 const transcriptList = ref([])
 const transcriptLoading = ref(false)
 
-/** 年级下拉选项：取自学生列表中出现过的年级 */
-const gradeOptions = computed(() => [...new Set(studentOptions.value.map(item => item.grade).filter(Boolean))])
+/** 班主任按分配的班级确定年级，管理员按学生数据确定选项。 */
+const rankingClassSource = computed(() => isAdmin ? studentOptions.value : assignedClasses.value)
+const gradeOptions = computed(() => [...new Set(rankingClassSource.value.map(item => item.grade).filter(Boolean))])
 
 /** 班级下拉选项：取所选年级下出现过的班级 */
 const classOptions = computed(() => [...new Set(
-  studentOptions.value
+  rankingClassSource.value
     .filter(item => item.grade === rankQuery.grade && item.className)
     .map(item => item.className)
 )])
@@ -233,17 +238,27 @@ function loadRanking() {
     return
   }
   rankLoading.value = true
+  const requestId = ++rankingRequest
   // 年级排名不需要班级参数
   const query = { ...rankQuery, className: rankQuery.scope === "CLASS" ? rankQuery.className : undefined }
   getScoreRanking(query).then(response => {
-    rankList.value = response.data
+    if (requestId === rankingRequest) rankList.value = response.data
   }).finally(() => {
-    rankLoading.value = false
+    if (requestId === rankingRequest) rankLoading.value = false
   })
 }
 
+watch(() => [rankQuery.examId, rankQuery.grade, rankQuery.className, rankQuery.scope, rankQuery.subject], () => {
+  rankingRequest++
+  rankList.value = []
+  rankLoading.value = false
+})
+
 /** 班级统计中的年级选项（取自已加载的班级数据） */
 const classGradeOptions = computed(() => [...new Set(classStatRows.value.map(item => item.grade))])
+const filteredClassStatRows = computed(() => statQuery.grade
+  ? classStatRows.value.filter(item => item.grade === statQuery.grade)
+  : classStatRows.value)
 
 /** 加载班级平均分并绘制分组柱状图 */
 function loadClassStat() {
@@ -262,16 +277,15 @@ function loadClassStat() {
 
 /** 绘制：横轴为班级，每个班级六根柱子（分组柱状图），顶部图例说明颜色 */
 function drawClassChart() {
-  if (!classChartRef.value) {
+  if (!classChartRef.value || filteredClassStatRows.value.length === 0) {
     return
   }
   if (!classChart) {
     classChart = echarts.init(classChartRef.value)
     window.addEventListener("resize", () => classChart && classChart.resize())
   }
-  const rows = statQuery.grade
-    ? classStatRows.value.filter(item => item.grade === statQuery.grade)
-    : classStatRows.value
+  classChart.resize()
+  const rows = filteredClassStatRows.value
   const dark = document.documentElement.classList.contains("dark")
   const colors = dark ? SUBJECT_COLORS_DARK : SUBJECT_COLORS_LIGHT
   const subjects = [
@@ -325,6 +339,9 @@ onBeforeUnmount(() => {
 
 /** 加载学生、考试下拉选项 */
 function loadOptions() {
+  if (!isAdmin) {
+    listStudentClassOptions().then(response => { assignedClasses.value = response.data || [] })
+  }
   listStudent({ pageNum: 1, pageSize: 1000 }).then(response => {
     studentOptions.value = response.rows
   })

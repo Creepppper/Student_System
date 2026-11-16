@@ -23,6 +23,13 @@ public class StuScore extends BaseEntity
     @Excel(name = "学生ID", readConverterExp = "s=tu_student.id")
     private Long studentId;
 
+    /** 列表查询用学号，不作为成绩表字段保存。 */
+    private String studentNo;
+
+    public String getStudentNo() { return studentNo; }
+
+    public void setStudentNo(String studentNo) { this.studentNo = studentNo; }
+
     /** 考试ID（stu_exam.id） */
     @Excel(name = "考试ID", readConverterExp = "s=tu_exam.id")
     private Long examId;

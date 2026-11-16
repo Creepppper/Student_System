@@ -24,6 +24,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <include refid="selectStuReviewVo"/>
         <where>  
             <if test="studentId != null "> and student_id = #{studentId}</if>
+            <if test="studentNo != null and studentNo != ''"> and exists (select 1 from stu_student sn where sn.id = stu_review.student_id and sn.student_no = #{studentNo})</if>
             <if test="examId != null "> and exam_id = #{examId}</if>
             <if test="subject != null  and subject != ''"> and subject = #{subject}</if>
             <if test="reason != null  and reason != ''"> and reason = #{reason}</if>

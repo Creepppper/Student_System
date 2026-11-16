@@ -2,7 +2,7 @@
 export function defaultEntry(roles) {
   if (roles.includes('admin')) return '/system/user'
   if (roles.includes('teacher')) return '/system/student'
-  if (roles.includes('student')) return '/student/myscore'
+  if (roles.includes('student')) return '/student/profile'
   return '/401'
 }
 

@@ -18,22 +18,14 @@
         />
       </el-form-item>
       <el-form-item label="年级" prop="grade">
-        <el-select v-model="queryParams.grade" placeholder="请选择年级" clearable style="width: 180px">
-          <el-option v-for="grade in grades" :key="grade" :label="grade" :value="grade" />
+        <el-select v-model="queryParams.grade" placeholder="请选择年级" clearable style="width: 180px" @change="queryParams.className = undefined">
+          <el-option v-for="grade in filterGrades" :key="grade" :label="grade" :value="grade" />
         </el-select>
       </el-form-item>
       <el-form-item label="班级名称" prop="className">
         <el-select v-model="queryParams.className" placeholder="请选择班级" clearable style="width: 180px">
-          <el-option v-for="className in classes" :key="className" :label="className" :value="className" />
+          <el-option v-for="className in filterClasses" :key="className" :label="className" :value="className" />
         </el-select>
-      </el-form-item>
-      <el-form-item label="关联若依用户ID" prop="userId">
-        <el-input
-          v-model="queryParams.userId"
-          placeholder="请输入关联若依用户ID"
-          clearable
-          @keyup.enter="handleQuery"
-        />
       </el-form-item>
       <el-form-item>
         <el-button type="primary" icon="Search" @click="handleQuery">搜索</el-button>
@@ -99,7 +91,6 @@
       <el-table-column label="学生姓名" align="center" prop="studentName" />
       <el-table-column label="年级" align="center" prop="grade" />
       <el-table-column label="班级名称" align="center" prop="className" />
-      <el-table-column label="关联若依用户ID" align="center" prop="userId" />
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template #default="scope">
           <el-button link type="primary" icon="Edit" @click="handleUpdate(scope.row)" v-hasPermi="['system:student:edit']">修改</el-button>
@@ -171,13 +162,20 @@
 </template>
 
 <script setup name="Student">
-import { listStudent, getStudent, delStudent, addStudent, updateStudent } from "@/api/system/student"
+import { listStudent, listStudentClassOptions, getStudent, delStudent, addStudent, updateStudent } from "@/api/system/student"
 import { listUser } from "@/api/system/user"
 import ExcelImportDialog from "@/components/ExcelImportDialog"
+import auth from "@/plugins/auth"
+import { classFilterOptions } from "./classOptions"
 
 const { proxy } = getCurrentInstance()
 const grades = ['高一', '高二', '高三']
 const classes = Array.from({ length: 12 }, (_, index) => `${index + 1}班`)
+const isAdmin = auth.hasRole('admin')
+const assignedClasses = ref([])
+const filterOptions = computed(() => classFilterOptions(grades, classes, assignedClasses.value, isAdmin, queryParams.value.grade))
+const filterGrades = computed(() => filterOptions.value.grades)
+const filterClasses = computed(() => filterOptions.value.classes)
 
 /** 可绑定的系统账号（后端会校验角色和唯一性） */
 const userOptions = ref([])
@@ -206,8 +204,7 @@ const data = reactive({
     studentNo: undefined,
     studentName: undefined,
     grade: undefined,
-    className: undefined,
-    userId: undefined
+    className: undefined
   },
   rules: {
     studentNo: [
@@ -338,7 +335,12 @@ function handleExport() {
 }
 
 getList()
-loadUserOptions()
+if (!isAdmin) {
+  listStudentClassOptions().then(response => { assignedClasses.value = response.data })
+}
+if (auth.hasPermi("system:user:list")) {
+  loadUserOptions()
+}
 </script>
 
 <style scoped>

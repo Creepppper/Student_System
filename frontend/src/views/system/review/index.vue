@@ -1,6 +1,9 @@
 <template>
   <div class="app-container">
     <el-form :model="queryParams" ref="queryRef" :inline="true" v-show="showSearch" label-width="auto">
+      <el-form-item label="学号" prop="studentNo">
+        <el-input v-model.trim="queryParams.studentNo" placeholder="请输入学号" clearable @keyup.enter="handleQuery" />
+      </el-form-item>
       <el-form-item label="申请学生ID" prop="studentId">
         <el-input
           v-model="queryParams.studentId"
@@ -295,6 +298,7 @@ const data = reactive({
   queryParams: {
     pageNum: 1,
     pageSize: 10,
+    studentNo: undefined,
     studentId: undefined,
     examId: undefined,
     subject: undefined,

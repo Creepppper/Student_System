@@ -21,6 +21,7 @@
 | [014_student_route_name.sql](014_student_route_name.sql) | 在 010 之后执行：修复学生信息与学生端目录的路由名称冲突；回滚方式见脚本 |
 | [015_standard_grade_class.sql](015_standard_grade_class.sql) | 在 001、011 后检查旧数据，再由数据库管理员添加年级班级约束；执行顺序、兼容范围及回滚见脚本 |
 | [016_business_menu_icons.sql](016_business_menu_icons.sql) | 在业务菜单脚本后执行：为未设置图标的业务菜单指定图标；回滚方式见脚本 |
+| [017_student_profile_menu.sql](017_student_profile_menu.sql) | 在 010 后执行：新增学生基本信息菜单及学生角色授权；回滚方式见脚本 |
 | [006_hide_unrelated_menus.sql](006_hide_unrelated_menus.sql) | 隐藏与项目无关的若依菜单；只改 `visible`，不删表和数据 |
 | [init_database.sh](init_database.sh) | 既有的若依基础库初始化脚本，负责创建 `student_system` 并导入 `sql/ry_20260417.sql`、`sql/quartz.sql` |
 | [../sql/ry_20260417.sql](../sql/ry_20260417.sql) | 若依基础表与初始数据，不要修改 |

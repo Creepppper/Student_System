@@ -1,5 +1,10 @@
 import request from '@/utils/request'
 
+// 当前班主任负责的年级和班级
+export function listStudentClassOptions() {
+  return request({ url: '/system/student/class-options', method: 'get' })
+}
+
 // 查询学生信息列表
 export function listStudent(query) {
   return request({

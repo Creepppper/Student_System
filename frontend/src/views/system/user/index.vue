@@ -57,8 +57,8 @@
         <el-form-item label="用户昵称" prop="nickName"><el-input v-model="form.nickName" placeholder="请输入用户昵称" maxlength="30" /></el-form-item>
         <el-form-item label="用户名称" prop="userName"><el-input v-model="form.userName" placeholder="请输入用户名称" maxlength="30" :disabled="form.userId != null" /></el-form-item>
         <el-form-item v-if="form.userId == null" label="用户密码" prop="password" :rules="pwdValidator"><el-input v-model="form.password" placeholder="请输入用户密码" type="password" maxlength="20" show-password /></el-form-item>
-        <el-form-item label="状态" prop="status"><el-radio-group v-model="form.status"><el-radio v-for="dict in sys_normal_disable" :key="dict.value" :value="dict.value">{{ dict.label }}</el-radio></el-radio-group></el-form-item>
         <el-form-item label="角色" prop="roleIds"><el-select v-model="form.roleIds" multiple placeholder="请选择角色"><el-option v-for="role in roleOptions" :key="role.roleId" :label="role.roleName" :value="role.roleId" :disabled="role.status === '1'" /></el-select></el-form-item>
+        <el-form-item label="状态" prop="status"><el-radio-group v-model="form.status"><el-radio v-for="dict in sys_normal_disable" :key="dict.value" :value="dict.value">{{ dict.label }}</el-radio></el-radio-group></el-form-item>
       </el-form>
       <template #footer><el-button type="primary" @click="submitForm">确 定</el-button><el-button @click="open = false">取 消</el-button></template>
     </el-dialog>
